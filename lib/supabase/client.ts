@@ -1,5 +1,15 @@
 import { createBrowserClient } from "@supabase/ssr"
 
 export function createClient() {
-  return createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url || !key) {
+    throw new Error(
+      `Faltan variables de entorno: URL está ${url ? 'OK' : 'MISSING'}, KEY está ${key ? 'OK' : 'MISSING'}. 
+       Revisa que en Vercel los nombres coincidan exactamente.`
+    )
+  }
+
+  return createBrowserClient(url, key)
 }
