@@ -71,10 +71,23 @@ export class WeatherRepository {
   /**
    * Actualiza o crea los extremos diarios si es necesario
    */
-  static async updateDailyExtremes(reading: WeatherReading): Promise<void> {
+  static async updateDailyExtremes(
+    reading: WeatherReading,
+    context?: { requestId?: string; source?: string },
+  ): Promise<void> {
     try {
       const supabase = await createClient()
       const date = new Date(reading.recorded_at).toISOString().split("T")[0]
+      const prefix = `[v1-extremes][req:${context?.requestId ?? "n/a"}][${context?.source ?? "unknown"}]`
+      const startedAt = Date.now()
+
+      console.log(`${prefix} Start updateDailyExtremes`, {
+        readingId: reading.id,
+        recorded_at: reading.recorded_at,
+        temp: reading.temperature,
+        humidity: reading.humidity,
+        date,
+      })
 
       // Obtener extremos actuales del día
       const { data: currentExtremes, error: fetchError } = await supabase
@@ -84,9 +97,11 @@ export class WeatherRepository {
         .maybeSingle()
 
       if (fetchError && fetchError.code !== "PGRST116") {
-        console.error("[v0] Error fetching daily extremes:", fetchError)
+        console.error(`${prefix} Error fetching daily extremes:`, fetchError)
         return
       }
+
+      console.log(`${prefix} Current extremes`, currentExtremes ?? "none")
 
       const updates: Partial<DailyExtremes> = {}
 
@@ -118,6 +133,8 @@ export class WeatherRepository {
       if (Object.keys(updates).length > 0) {
         updates.updated_at = new Date().toISOString()
 
+        console.log(`${prefix} Applying updates`, updates)
+
         if (currentExtremes) {
           // Si existe registro para hoy, actualizar
           const { error: updateError } = await supabase
@@ -126,7 +143,9 @@ export class WeatherRepository {
             .eq("date", date)
 
           if (updateError) {
-            console.error("[v0] Error updating daily extremes:", updateError)
+            console.error(`${prefix} Error updating daily extremes:`, updateError)
+          } else {
+            console.log(`${prefix} Updated daily extremes for date ${date}`)
           }
         } else {
           // Si no existe registro, crear uno nuevo
@@ -136,12 +155,18 @@ export class WeatherRepository {
           })
 
           if (insertError) {
-            console.error("[v0] Error inserting daily extremes:", insertError)
+            console.error(`${prefix} Error inserting daily extremes:`, insertError)
+          } else {
+            console.log(`${prefix} Inserted daily extremes for date ${date}`)
           }
         }
+      } else {
+        console.log(`${prefix} No updates needed for date ${date}`)
       }
+
+      console.log(`${prefix} Finished in ${Date.now() - startedAt}ms`)
     } catch (error) {
-      console.error("[v0] Error in updateDailyExtremes:", error)
+      console.error("[v1-extremes] Error in updateDailyExtremes:", error)
     }
   }
 
