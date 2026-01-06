@@ -7,6 +7,7 @@ import { ExtremesDisplay } from "./extremes-display"
 import type { WeatherDashboardData } from "@/lib/types/weather"
 import { Thermometer, Droplets } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
+import AmplitudTermicaToday from "../todays-stats/amplitud-termica-today"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -76,6 +77,7 @@ export function WeatherDashboard() {
       </div>
 
       <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
+      <AmplitudTermicaToday temp_max={data?.todayExtremes?.temp_max ?? null} temp_min={data?.todayExtremes?.temp_min ?? null} />
     </div>
   )
 }

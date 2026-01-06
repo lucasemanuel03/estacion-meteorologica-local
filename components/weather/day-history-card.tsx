@@ -111,6 +111,16 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
           variant="min"
           icon={Droplets}
         />
+        <div>
+          La Amplitud térmica del día fue de{" "}
+          <span className="font-semibold">
+            {day.temp_max !== null && day.temp_min !== null
+              ? (day.temp_max - day.temp_min).toFixed(1)
+              : "--"}{" "}
+            °C
+          </span>
+        </div>
+        
       </CardContent>
     </Card>
   )
