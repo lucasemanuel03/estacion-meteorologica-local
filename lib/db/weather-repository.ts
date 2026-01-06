@@ -45,6 +45,28 @@ export class WeatherRepository {
   }
 
   /**
+   * Obtiene las ultimas N extremos diarios
+   */
+
+  static async getRecentExtremes(limit: number = 7): Promise<DailyExtremes[]> {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from("daily_extremes")
+      .select("*")
+      .order("date", { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error("[v0] Error fetching recent extremes:", error)
+      return []
+    }
+
+    return data || []
+  }
+
+
+  /**
    * Inserta una nueva lectura meteorológica
    */
   static async insertReading(payload: ESP32Payload): Promise<WeatherReading | null> {
