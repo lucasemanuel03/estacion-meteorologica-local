@@ -96,7 +96,7 @@ export default function CurveToday() {
       const found = map.get(h)
       filled.push({
         hour: h,
-        label: `${h.toString().padStart(2, "0")}:00`,
+        label: `${h.toString().padStart(2, "0")}h.`,
         avgTemperature: found ? found.avgTemperature : null,
         avgHumidity: found ? found.avgHumidity : null,
         count: found ? found.count : 0,
@@ -146,9 +146,9 @@ export default function CurveToday() {
               formatter={(value: number | null, _name, item) => {
                 const cnt = chartData[item?.payload?.hour]?.count ?? 0
                 if (value === null || value === undefined) return ["Sin datos", ""]
-                return [`${value}`, `${metric === "temperature" ? "°C" : "%"} (n=${cnt})`]
+                return [ `${value} ${metric === "temperature" ? "°C" : "%"} (Con ${cnt} muestra/s)`]
               }}
-              labelFormatter={(label) => `Hora ${label}`}
+              labelFormatter={(label) => `Hora: ${label}`}
             />
             <Legend />
             <Area
