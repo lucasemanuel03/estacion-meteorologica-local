@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
 
     // 5. Actualizar extremos diarios (no bloqueante)
     console.log(`[v1][req:${requestId}] Step 5: Starting background task to update daily extremes`)
-    WeatherRepository.updateDailyExtremes(reading, { requestId, source: "POST /api/weather" }).catch((error) => {
+    await WeatherRepository.updateDailyExtremes(reading, { requestId, source: "POST /api/weather" }).catch((error) => {
       console.error(`[v1][req:${requestId}] Background task error updating extremes:`, error)
     })
 
