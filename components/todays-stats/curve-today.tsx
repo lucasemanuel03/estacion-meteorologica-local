@@ -33,6 +33,15 @@ type ApiResponse = {
 
 type Metric = "temperature" | "humidity"
 
+const TZ_OFFSET_MINUTES = 3 * 60 // UTC-3 (Argentina)
+
+function getCurrentLocalHour(): number {
+  // Convertir ahora a hora local destino sin depender del timezone del dispositivo
+  const now = Date.now()
+  const local = new Date(now - TZ_OFFSET_MINUTES * 60 * 1000)
+  return local.getUTCHours()
+}
+
 export default function CurveToday() {
   const [metric, setMetric] = useState<Metric>("temperature")
   const [loading, setLoading] = useState(true)
@@ -64,8 +73,8 @@ export default function CurveToday() {
   }, [])
 
   const chartData = useMemo(() => {
-    const now = new Date()
-    const currentHour = now.getHours()
+    // currentHour en zona objetivo (UTC-3) para alinear con los datos del backend
+    const currentHour = getCurrentLocalHour()
     const map = new Map<number, { count: number; avgTemperature: number; avgHumidity: number }>()
     data.forEach((entry) => {
       map.set(entry.hour, {
