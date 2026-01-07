@@ -6,6 +6,8 @@ import { Search, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import ModalDetails from "@/components/weather-history/modal-details"
 import { DayHistoryCard } from "@/components/weather/day-history-card"
 import type { DailyExtremes } from "@/lib/types/weather"
 

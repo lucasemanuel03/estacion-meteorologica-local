@@ -34,3 +34,11 @@ export interface WeatherDashboardData {
   latestReading: WeatherReading | null
   todayExtremes: DailyExtremes | null
 }
+
+// Tipo para los promedios horarios
+export interface HourlyAverages{
+  hour: number
+  count: number
+  avgTemperature: number
+  avgHumidity: number
+}
