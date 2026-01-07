@@ -1,5 +1,5 @@
 import IrAlHistorialCard from "@/components/cards/ir-historial-card"
-import AmplitudTermicaToday from "@/components/todays-stats/amplitud-termica-today"
+import AmplitudTermicaToday from "@/components/todays-stats/estadisticas-hoy"
 import CurveToday from "@/components/todays-stats/curve-today"
 import { WeatherDashboard } from "@/components/weather/weather-dashboard"
 

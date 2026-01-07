@@ -214,4 +214,59 @@ export class StatsRepository {
 
     return result
   }
+
+  /**
+   * Calcula la tendencia comparando las últimas N lecturas vs las N anteriores
+   * Devuelve el diferencial y un mensaje según un umbral de estabilidad
+   */
+  static async getTrend(options?: { windowSize?: number; threshold?: number }): Promise<{
+    tempTrend: { differential: number; message: string }
+    humTrend: { differential: number; message: string }
+  }> {
+    const windowSize = Math.max(1, Math.floor(options?.windowSize ?? 2))
+    const threshold = options?.threshold ?? 0.2
+
+    const supabase = await createClient()
+    const limit = windowSize * 2
+
+    const { data, error } = await supabase
+      .from("weather_readings")
+      .select("temperature, humidity, recorded_at")
+      .order("recorded_at", { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error("[v1-stats] Error fetching readings for trend:", error)
+      return {
+        tempTrend: { differential: 0, message: "Error al calcular tendencia" },
+        humTrend: { differential: 0, message: "Error al calcular tendencia" },
+      }
+    }
+
+    if (!data || data.length < limit) {
+      return {
+        tempTrend: { differential: 0, message: "No hay suficientes datos" },
+        humTrend: { differential: 0, message: "No hay suficientes datos" },
+      }
+    }
+
+    const latest = data.slice(0, windowSize)
+    const previous = data.slice(windowSize, limit)
+
+    const avg = (arr: typeof data, key: "temperature" | "humidity") =>
+      arr.reduce((sum, item) => sum + (item[key] ?? 0), 0) / arr.length
+
+    const tempDiff = Number((avg(latest, "temperature") - avg(previous, "temperature")).toFixed(2))
+    const humDiff = Number((avg(latest, "humidity") - avg(previous, "humidity")).toFixed(2))
+
+    const trendMessage = (diff: number, label: string) => {
+      if (Math.abs(diff) <= threshold) return `${label} estable`
+      return diff > 0 ? `${label} en aumento` : `${label} en descenso`
+    }
+
+    return {
+      tempTrend: { differential: tempDiff, message: trendMessage(tempDiff, "Temperatura") },
+      humTrend: { differential: humDiff, message: trendMessage(humDiff, "Humedad") },
+    }
+  }
 }

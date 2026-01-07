@@ -1,6 +1,8 @@
 import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import TrendIcon from "./trend-icon"
+
 
 interface WeatherCardProps {
   title: string
@@ -10,9 +12,10 @@ interface WeatherCardProps {
   icon?: React.ReactNode
   variant?: "default" | "temperature" | "humidity"
   tempColor?: string
+  diferencial?: number
 }
 
-export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary" }: WeatherCardProps) {
+export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial }: WeatherCardProps) {
   const variants = {
     default: {
       border: "border-muted-foreground/50",
@@ -35,6 +38,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
 
   const style = variants[variant]
 
+
   return (
     <Card className={cn("border", style.border)}>
       <CardHeader className="flex flex-row items-center justify-between pb-1">
@@ -48,7 +52,12 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
           <span className={cn("text-5xl sm:text-6xl font-mono font-bold tracking-tight", style.valueColor)}>{value ?? "--"}</span>
           {unit && <span className="text-2xl font-mono text-muted-foreground">{unit}</span>}
         </div>
-        {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-xs sm:text-sm text-muted-foreground mt-2 flex justify-center items-center gap-1">
+            {diferencial !== undefined && <TrendIcon diferencial={diferencial} />}
+            <span>{subtitle}</span>
+          </p>
+        )}
       </CardContent>
     </Card>
   )

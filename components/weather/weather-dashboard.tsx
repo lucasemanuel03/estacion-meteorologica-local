@@ -7,18 +7,53 @@ import { ExtremesDisplay } from "./extremes-display"
 import type { WeatherDashboardData } from "@/lib/types/weather"
 import { Thermometer, Droplets } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
-import AmplitudTermicaToday from "../todays-stats/amplitud-termica-today"
+import AmplitudTermicaToday from "../todays-stats/estadisticas-hoy"
+import EstadisticasHoy from "../todays-stats/estadisticas-hoy"
+
+type TrendResponse = {
+  success: boolean
+  tempTrend?: { differential: number; message: string }
+  humTrend?: { differential: number; message: string }
+}
+
+type TrendParametro = {
+  differential: number
+  message: string
+}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export function WeatherDashboard() {
   const [lastUpdate, setLastUpdate] = useState<string>("")
+  const [tempTrend, setTempTrend] = useState<TrendParametro | null>(null)
+  const [humTrend, setHumTrend] = useState<TrendParametro | null>(null)
 
   // SWR para refrescar datos automáticamente cada 30 segundos
   const { data, error, isLoading } = useSWR<WeatherDashboardData>("/api/weather-data", fetcher, {
     refreshInterval: 60000, // 60 segundos
     revalidateOnFocus: true,
   })
+
+  // Fetch tendencia (lazy, no necesita revalidación tan frecuente)
+  useEffect(() => {
+    let abort = false
+    const loadTrend = async () => {
+      try {
+        const res = await fetch("/api/todays-stats/trend")
+        if (!res.ok) return
+        const json: TrendResponse = await res.json()
+        if (abort || !json.success) return
+        if (json.tempTrend) setTempTrend(json.tempTrend)
+        if (json.humTrend) setHumTrend(json.humTrend)
+      } catch {
+        // silencioso
+      }
+    }
+    loadTrend()
+    return () => {
+      abort = true
+    }
+  }, [])
 
   useEffect(() => {
     if (data?.latestReading?.recorded_at) {
@@ -65,6 +100,8 @@ export function WeatherDashboard() {
           icon={<Thermometer className="h-6 w-6" />}
           variant="temperature"
           tempColor={getTempColor(data?.latestReading?.temperature ?? 16)}
+          subtitle={tempTrend ? tempTrend.message : undefined}
+          diferencial={tempTrend ? tempTrend.differential : undefined}
         />
         <WeatherCard
           title="Humedad"
@@ -72,12 +109,18 @@ export function WeatherDashboard() {
           unit="%"
           icon={<Droplets className="h-6 w-6" />}
           variant="humidity"
-        
+          subtitle={humTrend ? humTrend.message : undefined}
+          diferencial={humTrend ? humTrend.differential : undefined}
         />
       </div>
 
       <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
-      <AmplitudTermicaToday temp_max={data?.todayExtremes?.temp_max ?? null} temp_min={data?.todayExtremes?.temp_min ?? null} />
+      <EstadisticasHoy 
+        temp_max={data?.todayExtremes?.temp_max ?? null} 
+        temp_min={data?.todayExtremes?.temp_min ?? null}
+        tempDiferencial={tempTrend ? tempTrend.differential : undefined}
+        humDiferencial={humTrend ? humTrend.differential : undefined}
+         />
     </div>
   )
 }
