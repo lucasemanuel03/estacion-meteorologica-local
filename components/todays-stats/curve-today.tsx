@@ -58,7 +58,7 @@ export default function CurveToday() {
         }
         const json: ApiResponse = await res.json()
         if (!json.success) {
-          throw new Error(json?.error || "Unknown error")
+          throw new Error("Unknown error")
         }
         setData(json.hourlyAverages)
       } catch (err) {
