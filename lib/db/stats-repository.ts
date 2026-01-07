@@ -1,35 +1,6 @@
 import { createClient } from "../supabase/server"
 import type { WeatherReading } from "../types/weather"
-
-// Zona horaria objetivo (Argentina, sin DST en la práctica actual)
-const TZ_OFFSET_MINUTES = 3 * 60 // UTC-3
-
-function getUtcRangeForLocalDate(date?: string): { start: string; end: string; localDate: string } {
-  // Si no se pasa fecha, usar la fecha local actual en la zona objetivo
-  const now = new Date()
-  const tzOffsetMs = TZ_OFFSET_MINUTES * 60 * 1000
-  const localNow = new Date(now.getTime() - tzOffsetMs)
-
-  const [y, m, d] = date
-    ? date.split("-").map((n) => parseInt(n, 10))
-    : [localNow.getUTCFullYear(), localNow.getUTCMonth() + 1, localNow.getUTCDate()]
-
-  // Medianoche local (UTC-3) corresponde a 03:00 UTC
-  const startUtcMs = Date.UTC(y, m - 1, d, TZ_OFFSET_MINUTES / 60, 0, 0)
-  const endUtcMs = Date.UTC(y, m - 1, d + 1, TZ_OFFSET_MINUTES / 60, 0, 0)
-
-  const localDate = `${y.toString().padStart(4, "0")}-${m.toString().padStart(2, "0")}-${d
-    .toString()
-    .padStart(2, "0")}`
-
-  return { start: new Date(startUtcMs).toISOString(), end: new Date(endUtcMs).toISOString(), localDate }
-}
-
-function getLocalHour(recordedAt: string): number {
-  const utcHour = new Date(recordedAt).getUTCHours()
-  // Local = UTC - 3h
-  return (utcHour + 24 - TZ_OFFSET_MINUTES / 60) % 24
-}
+import { getUtcRangeForLocalDate, getARLocalHour } from "@/lib/utils/timezone"
 
 export class StatsRepository {
   /**
@@ -105,7 +76,7 @@ export class StatsRepository {
     >()
 
     readings.forEach((reading) => {
-      const hour = getLocalHour(reading.recorded_at)
+      const hour = getARLocalHour(reading.recorded_at)
 
       if (!hourlyMap.has(hour)) {
         hourlyMap.set(hour, { temps: [], humidities: [] })
@@ -174,7 +145,7 @@ export class StatsRepository {
     >()
 
     readings.forEach((reading) => {
-      const hour = getLocalHour(reading.recorded_at)
+      const hour = getARLocalHour(reading.recorded_at)
 
       if (!hourlyMap.has(hour)) {
         hourlyMap.set(hour, { temps: [], humidities: [] })

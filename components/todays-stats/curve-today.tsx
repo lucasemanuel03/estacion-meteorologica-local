@@ -15,6 +15,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Skeleton } from "@/components/ui/skeleton"
+import { AR_TZ_OFFSET_MINUTES } from "@/lib/utils/timezone"
 
 type HourlyAverages = Array<{
   hour: number
@@ -33,12 +34,10 @@ type ApiResponse = {
 
 type Metric = "temperature" | "humidity"
 
-const TZ_OFFSET_MINUTES = 3 * 60 // UTC-3 (Argentina)
-
 function getCurrentLocalHour(): number {
   // Convertir ahora a hora local destino sin depender del timezone del dispositivo
   const now = Date.now()
-  const local = new Date(now - TZ_OFFSET_MINUTES * 60 * 1000)
+  const local = new Date(now - AR_TZ_OFFSET_MINUTES * 60 * 1000)
   return local.getUTCHours()
 }
 

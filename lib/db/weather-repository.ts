@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import type { WeatherReading, DailyExtremes, ESP32Payload } from "@/lib/types/weather"
+import { toARLocalDateString, todayARLocalDate } from "@/lib/utils/timezone"
 
 /**
  * Repositorio para operaciones de base de datos relacionadas con el clima
@@ -7,6 +8,7 @@ import type { WeatherReading, DailyExtremes, ESP32Payload } from "@/lib/types/we
  */
 
 export class WeatherRepository {
+
   /**
    * Obtiene la última lectura meteorológica
    */
@@ -32,7 +34,7 @@ export class WeatherRepository {
    */
   static async getTodayExtremes(): Promise<DailyExtremes | null> {
     const supabase = await createClient()
-    const today = new Date().toISOString().split("T")[0]
+    const today = todayARLocalDate()
 
     const { data, error } = await supabase.from("daily_extremes").select("*").eq("date", today).limit(1)
 
@@ -99,7 +101,8 @@ export class WeatherRepository {
   ): Promise<void> {
     try {
       const supabase = await createClient()
-      const date = new Date(reading.recorded_at).toISOString().split("T")[0]
+      // Hotfix: calcular el día local AR (UTC-3) para evitar cruzar fechas
+      const date = toARLocalDateString(reading.recorded_at)
       const prefix = `[v1-extremes][req:${context?.requestId ?? "n/a"}][${context?.source ?? "unknown"}]`
       const startedAt = Date.now()
 
@@ -108,7 +111,7 @@ export class WeatherRepository {
         recorded_at: reading.recorded_at,
         temp: reading.temperature,
         humidity: reading.humidity,
-        date,
+        date, // fecha local AR
       })
 
       // Obtener extremos actuales del día
