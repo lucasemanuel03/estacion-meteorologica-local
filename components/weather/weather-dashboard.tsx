@@ -7,8 +7,9 @@ import { ExtremesDisplay } from "./extremes-display"
 import type { WeatherDashboardData } from "@/lib/types/weather"
 import { Thermometer, Droplets } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
-import AmplitudTermicaToday from "../todays-stats/estadisticas-hoy"
 import EstadisticasHoy from "../todays-stats/estadisticas-hoy"
+import { AdvertenciaCard } from "@/components/ui/advertencia-card"
+import { ModalError } from "@/components/ui/modal-error"
 
 type TrendResponse = {
   success: boolean
@@ -21,20 +22,24 @@ type TrendParametro = {
   message: string
 }
 
+type EstadoConexion = "normal" | "warning" | "error"
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export function WeatherDashboard() {
   const [lastUpdate, setLastUpdate] = useState<string>("")
   const [tempTrend, setTempTrend] = useState<TrendParametro | null>(null)
   const [humTrend, setHumTrend] = useState<TrendParametro | null>(null)
+  const [estadoConexion, setEstadoConexion] = useState<EstadoConexion>("normal")
+  const [showErrorModal, setShowErrorModal] = useState(false)
 
-  // SWR para refrescar datos automáticamente cada 30 segundos
+  // SWR para refrescar datos automáticamente cada 60 segundos
   const { data, error, isLoading } = useSWR<WeatherDashboardData>("/api/weather-data", fetcher, {
-    refreshInterval: 60000, // 60 segundos
+    refreshInterval: 60000,
     revalidateOnFocus: true,
   })
 
-  // Fetch tendencia (lazy, no necesita revalidación tan frecuente)
+  // Fetch tendencia
   useEffect(() => {
     let abort = false
     const loadTrend = async () => {
@@ -54,6 +59,37 @@ export function WeatherDashboard() {
       abort = true
     }
   }, [])
+
+  // Verificar estado de conexión basado en última medición
+  useEffect(() => {
+    if (!data?.latestReading?.recorded_at) return
+
+    const verificarConexion = () => {
+      const ahora = new Date()
+      const ultimaMedicion = new Date(data.latestReading.recorded_at)
+      const diferenciaMinutos = (ahora.getTime() - ultimaMedicion.getTime()) / (1000 * 60)
+
+      let nuevoEstado: EstadoConexion = "normal"
+
+      if (diferenciaMinutos > 60) {
+        nuevoEstado = "error"
+        // Mostrar modal solo la primera vez que cambia a error
+        if (estadoConexion !== "error") {
+          setShowErrorModal(true)
+        }
+      } else if (diferenciaMinutos > 20) {
+        nuevoEstado = "warning"
+      }
+
+      setEstadoConexion(nuevoEstado)
+    }
+
+    verificarConexion()
+    // Verificar cada minuto
+    const intervalo = setInterval(verificarConexion, 60000)
+
+    return () => clearInterval(intervalo)
+  }, [data?.latestReading?.recorded_at, estadoConexion])
 
   useEffect(() => {
     if (data?.latestReading?.recorded_at) {
@@ -92,6 +128,23 @@ export function WeatherDashboard() {
         )}
       </div>
 
+      {/* Advertencias de conexión */}
+      {estadoConexion === "warning" && (
+        <AdvertenciaCard
+          nivel="warning"
+          titulo="Advertencia: Valores desactualizados"
+          descripcion="No se ha recibido la última medición del sensor. Los valores mostrados pueden estar desactualizados."
+        />
+      )}
+
+      {estadoConexion === "error" && (
+        <AdvertenciaCard
+          nivel="error"
+          titulo="Error: Conexión perdida con el sensor"
+          descripcion="Se perdió la conexión con el sensor ESP01. Los valores mostrados están desactualizados. Verifique la conexión del dispositivo."
+        />
+      )}
+
       <div className="grid gap-4 md:grid-cols-2">
         <WeatherCard
           title="Temperatura"
@@ -120,7 +173,15 @@ export function WeatherDashboard() {
         temp_min={data?.todayExtremes?.temp_min ?? null}
         tempDiferencial={tempTrend ? tempTrend.differential : undefined}
         humDiferencial={humTrend ? humTrend.differential : undefined}
-         />
+      />
+
+      {/* Modal de error crítico */}
+      <ModalError
+        open={showErrorModal}
+        onOpenChange={setShowErrorModal}
+        title="Se perdió conexión con el sensor"
+        description="Se perdió la conexión con el sensor ESP01. No se están recibiendo datos actualizados. Por favor, verifique que el dispositivo esté encendido y correctamente conectado a la red."
+      />
     </div>
   )
 }
