@@ -1,274 +1,629 @@
-# Estación Meteorológica Local
+# Especificación del Sistema: Local Weather Station
 
-Sistema de monitoreo meteorológico en tiempo real con ESP-32 y Next.js.
+## 1. Nombre del Sistema
+**Local Weather Station** - Sistema de Monitoreo Meteorológico Doméstico en Tiempo Real
 
-## Características
+---
 
-- **Backend modular**: Validación de API keys, repositorio de base de datos separado
-- **Frontend en tiempo real**: Actualización automática cada 30 segundos con SWR
-- **Base de datos PostgreSQL**: Lecturas históricas y extremos diarios
-- **Arquitectura escalable**: Preparado para añadir más sensores (precipitación, presión, etc.)
+## 2. Objetivo del Sistema
 
-## Estructura del Proyecto
+Proporcionar una solución integral de monitoreo meteorológico local que permita a los usuarios capturar, almacenar y visualizar datos de temperatura y humedad en tiempo real desde un dispositivo ESP01, con capacidad de análisis histórico, detección de tendencias y alertas automáticas de desconexión.
 
+---
+
+## 3. Descripción General
+
+**Local Weather Station** es una aplicación web fullstack que integra un microcontrolador ESP01 como sensor remoto para recopilar datos meteorológicos (temperatura y humedad) en tiempo real. El sistema procesa estos datos, los almacena en una base de datos, y presenta un dashboard interactivo que muestra:
+
+- Valores actuales de temperatura y humedad
+- Extremos diarios (máximas y mínimas)
+- Tendencias de cambio en las últimas horas
+- Estadísticas diarias detalladas
+- Alertas automáticas cuando el sensor pierde conexión
+
+El sistema está diseñado para funcionar de manera autónoma con actualización de datos cada 15 minutos desde el sensor, con un mecanismo robusto de detección de fallos y notificación al usuario.
+
+---
+
+## 4. Casos de Uso
+
+### **CU-001: Captura de Datos Meteorológicos**
+**Descripción:** El sistema recibe automáticamente datos de temperatura y humedad del ESP01 cada 15 minutos y los almacena en la base de datos.
+
+**Actores:**
+- ESP01 (Sistema Externo)
+- Backend API
+
+**Precondiciones:**
+- El ESP01 está conectado a la red
+- La API está disponible y funcionando
+
+**Flujo Principal:**
+1. ESP01 realiza una solicitud HTTP POST a `/api/weather-data` con los datos de temperatura y humedad
+2. Backend valida los datos recibidos
+3. Backend almacena los datos en la base de datos con timestamp
+4. Backend retorna confirmación al ESP01
+
+**Postcondiciones:**
+- Los datos quedan registrados en la base de datos
+- El timestamp de última medición se actualiza
+
+---
+
+### **CU-002: Visualizar Valores Actuales**
+**Descripción:** El usuario visualiza en el dashboard los valores actuales de temperatura y humedad del sensor.
+
+**Actores:**
+- Usuario Final
+- Sistema Web
+
+**Precondiciones:**
+- Usuario ha accedido a la aplicación
+- Existen datos meteorológicos en la base de datos
+
+**Flujo Principal:**
+1. Usuario abre el dashboard
+2. Sistema obtiene la última medición de temperatura y humedad
+3. Sistema calcula el color de temperatura según rango
+4. Sistema muestra las tarjetas con valores, unidades e iconos
+5. Sistema muestra el timestamp de la última medición en formato localizado
+
+**Postcondiciones:**
+- Usuario visualiza los valores actuales con claridad
+- Información se actualiza automáticamente cada 60 segundos
+
+---
+
+### **CU-003: Monitorear Tendencias Meteorológicas**
+**Descripción:** El sistema calcula y muestra tendencias de temperatura y humedad comparando mediciones recientes con mediciones anteriores del mismo día.
+
+**Actores:**
+- Sistema Backend
+- Usuario Final
+
+**Precondiciones:**
+- Existen al menos 2 mediciones en la base de datos del día actual
+- El endpoint de tendencias funciona correctamente
+
+**Flujo Principal:**
+1. Sistema calcula diferencial de temperatura desde inicio del día
+2. Sistema calcula diferencial de humedad desde inicio del día
+3. Sistema genera mensaje de tendencia (ej: "↑ Aumentando 2.5°C")
+4. Sistema retorna datos de tendencia al dashboard
+5. Dashboard muestra tendencias debajo de cada valor
+
+**Postcondiciones:**
+- Usuario visualiza si los valores están aumentando o disminuyendo
+- Se actualiza automáticamente al recargar datos
+
+---
+
+### **CU-004: Consultar Extremos Diarios**
+**Descripción:** El usuario puede consultar los valores máximos y mínimos de temperatura registrados durante el día actual.
+
+**Actores:**
+- Usuario Final
+- Sistema Backend
+
+**Precondiciones:**
+- Existen mediciones del día actual
+- El endpoint de extremos está disponible
+
+**Flujo Principal:**
+1. Usuario visualiza la sección "Extremos Diarios" en el dashboard
+2. Sistema obtiene temperatura máxima y mínima del día
+3. Sistema obtiene humedad máxima y mínima del día
+4. Sistema muestra los extremos en formato de tarjetas
+5. Sistema incluye los timestamps de cuándo ocurrieron
+
+**Postcondiciones:**
+- Usuario conoce los rangos de variación diaria
+- Datos se actualizan en tiempo real con nuevas mediciones
+
+---
+
+### **CU-005: Ver Estadísticas Diarias Detalladas**
+**Descripción:** El usuario accede a un análisis completo de estadísticas del día actual incluyendo promedios, rangos y gráficos.
+
+**Actores:**
+- Usuario Final
+- Sistema Backend
+
+**Precondiciones:**
+- Existen múltiples mediciones del día
+- El componente de estadísticas está renderizado
+
+**Flujo Principal:**
+1. Usuario visualiza la sección "Estadísticas de Hoy"
+2. Sistema calcula temperatura promedio del día
+3. Sistema calcula humedad promedio del día
+4. Sistema calcula diferencial total de temperatura
+5. Sistema calcula diferencial total de humedad
+6. Sistema presenta información en formato visual (tarjetas/gráficos)
+
+**Postcondiciones:**
+- Usuario comprende el comportamiento meteorológico del día
+- Datos se actualizan conforme llegan nuevas mediciones
+
+---
+
+### **CU-006: Detectar Desconexión del Sensor**
+**Descripción:** El sistema monitorea el tiempo transcurrido desde la última medición y detecta automáticamente cuando el ESP01 pierde conexión.
+
+**Actores:**
+- Sistema de Monitoreo
+- Usuario Final
+
+**Precondiciones:**
+- El sistema está funcionando
+- Existen mediciones previas en la base de datos
+
+**Flujo Principal:**
+1. Sistema verifica cada minuto el tiempo desde la última medición
+2. Si han pasado más de 20 minutos sin nuevas mediciones:
+   - Sistema muestra advertencia amarilla (warning)
+   - Mensaje: "Advertencia: Valores no actualizados"
+3. Si han pasado más de 30 minutos sin nuevas mediciones:
+   - Sistema cambia advertencia a roja (error)
+   - Sistema muestra modal de error crítico
+   - Mensaje: "Error: Conexión perdida con el sensor"
+
+**Postcondiciones:**
+- Usuario es notificado de la desconexión
+- Modal se muestra solo una vez al cambiar a estado error
+
+---
+
+### **CU-007: Alertar sobre Valores Desactualizados**
+**Descripción:** El sistema notifica al usuario cuando los valores mostrados pueden no ser actuales debido a problemas de comunicación.
+
+**Actores:**
+- Sistema de Alertas
+- Usuario Final
+
+**Precondiciones:**
+- Se ha detectado falta de nuevas mediciones (CU-006)
+
+**Flujo Principal:**
+1. Sistema muestra card de advertencia en la parte superior del dashboard
+2. Card amarilla indica estado "warning" (20-30 min sin datos)
+3. Card roja indica estado "error" (>30 min sin datos)
+4. Card contiene descripción clara del problema
+5. Card se actualiza automáticamente según el estado
+
+**Postcondiciones:**
+- Usuario es consciente de la falta de actualización de datos
+- Usuario puede tomar acciones (reiniciar sensor, verificar conexión)
+
+---
+
+### **CU-008: Mostrar Modal de Error Crítico**
+**Descripción:** Cuando la conexión se pierde completamente, el sistema muestra un modal informativo al usuario con instrucciones.
+
+**Actores:**
+- Sistema de Alertas
+- Usuario Final
+
+**Precondiciones:**
+- Sistema detectó desconexión crítica (>30 minutos)
+- Modal no ha sido mostrado antes en esta sesión
+
+**Flujo Principal:**
+1. Sistema detecta pérdida de conexión crítica
+2. Sistema abre modal de diálogo
+3. Modal muestra:
+   - Título: "Se perdió conexión con el sensor"
+   - Descripción con instrucciones de verificación
+   - Botón "Entendido" para cerrar
+4. Usuario cierra el modal
+5. Card de error sigue visible en el dashboard
+
+**Postcondiciones:**
+- Usuario comprende el problema
+- Usuario tiene información para resolver el problema
+- Modal no reaparece hasta nueva desconexión
+
+---
+
+### **CU-009: Actualización Automática de Datos**
+**Descripción:** El sistema actualiza automáticamente todos los datos mostrados sin intervención del usuario.
+
+**Actores:**
+- Sistema de Actualización (SWR)
+- Usuario Final
+
+**Precondiciones:**
+- Usuario está en el dashboard
+- API está disponible
+
+**Flujo Principal:**
+1. Sistema realiza solicitud a API cada 60 segundos
+2. Sistema recibe nuevos datos meteorológicos
+3. Sistema actualiza valores en tiempo real
+4. Sistema recalcula tendencias
+5. Sistema actualiza extremos si hay nuevos
+6. Interfaz se renderiza con nuevos valores
+
+**Postcondiciones:**
+- Usuario visualiza datos frescos sin recargar la página
+- Indicador "Actualizando..." aparece brevemente
+
+---
+
+### **CU-010: Validar Integridad de Datos**
+**Descripción:** El sistema valida que los datos recibidos del sensor sean correctos y dentro de rangos esperados.
+
+**Actores:**
+- Backend API
+- Sistema de Validación
+
+**Precondiciones:**
+- Se reciben datos del ESP01
+
+**Flujo Principal:**
+1. Backend recibe solicitud HTTP del ESP01
+2. Sistema valida que temperatura esté en rango válido (-50 a 60°C)
+3. Sistema valida que humedad esté en rango válido (0 a 100%)
+4. Sistema verifica que ambos valores estén presentes
+5. Si validación es exitosa: almacena datos
+6. Si validación falla: rechaza datos y retorna error
+
+**Postcondiciones:**
+- Solo datos válidos se almacenan en la base de datos
+- Se mantiene integridad de datos históricos
+
+---
+
+## 5. Tabla Resumen de Casos de Uso
+
+| ID | Nombre | Tipo | Complejidad | Prioridad |
+|---|---|---|---|---|
+| CU-001 | Captura de Datos Meteorológicos | Sistema | Alta | Crítica |
+| CU-002 | Visualizar Valores Actuales | Usuario | Media | Crítica |
+| CU-003 | Monitorear Tendencias | Sistema | Media | Alta |
+| CU-004 | Consultar Extremos Diarios | Usuario | Media | Alta |
+| CU-005 | Ver Estadísticas Diarias | Usuario | Media | Media |
+| CU-006 | Detectar Desconexión | Sistema | Alta | Crítica |
+| CU-007 | Alertar Valores Desactualizados | Sistema | Media | Alta |
+| CU-008 | Mostrar Modal de Error | Sistema | Baja | Alta |
+| CU-009 | Actualización Automática | Sistema | Media | Crítica |
+| CU-010 | Validar Integridad de Datos | Sistema | Media | Alta |
+
+---
+
+## 6. Requisitos No Funcionales
+
+### Rendimiento
+- Actualización de interfaz en < 500ms
+- API responde en < 1000ms
+- Carga inicial del dashboard en < 2 segundos
+
+### Disponibilidad
+- Sistema disponible 24/7
+- Tolerancia de fallos del sensor con alertas
+- Recovery automático de fallos temporales
+
+### Precisión
+- Datos meteorológicos con precisión ±0.5°C
+- Almacenamiento de datos con timestamp exacto
+- Cálculos estadísticos precisos con 2 decimales
+
+### Escalabilidad
+- Capacidad de almacenar datos históricos de meses
+- Base de datos optimizada para consultas frecuentes
+- Soporte para múltiples sensores en futuras versiones
+
+### Usabilidad
+- Interfaz adaptable a dispositivos móviles
+- Visualización clara de alertas y advertencias
+- Mensajes claros en español
+
+### Seguridad
+- Validación de entrada en todas las solicitudes
+- Rango de datos esperados verificados
+- Protección contra datos malformados
+
+### Mantenibilidad
+- Código modular y reutilizable
+- Componentes bien documentados
+- Arquitectura escalable para nuevas funcionalidades
+
+---
+
+## 7. Arquitectura Técnica
+
+### Stack Tecnológico
+- **Frontend:** Next.js 14+ (React), TypeScript, Tailwind CSS, ShadcnUI
+- **Backend:** Next.js API Routes
+- **Base de Datos:** PostgreSQL
+- **Estado de Datos:** SWR (para actualización automática)
+- **Hardware:** ESP01 (Microcontrolador)
+- **Control de Versiones:** Git
+
+### Estructura de Carpetas
 ```
-├── app/
-│   ├── api/
-│   │   ├── weather/          # Endpoint para ESP-32
-│   │   └── weather-data/     # Endpoint público para dashboard
-│   └── page.tsx              # Dashboard principal
+local-weather-station/
+├── app/                          # Next.js app directory
+│   ├── api/                      # Endpoints API
+│   │   ├── weather-data/         # Captura y consulta de datos
+│   │   └── todays-stats/         # Estadísticas del día
+│   └── dashboard/                # Página principal
 ├── components/
-│   └── weather/
-│       ├── weather-card.tsx       # Tarjeta de medición individual
-│       ├── extremes-display.tsx   # Display de extremos diarios
-│       └── weather-dashboard.tsx  # Dashboard principal
+│   ├── weather/                  # Componentes del dashboard
+│   │   ├── weather-dashboard.tsx
+│   │   ├── weather-card.tsx
+│   │   └── extremes-display.tsx
+│   ├── todays-stats/             # Estadísticas
+│   │   └── estadisticas-hoy.tsx
+│   └── ui/                       # Componentes reutilizables
+│       ├── modal-error.tsx       # Modal de alertas
+│       ├── advertencia-card.tsx  # Card de advertencias
+│       └── alert-dialog.tsx
 ├── lib/
-│   ├── db/
-│   │   └── weather-repository.ts  # Lógica de base de datos
+│   ├── types/                    # TypeScript types
+│   │   └── weather.ts
 │   ├── utils/
-│   │   └── weather-validator.ts   # Validaciones
-│   ├── types/
-│   │   └── weather.ts             # Tipos TypeScript
-│   └── supabase/                  # Clientes Supabase
-└── scripts/
-    └── 001_create_weather_tables.sql  # Schema inicial
+│   │   ├── functions/
+│   │   │   └── getTempColor.ts   # Lógica de color de temperatura
+│   │   └── cn.ts                 # Utility para clases
+│   └── db/                       # Conexión a BD
+├── detalles-proyecto.md          # Este archivo
+└── package.json
 ```
 
-## Configuración
+---
 
-### 1. Ejecutar script de base de datos
+## 8. Flujo de Datos
 
-El script SQL se ejecutará automáticamente desde v0, o puedes hacerlo manualmente desde el proyecto.
+```
+┌─────────────────────────────────────────────────────────┐
+│                      ESP01 Sensor                        │
+│              (Temperatura + Humedad)                     │
+└────────────────────┬────────────────────────────────────┘
+                     │ HTTP POST c/15 min
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              API Route: /api/weather-data               │
+│         - Valida datos                                  │
+│         - Almacena en BD                                │
+│         - Retorna confirmación                          │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│                  Base de Datos                          │
+│              (Tabla: weather_readings)                  │
+└────────────────────┬────────────────────────────────────┘
+                     │
+     ┌───────────────┼───────────────┐
+     │               │               │
+     ▼               ▼               ▼
+  ┌────────┐   ┌──────────┐   ┌────────────┐
+  │ Última │   │ Extremos │   │ Tendencias │
+  │Medicion│   │  Diarios │   │    Hoy     │
+  └────────┘   └──────────┘   └────────────┘
+     │               │               │
+     └───────────────┼───────────────┘
+                     │
+    ┌────────────────┴────────────────┐
+    │                                 │
+    ▼                                 ▼
+┌──────────────────┐         ┌────────────────┐
+│  SWR (cada 60s)  │         │ API Endpoints  │
+│  /api/weather-   │         │ /api/todays-   │
+│      data        │         │   stats/trend  │
+└────────────────┬─┘         └────────┬───────┘
+                 │                    │
+                 └────────┬───────────┘
+                          │
+                          ▼
+              ┌──────────────────────┐
+              │  Weather Dashboard   │
+              │  - Valores actuales  │
+              │  - Extremos          │
+              │  - Tendencias        │
+              │  - Estadísticas      │
+              │  - Alertas           │
+              └──────────────────────┘
+```
 
-### 2. Configurar API Key
+---
 
-Por defecto, la API key es `esp32-station-key-change-me`. Para cambiarla:
+## 9. Estados de Conexión
 
+```
+NORMAL (< 20 min)
+└─ Sin advertencias
+└─ Card verde (implícita)
+└─ Valores mostrados como actuales
+
+        ↓ (> 20 min)
+
+WARNING (20-30 min)
+└─ Card amarilla visible
+└─ Título: "Advertencia: Valores no actualizados"
+└─ Descripción: "No se ha recibido la última medición..."
+└─ Valores siguen visibles
+
+        ↓ (> 30 min)
+
+ERROR (> 30 min)
+└─ Card roja visible
+└─ Título: "Error: Conexión perdida con el sensor"
+└─ Modal de error se muestra (una sola vez)
+└─ Descripción: "Se perdió la conexión..."
+└─ Valores siguen visibles pero con advertencia crítica
+```
+
+---
+
+## 10. Modelo de Datos
+
+### Tabla: weather_readings
 ```sql
--- Insertar una nueva API key
-INSERT INTO api_keys (key, name) 
-VALUES ('tu-api-key-segura', 'Mi ESP32');
-
--- Desactivar la key de prueba
-UPDATE api_keys 
-SET is_active = false 
-WHERE key = 'esp32-station-key-change-me';
+CREATE TABLE weather_readings (
+  id SERIAL PRIMARY KEY,
+  temperature DECIMAL(5,2) NOT NULL,      -- Rango: -50 a 60°C
+  humidity DECIMAL(5,2) NOT NULL,         -- Rango: 0 a 100%
+  recorded_at TIMESTAMP NOT NULL,         -- Cuándo se midió
+  created_at TIMESTAMP DEFAULT NOW(),     -- Cuándo se guardó
+  INDEX(recorded_at DESC)                 -- Para consultas rápidas
+);
 ```
 
-### 3. Configurar ESP-32
+---
 
-Envía peticiones POST a `/api/weather` con:
+## 11. Endpoints API
 
-**Headers:**
-```
-Authorization: Bearer esp32-station-key-change-me
-Content-Type: application/json
-```
+### POST /api/weather-data
+**Descripción:** Recibe datos del ESP01 y los almacena
 
-**Body:**
+**Request:**
 ```json
 {
-  "temperature": 23.5,
-  "humidity": 65.2,
-  "timestamp": "2025-01-01T12:00:00Z"
+  "temperature": 22.5,
+  "humidity": 65.3
 }
 ```
 
-**Ejemplo con Arduino (ESP-32):**
-
-```cpp
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
-#include <DHT.h>
-
-#define DHTPIN 4
-#define DHTTYPE DHT22
-DHT dht(DHTPIN, DHTTYPE);
-
-const char* ssid = "TU_WIFI";
-const char* password = "TU_PASSWORD";
-const char* serverUrl = "https://tu-dominio.vercel.app/api/weather";
-const char* apiKey = "esp32-station-key-change-me";
-
-void setup() {
-  Serial.begin(115200);
-  dht.begin();
-  
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Conectando a WiFi...");
-  }
-  Serial.println("Conectado a WiFi");
-}
-
-void loop() {
-  float humidity = dht.readHumidity();
-  float temperature = dht.readTemperature();
-  
-  if (isnan(humidity) || isnan(temperature)) {
-    Serial.println("Error leyendo sensor DHT");
-    delay(2000);
-    return;
-  }
-  
-  HTTPClient http;
-  http.begin(serverUrl);
-  http.addHeader("Content-Type", "application/json");
-  http.addHeader("Authorization", String("Bearer ") + apiKey);
-  
-  StaticJsonDocument<200> doc;
-  doc["temperature"] = temperature;
-  doc["humidity"] = humidity;
-  
-  String jsonData;
-  serializeJson(doc, jsonData);
-  
-  int httpResponseCode = http.POST(jsonData);
-  
-  if (httpResponseCode > 0) {
-    Serial.print("Datos enviados. Código: ");
-    Serial.println(httpResponseCode);
-  } else {
-    Serial.print("Error: ");
-    Serial.println(httpResponseCode);
-  }
-  
-  http.end();
-  
-  // Esperar 30 minutos (1800000 ms)
-  delay(1800000);
-}
-```
-
-## API Endpoints
-
-### POST /api/weather
-Recibe datos de la ESP-32 (protegido con API key)
-
-**Headers requeridos:**
-- `Authorization: Bearer <api-key>`
-
-**Body:**
-```json
-{
-  "temperature": 23.5,
-  "humidity": 65.2,
-  "timestamp": "2025-01-01T12:00:00Z"  // Opcional
-}
-```
-
-**Respuesta exitosa (200):**
+**Response (201):**
 ```json
 {
   "success": true,
+  "message": "Datos guardados correctamente",
   "reading": {
-    "id": "uuid",
-    "temperature": 23.5,
-    "humidity": 65.2,
-    "recorded_at": "2025-01-01T12:00:00Z"
+    "id": 123,
+    "temperature": 22.5,
+    "humidity": 65.3,
+    "recorded_at": "2026-01-06T10:30:00Z"
   }
 }
 ```
 
 ### GET /api/weather-data
-Obtiene datos para el dashboard (público, sin autenticación)
+**Descripción:** Obtiene últimos datos y extremos del día
 
-**Respuesta:**
+**Response (200):**
 ```json
 {
   "latestReading": {
-    "id": "uuid",
-    "temperature": 23.5,
-    "humidity": 65.2,
-    "recorded_at": "2025-01-01T12:00:00Z"
+    "temperature": 22.5,
+    "humidity": 65.3,
+    "recorded_at": "2026-01-06T10:30:00Z"
   },
   "todayExtremes": {
-    "temp_max": 25.3,
-    "temp_min": 18.7,
-    "temp_max_time": "2025-01-01T14:30:00Z",
-    "temp_min_time": "2025-01-01T05:15:00Z",
-    "humidity_max": 78.5,
-    "humidity_min": 45.2
-  },
-  "timestamp": "2025-01-01T16:00:00Z"
-}
-```
-
-## Escalabilidad
-
-El proyecto está diseñado para escalar fácilmente:
-
-### Añadir nuevos sensores (ejemplo: precipitación)
-
-**1. Actualizar tipos:**
-```typescript
-// lib/types/weather.ts
-export interface WeatherReading {
-  // ... campos existentes
-  rainfall?: number  // mm de lluvia
-  pressure?: number  // presión atmosférica en hPa
-}
-```
-
-**2. Actualizar schema:**
-```sql
--- scripts/002_add_rainfall.sql
-ALTER TABLE weather_readings 
-ADD COLUMN rainfall DECIMAL(5,2),
-ADD COLUMN pressure DECIMAL(6,2);
-
-ALTER TABLE daily_extremes
-ADD COLUMN rainfall_total DECIMAL(6,2),
-ADD COLUMN pressure_max DECIMAL(6,2),
-ADD COLUMN pressure_min DECIMAL(6,2);
-```
-
-**3. Actualizar validador:**
-```typescript
-// lib/utils/weather-validator.ts
-static validateRanges(payload: ESP32Payload) {
-  // ... validaciones existentes
-  if (payload.rainfall && payload.rainfall < 0) {
-    errors.push('Rainfall cannot be negative');
+    "temp_max": 25.0,
+    "temp_max_time": "2026-01-06T14:30:00Z",
+    "temp_min": 18.5,
+    "temp_min_time": "2026-01-06T06:15:00Z",
+    "humidity_max": 78.0,
+    "humidity_min": 45.5
   }
 }
 ```
 
-**4. Añadir componente UI:**
-```tsx
-// components/weather/rainfall-card.tsx
-<WeatherCard
-  title="Precipitación"
-  value={data?.latestReading?.rainfall}
-  unit="mm"
-  icon={<Cloud />}
-/>
+### GET /api/todays-stats/trend
+**Descripción:** Obtiene tendencias de temperatura y humedad del día
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "tempTrend": {
+    "differential": 3.5,
+    "message": "↑ Aumentando 3.5°C desde el inicio del día"
+  },
+  "humTrend": {
+    "differential": -5.2,
+    "message": "↓ Disminuyendo 5.2% desde el inicio del día"
+  }
+}
 ```
 
-## Validaciones
+---
 
-- **Temperatura**: -50°C a 60°C
-- **Humedad**: 0% a 100%
-- **API Key**: Verificación en base de datos
-- **Payload**: Validación de estructura y tipos
+## 12. Componentes Reutilizables Implementados
 
-## Tecnologías
+### modal-error.tsx
+- **Props:** `open`, `onOpenChange`, `title`, `description`
+- **Uso:** Alertas críticas del sistema
+- **Estilo:** AlertDialog de ShadcnUI
+- **Ubicación:** `/components/ui/modal-error.tsx`
 
-- **Frontend**: Next.js 16, React 19, TailwindCSS v4
-- **Backend**: Next.js API Routes
-- **Base de datos**: PostgreSQL (Supabase)
-- **Actualización en tiempo real**: SWR con revalidación cada 30s
-- **Hardware**: ESP-32 con sensor DHT22/DHT11
+### advertencia-card.tsx
+- **Props:** `nivel` (warning|error), `titulo`, `descripcion`
+- **Uso:** Notificaciones no-modales
+- **Colores:** Amarillo (warning), Rojo (error)
+- **Ubicación:** `/components/ui/advertencia-card.tsx`
 
-## Seguridad
+### weather-card.tsx
+- **Props:** Múltiples (título, valor, unidad, icono, etc.)
+- **Uso:** Mostrar valores individuales de sensores
+- **Colores:** Dinámicos según temperatura
 
-- API keys almacenadas en base de datos
-- Validación de rangos de sensores
-- Sin RLS (datos públicos de solo lectura)
-- Escritura protegida por API key
+---
 
-## Deploy
+## 13. Consideraciones de Implementación
 
-El proyecto está listo para desplegarse en Vercel con el botón "Publish" en v0.
+### Tolerancia de Fallos
+- Sensor offline > 20 min: Advertencia visual
+- Sensor offline > 30 min: Modal + Card de error
+- Datos validados antes de almacenar
+- Solo datos válidos se muestran
+
+### Optimizaciones
+- SWR para actualización eficiente
+- Índices en BD para consultas rápidas
+- Componentes React optimizados con memo si aplica
+- Caché de respuestas API
+
+### Seguridad
+- Validación de rangos en backend
+- Tipado TypeScript para prevenir errores
+- Sanitización de entrada de datos
+- Rate limiting en endpoints (futuro)
+
+---
+
+## 14. Roadmap Futuro
+
+- [ ] Histórico de datos con gráficos (Chart.js/Recharts)
+- [ ] Exportar datos a CSV
+- [ ] Notificaciones por email si sensor falla
+- [ ] Soporte para múltiples sensores
+- [ ] Predicción de tendencias con ML
+- [ ] Dark mode automático
+- [ ] API de autenticación
+- [ ] Base de datos distribuida para redundancia
+
+---
+
+## 15. Instrucciones de Setup
+
+### Variables de Entorno
+```env
+# .env.local
+DATABASE_URL=postgresql://user:password@localhost:5432/weather_station
+API_PORT=3000
+SENSOR_TIMEOUT_WARNING=20
+SENSOR_TIMEOUT_ERROR=30
+```
+
+### Instalación
+```bash
+npm install
+npm run dev
+```
+
+### Configurar ESP01
+```
+POST http://your-local-ip:3000/api/weather-data
+Payload: {"temperature": XX.X, "humidity": XX.X}
+Interval: 15 minutos
+```
+
+---
+
+**Última actualización:** 6 de enero de 2026
+**Estado:** Especificación Completa
+**Versión:** 1.0
