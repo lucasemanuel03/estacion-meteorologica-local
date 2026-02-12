@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import Header from "@/components/header"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AutoThemeWrapper } from "@/components/auto-theme-wrapper"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -37,11 +39,24 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="es" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        <Header />
-        {children}
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AutoThemeWrapper
+            lightModeStart={7}
+            darkModeStart={22}
+            enabled={true}
+          >
+            <Header />
+            {children}
+          </AutoThemeWrapper>
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { WeatherCard } from "./weather-card"
 import { ExtremesDisplay } from "./extremes-display"
 import type { WeatherDashboardData } from "@/lib/types/weather"
-import { Thermometer, Droplets } from "lucide-react"
-import getTempColor from "@/lib/utils/functions/getTempColor"
 import EstadisticasHoy from "../todays-stats/estadisticas-hoy"
+import ActualesDisplay from "./actuales-display"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
+import { MapPin } from "lucide-react"
 
 type TrendResponse = {
   success: boolean
@@ -26,12 +25,13 @@ type EstadoConexion = "normal" | "warning" | "error"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-export function WeatherDashboard() {
+export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubicacion?: string}) {
   const [lastUpdate, setLastUpdate] = useState<string>("")
   const [tempTrend, setTempTrend] = useState<TrendParametro | null>(null)
   const [humTrend, setHumTrend] = useState<TrendParametro | null>(null)
   const [estadoConexion, setEstadoConexion] = useState<EstadoConexion>("normal")
   const [showErrorModal, setShowErrorModal] = useState(false)
+
 
   // SWR para refrescar datos automáticamente cada 60 segundos
   const { data, error, isLoading } = useSWR<WeatherDashboardData>("/api/weather-data", fetcher, {
@@ -65,6 +65,8 @@ export function WeatherDashboard() {
     if (!data?.latestReading?.recorded_at) return
 
     const verificarConexion = () => {
+      if (!data?.latestReading?.recorded_at) return
+      
       const ahora = new Date()
       const ultimaMedicion = new Date(data.latestReading.recorded_at)
       const diferenciaMinutos = (ahora.getTime() - ultimaMedicion.getTime()) / (1000 * 60)
@@ -114,60 +116,62 @@ export function WeatherDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Valores Actuales</h2>
-          {lastUpdate && <p className="text-base text-muted-foreground">Última Medición: {lastUpdate}</p>}
-        </div>
-        {isLoading && (
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
-            <span className="text-xs text-muted-foreground">Actualizando...</span>
+    <div className="space-y-8">
+      {/* Header con efecto de gradiente */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
+        <div className="flex items-center justify-between pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 ">
+              <MapPin className="h-10 w-10"/>
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                {ubicacion}
+              </h2>
+            </div>
+            {lastUpdate && (
+              <p className="text-sm sm:text-base text-muted-foreground font-medium flex items-center gap-2 ml-12">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                Última Medición: {lastUpdate}
+              </p>
+            )}
           </div>
-        )}
+          {isLoading && (
+            <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
+              <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
+              <span className="text-sm font-medium text-primary">Actualizando...</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Advertencias de conexión */}
-      {estadoConexion === "warning" && (
-        <AdvertenciaCard
-          nivel="warning"
-          titulo="Advertencia: Valores desactualizados"
-          descripcion="No se ha recibido la última medición del sensor. Los valores mostrados pueden estar desactualizados."
-        />
-      )}
+      <div className="animate-in fade-in-50 slide-in-from-top-5 duration-500">
+        {estadoConexion === "warning" && (
+          <AdvertenciaCard
+            nivel="warning"
+            titulo="Advertencia: Valores desactualizados"
+            descripcion="No se ha recibido la última medición del sensor. Los valores mostrados pueden estar desactualizados."
+          />
+        )}
 
-      {estadoConexion === "error" && (
-        <AdvertenciaCard
-          nivel="error"
-          titulo="Error: Conexión perdida con el sensor"
-          descripcion="Se perdió la conexión con el sensor ESP01. Los valores mostrados están desactualizados. Verifique la conexión del dispositivo."
-        />
-      )}
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <WeatherCard
-          title="Temperatura"
-          value={data?.latestReading?.temperature ?? null}
-          unit="°C"
-          icon={<Thermometer className="h-6 w-6" />}
-          variant="temperature"
-          tempColor={getTempColor(data?.latestReading?.temperature ?? 16)}
-          subtitle={tempTrend ? tempTrend.message : undefined}
-          diferencial={tempTrend ? tempTrend.differential : undefined}
-        />
-        <WeatherCard
-          title="Humedad"
-          value={data?.latestReading?.humidity ?? null}
-          unit="%"
-          icon={<Droplets className="h-6 w-6" />}
-          variant="humidity"
-          subtitle={humTrend ? humTrend.message : undefined}
-          diferencial={humTrend ? humTrend.differential : undefined}
-        />
+        {estadoConexion === "error" && (
+          <AdvertenciaCard
+            nivel="error"
+            titulo="Error: Conexión perdida con el sensor"
+            descripcion="Se perdió la conexión con el sensor ESP01. Los valores mostrados están desactualizados. Verifique la conexión del dispositivo."
+          />
+        )}
       </div>
 
+      <ActualesDisplay
+        temperature={data?.latestReading?.temperature ?? null}
+        humidity={data?.latestReading?.humidity ?? null}
+        tempTrend={tempTrend ?? undefined}
+        humTrend={humTrend ?? undefined}
+      />
+
       <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
+
       <EstadisticasHoy 
         temp_max={data?.todayExtremes?.temp_max ?? null} 
         temp_min={data?.todayExtremes?.temp_min ?? null}
