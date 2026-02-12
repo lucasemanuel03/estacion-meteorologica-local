@@ -120,25 +120,27 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       {/* Header con efecto de gradiente */}
       <div className="relative">
         <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
-        <div className="flex items-center justify-between pb-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 ">
-              <MapPin className="h-10 w-10"/>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-                {ubicacion}
-              </h2>
-            </div>
-            {lastUpdate && (
-              <p className="text-sm sm:text-base text-muted-foreground font-medium flex items-center gap-2 ml-12">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                Última Medición: {lastUpdate}
-              </p>
-            )}
-          </div>
-          {isLoading && (
+        <div className="flex items-center justify-center pb-4">
+
+          {isLoading? (
             <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
               <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
               <span className="text-sm font-medium text-primary">Actualizando...</span>
+            </div>
+          ) : (
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 ">
+                <MapPin className="h-8 w-8"/>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                  {ubicacion}
+                </h2>
+              </div>
+              {lastUpdate && (
+                <p className="text-sm sm:text-base text-muted-foreground font-medium flex items-center gap-2 ml-12">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  Última Medición: {lastUpdate}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -149,7 +151,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         {estadoConexion === "warning" && (
           <AdvertenciaCard
             nivel="warning"
-            titulo="Advertencia: Valores desactualizados"
+            titulo="Valores desactualizados"
             descripcion="No se ha recibido la última medición del sensor. Los valores mostrados pueden estar desactualizados."
           />
         )}
@@ -157,7 +159,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         {estadoConexion === "error" && (
           <AdvertenciaCard
             nivel="error"
-            titulo="Error: Conexión perdida con el sensor"
+            titulo="Conexión perdida con el sensor"
             descripcion="Se perdió la conexión con el sensor ESP01. Los valores mostrados están desactualizados. Verifique la conexión del dispositivo."
           />
         )}
@@ -183,7 +185,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       <ModalError
         open={showErrorModal}
         onOpenChange={setShowErrorModal}
-        title="Se perdió conexión con el sensor"
+        title="Conexión perdida con el sensor"
         description="Se perdió la conexión con el sensor ESP01. No se están recibiendo datos actualizados. Por favor, verifique que el dispositivo esté encendido y correctamente conectado a la red."
       />
     </div>

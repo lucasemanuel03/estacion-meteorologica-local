@@ -33,7 +33,7 @@ export function useAutoTheme({
   darkModeStart = 22,
   enabled = true,
 }: UseAutoThemeOptions = {}) {
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   /**
    * Determina si el tema debe ser oscuro basándose en la hora actual
@@ -68,9 +68,12 @@ export function useAutoTheme({
   }
 
   useEffect(() => {
-    if (!enabled) return
+    // Solo aplicar cambios automáticos si:
+    // 1. El componente está habilitado
+    // 2. El tema seleccionado es "system" (modo automático)
+    if (!enabled || theme !== 'system') return
 
-    // Establecer el tema inicial
+    // Establecer el tema inicial basado en la hora
     const initialTheme = getThemeBasedOnTime()
     setTheme(initialTheme)
 
@@ -81,7 +84,7 @@ export function useAutoTheme({
     }, 60000) // Verificar cada 60 segundos
 
     return () => clearInterval(interval)
-  }, [lightModeStart, darkModeStart, enabled, setTheme])
+  }, [lightModeStart, darkModeStart, enabled, setTheme, theme])
 
   return getThemeBasedOnTime
 }

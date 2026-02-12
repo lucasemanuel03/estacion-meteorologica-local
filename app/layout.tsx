@@ -50,7 +50,6 @@ export default function RootLayout({
           <AutoThemeWrapper
             lightModeStart={7}
             darkModeStart={22}
-            enabled={true}
           >
             <Header />
             {children}

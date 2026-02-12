@@ -8,10 +8,10 @@ export default function IrAlHistorialCard() {
   return (
     <Card className={cn(
       "relative overflow-hidden backdrop-blur-xl",
-      "bg-gradient-to-br from-emerald-500/10 via-background/95 to-teal-500/10",
+      "bg-linear-to-br from-emerald-500/10 via-background/95 to-teal-500/10",
       "border-emerald-400/30 shadow-2xl shadow-emerald-500/20",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
-      "group hover:scale-[1.01] transition-all"
+      "group  transition-all"
     )}
     style={{ animationDelay: "600ms" }}
     >
@@ -22,12 +22,12 @@ export default function IrAlHistorialCard() {
       </div>
       
       <CardHeader className="relative z-10">
-        <div className="flex items-start gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+        <div className="flex items-start gap-4 group-hover:scale-101 transition-transform duration-300">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm ">
             <HistoryIcon className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <CardTitle className="text-2xl sm:text-3xl font-black tracking-tight mb-2">
+            <CardTitle className="text-2xl sm:text-3xl font-black tracking-tight ">
               Historial del Clima
             </CardTitle>
             <CardDescription className="text-base">
@@ -40,15 +40,10 @@ export default function IrAlHistorialCard() {
       <CardContent className="relative z-10">
         <Link href="/weather-history">
           <Button 
-            variant="default" 
+            variant="dinamic" 
             size="lg"
             className={cn(
               "w-full sm:w-auto group/btn",
-              "bg-gradient-to-r from-emerald-600 to-teal-600",
-              "hover:from-emerald-700 hover:to-teal-700",
-              "shadow-lg hover:shadow-xl shadow-emerald-500/30",
-              "transition-all duration-300",
-              "text-base font-bold"
             )}
           >
             <HistoryIcon className="mr-2" />

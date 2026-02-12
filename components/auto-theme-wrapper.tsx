@@ -20,7 +20,7 @@ export function AutoThemeWrapper({
   children,
   lightModeStart = 6,
   darkModeStart = 22,
-  enabled = true,
+  enabled = false,
 }: AutoThemeWrapperProps) {
   useAutoTheme({ lightModeStart, darkModeStart, enabled })
 

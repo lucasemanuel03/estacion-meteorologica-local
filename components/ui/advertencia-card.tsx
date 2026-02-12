@@ -19,11 +19,10 @@ export function AdvertenciaCard({ nivel, titulo, descripcion }: AdvertenciaCardP
     <Card
       className={cn(
         "relative overflow-hidden border backdrop-blur-xl w-full p-6",
-        "transition-all duration-500 hover:scale-[1.01]",
         "animate-in fade-in-50 slide-in-from-top-5 duration-500",
         isError
-          ? "border-red-500/50 bg-linear-to-br from-red-500/15 to-red-600/5 shadow-lg shadow-red-500/20"
-          : "border-yellow-500/50 bg-linear-to-br from-yellow-500/15 to-amber-500/5 shadow-lg shadow-yellow-500/20"
+          ? "border-red-800/50 bg-linear-to-br from-red-500/15 to-red-600/5 shadow-lg shadow-red-900/20"
+          : "border-yellow-800/50 bg-linear-to-br from-yellow-500/15 to-amber-500/5 shadow-lg shadow-yellow-900/20"
       )}
     >
       {/* Atmospheric background effect */}
@@ -42,9 +41,9 @@ export function AdvertenciaCard({ nivel, titulo, descripcion }: AdvertenciaCardP
             : "bg-yellow-500/20"
         )}>
           {isError ? (
-            <WifiOff className="h-7 w-7 text-red-600 dark:text-red-400" />
+            <WifiOff className="h-7 w-7 text-red-800 dark:text-red-200" />
           ) : (
-            <AlertTriangle className="h-7 w-7 text-yellow-600 dark:text-yellow-400" />
+            <AlertTriangle className="h-7 w-7 text-yellow-800 dark:text-yellow-200" />
           )}
         </div>
         
@@ -52,16 +51,16 @@ export function AdvertenciaCard({ nivel, titulo, descripcion }: AdvertenciaCardP
           <h3 className={cn(
             "font-bold text-base sm:text-lg tracking-wide",
             isError 
-              ? "text-red-700 dark:text-red-300" 
-              : "text-yellow-700 dark:text-yellow-300"
+              ? "text-red-900 dark:text-red-100" 
+              : "text-yellow-900 dark:text-yellow-100"
           )}>
             {titulo}
           </h3>
           <p className={cn(
             "text-sm sm:text-base leading-relaxed",
             isError 
-              ? "text-red-600 dark:text-red-400" 
-              : "text-yellow-600 dark:text-yellow-400"
+              ? "text-red-800 dark:text-red-200" 
+              : "text-yellow-800 dark:text-yellow-200"
           )}>
             {descripcion}
           </p>

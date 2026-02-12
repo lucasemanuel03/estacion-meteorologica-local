@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { CloudSun } from "lucide-react";
+import ThemeSelector from "./theme-selector";
 
 export default function Header() {
   return (
@@ -11,10 +12,10 @@ export default function Header() {
       {/* Gradient effect */}
       <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-orange-500/5 pointer-events-none" />
       
-      <div className="container mx-auto relative z-10">
+      <div className="container flex justify-between items-center mx-auto relative z-10">
         <div className="flex flex-col items-center justify-center">
           <Link href="/" className="group">
-            <div className="flex items-center gap-3 transition-all duration-300 hover:scale-105">
+            <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
                 <img 
@@ -33,6 +34,9 @@ export default function Header() {
             </div>
           </Link>
         </div>
+
+          <ThemeSelector />
+
       </div>
     </header>
   )
