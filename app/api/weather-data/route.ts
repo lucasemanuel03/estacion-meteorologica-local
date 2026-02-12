@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { WeatherRepository } from "@/lib/db/weather-repository"
+import { calculateHeatIndex } from "@/lib/utils/functions/heat-index"
 
 /**
  * GET /api/weather-data
@@ -13,9 +14,15 @@ export async function GET() {
       WeatherRepository.getTodayExtremes(),
     ])
 
+    // Calcular índice de calor si hay lectura disponible
+    const heatIndex = latestReading 
+      ? calculateHeatIndex(latestReading.temperature, latestReading.humidity)
+      : null
+
     return NextResponse.json({
       latestReading,
       todayExtremes,
+      heatIndex,
       timestamp: new Date().toISOString(),
     })
   } catch (error) {

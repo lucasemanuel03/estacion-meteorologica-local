@@ -29,6 +29,16 @@ export interface ESP32Payload {
   timestamp?: string // Opcional, si la ESP32 envía su timestamp
 }
 
+// Tipo para el índice de calor
+export interface HeatIndex {
+  /** Índice de calor en grados Celsius */
+  value: number
+  /** Categoría del índice de calor */
+  category: "SEGURO" | "PRECAUCIÓN" | "PRECAUCIÓN EXTREMA" | "PELIGRO" | "PELIGRO EXTREMO" | "MÁS ALLÁ DEL UMBRAL HUMANO"
+  /** Leyenda descriptiva del impacto en salud */
+  description: string
+}
+
 // Tipo para la respuesta del dashboard
 export interface WeatherDashboardData {
   latestReading: WeatherReading | null

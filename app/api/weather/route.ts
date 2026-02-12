@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { WeatherRepository } from "@/lib/db/weather-repository"
 import { WeatherValidator } from "@/lib/utils/weather-validator"
+import { calculateHeatIndex } from "@/lib/utils/functions/heat-index"
 
 /**
  * POST /api/weather
@@ -84,7 +85,12 @@ export async function POST(request: NextRequest) {
       console.error(`[v1][req:${requestId}] Background task error updating extremes:`, error)
     })
 
-    // 6. Respuesta exitosa
+    // 6. Calcular índice de calor
+    console.log(`[v1][req:${requestId}] Step 6: Calculating heat index`)
+    const heatIndex = calculateHeatIndex(reading.temperature, reading.humidity)
+    console.log(`[v1][req:${requestId}] Heat index calculated:`, heatIndex)
+
+    // 7. Respuesta exitosa
     console.log(`[v1][req:${requestId}] Returning success response`)
     return NextResponse.json({
       success: true,
@@ -93,6 +99,11 @@ export async function POST(request: NextRequest) {
         temperature: reading.temperature,
         humidity: reading.humidity,
         recorded_at: reading.recorded_at,
+      },
+      heatIndex: {
+        value: heatIndex.value,
+        category: heatIndex.category,
+        description: heatIndex.description,
       },
     })
   } catch (error) {
