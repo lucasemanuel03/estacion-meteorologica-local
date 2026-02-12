@@ -43,6 +43,7 @@ export interface HeatIndex {
 export interface WeatherDashboardData {
   latestReading: WeatherReading | null
   todayExtremes: DailyExtremes | null
+  heatIndex: HeatIndex | null
 }
 
 // Tipo para los promedios horarios

@@ -70,6 +70,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       const ahora = new Date()
       const ultimaMedicion = new Date(data.latestReading.recorded_at)
       const diferenciaMinutos = (ahora.getTime() - ultimaMedicion.getTime()) / (1000 * 60)
+      console.log("HeatIndex", data.heatIndex)
 
       let nuevoEstado: EstadoConexion = "normal"
 
@@ -168,6 +169,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       <ActualesDisplay
         temperature={data?.latestReading?.temperature ?? null}
         humidity={data?.latestReading?.humidity ?? null}
+        heatIndex={data?.heatIndex ?? null}
         tempTrend={tempTrend ?? undefined}
         humTrend={humTrend ?? undefined}
       />

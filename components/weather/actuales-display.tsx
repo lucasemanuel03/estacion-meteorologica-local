@@ -3,10 +3,13 @@ import { WeatherCard } from "./weather-card"
 import { Thermometer, Droplets } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
 import { cn } from "@/lib/utils"
+import HeatIndexCard from "./heat-index-card"
+import { HeatIndex } from "@/lib/types/weather"
 
 interface ActualesDisplayProps {
   temperature: number | null
   humidity: number | null
+  heatIndex: HeatIndex | null
   tempTrend?: { differential: number; message: string }
   humTrend?: { differential: number; message: string }
 }
@@ -16,6 +19,7 @@ export default function ActualesDisplay({
   humidity,
   tempTrend,
   humTrend,
+  heatIndex,
 }: ActualesDisplayProps) {
   return (
     <Card
@@ -35,7 +39,7 @@ export default function ActualesDisplay({
       </CardHeader>
 
       <CardContent className="relative z-10">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-3">
           <WeatherCard
             title="Temperatura"
             value={temperature}
@@ -55,6 +59,7 @@ export default function ActualesDisplay({
             subtitle={humTrend ? humTrend.message : undefined}
             diferencial={humTrend ? humTrend.differential : undefined}
           />
+            <HeatIndexCard heatIndex={heatIndex} /> 
         </div>
       </CardContent>
     </Card>
