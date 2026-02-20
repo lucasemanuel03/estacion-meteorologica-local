@@ -41,7 +41,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
       {/* Efecto de fondo atmosférico */}
       <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
 
-      <CardHeader className="flex flex-row items-center justify-between pb-3 relative z-10">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
         <CardTitle 
             className="text-lg sm:text-xl md:text-2xl font-semibold tracking-wide text-foreground/90">
                 <p className="flex gap-2 items-center">
@@ -135,23 +135,23 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         {heatIndex ? (
           <>
             {/* Valor principal - más compacto */}
-            <div className="flex items-baseline justify-center gap-2 py-2">
+            <div className="flex items-baseline justify-center gap-1 py-1">
               <span
                 className={cn(
-                  "text-4xl sm:text-5xl font-bold tracking-wide",
+                  "text-3xl sm:text-4xl font-bold tracking-wide",
                   "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
                   "drop-shadow-sm"
                 )}
               >
                 {heatIndex.value.toFixed(1)}
               </span>
-              <span className="text-2xl sm:text-3xl font-bold text-muted-foreground/80">
+              <span className="text-xl sm:text-2xl font-bold text-muted-foreground/80">
                 °C
               </span>
             </div>
 
             {/* Badge de categoría */}
-            <div className="flex justify-center mt-3">
+            <div className="flex justify-center mt-2">
               <span
                 className={cn(
                   "inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider",

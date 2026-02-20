@@ -114,6 +114,12 @@ export default function CurvaTempHum({
               return [`${value} ${metric === "temperature" ? "°C" : "%"} (Con ${cnt} muestra/s)`]
             }}
             labelFormatter={(label) => `Hora: ${label}`}
+            contentStyle={{
+              backgroundColor: "var(--background)",
+              color: "var(--foreground)",
+              border: '1px solid var(--border)',
+            }}
+            labelStyle={{ color: "var(--foreground)" }}
           />
           <Legend />
           <Area

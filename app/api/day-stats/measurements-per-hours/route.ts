@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const hourlyAverages = await DayStatsRepository.getAveragesByHourForDate(date)
+    const hourlyAverages = await DayStatsRepository.getHourlyStatsByDate(date)
 
     return NextResponse.json({
       success: true,
