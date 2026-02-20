@@ -99,4 +99,40 @@ export class DayStatsRepository {
     return result
   }
 
+  /**
+   * Obtiene los promedios por hora desde la tabla hourly_stats
+   *
+   * @param date - Formato: YYYY-MM-DD
+   */
+  static async getHourlyStatsByDate(
+    date: string,
+  ): Promise<
+    Array<{
+      hour: number
+      count: number
+      avgTemperature: number
+      avgHumidity: number
+    }>
+  > {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from("hourly_stats")
+      .select("hour,count,avgtemperature,avghumidity")
+      .eq("date", date)
+      .order("hour", { ascending: true })
+
+    if (error) {
+      console.error("[v1-stats] Error fetching hourly_stats for date:", error)
+      return []
+    }
+
+    return (data || []).map((row) => ({
+      hour: row.hour,
+      count: row.count,
+      avgTemperature: row.avgtemperature,
+      avgHumidity: row.avghumidity,
+    }))
+  }
+
 }
