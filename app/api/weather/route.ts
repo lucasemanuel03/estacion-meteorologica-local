@@ -14,6 +14,7 @@ import { calculateHeatIndex } from "@/lib/utils/functions/heat-index"
  * {
  *   "temperature": 23.5,
  *   "humidity": 65.2,
+ *   "pressure_atm": 104.4 (opcional),
  *   "timestamp": "2025-01-01T12:00:00Z" (opcional)
  * }
  */
@@ -92,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     // 7. Respuesta exitosa
     console.log(`[v1][req:${requestId}] Returning success response`)
-    return NextResponse.json({
+    const response: Record<string, unknown> = {
       success: true,
       reading: {
         id: reading.id,
@@ -105,7 +106,13 @@ export async function POST(request: NextRequest) {
         category: heatIndex.category,
         description: heatIndex.description,
       },
-    })
+    }
+
+    if (reading.pressure_atm !== null && reading.pressure_atm !== undefined) {
+      response.reading = { ...response.reading as object, pressure_atm: reading.pressure_atm }
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error(`[v1][req:${requestId}] Unhandled error in weather API:`, error)
     console.error(`[v1][req:${requestId}] Error type:`, error instanceof Error ? error.name : typeof error)

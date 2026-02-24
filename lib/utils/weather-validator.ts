@@ -11,6 +11,8 @@ export class WeatherValidator {
   private static readonly TEMP_MAX = 60
   private static readonly HUMIDITY_MIN = 0
   private static readonly HUMIDITY_MAX = 100
+  private static readonly PRESSURE_MIN = 300 // hPa
+  private static readonly PRESSURE_MAX = 1100 // hPa
 
   /**
    * Valida que el payload de la ESP32 tenga el formato correcto
@@ -29,6 +31,11 @@ export class WeatherValidator {
 
     // Verificar humedad
     if (typeof data.humidity !== "number" || isNaN(data.humidity)) {
+      return false
+    }
+
+    // Presión atmosférica es opcional pero si viene debe ser número
+    if (data.pressure_atm !== undefined && (typeof data.pressure_atm !== "number" || isNaN(data.pressure_atm))) {
       return false
     }
 
@@ -58,6 +65,12 @@ export class WeatherValidator {
     if (payload.humidity < this.HUMIDITY_MIN || payload.humidity > this.HUMIDITY_MAX) {
       errors.push(
         `Humidity ${payload.humidity}% is outside valid range (${this.HUMIDITY_MIN}% to ${this.HUMIDITY_MAX}%)`,
+      )
+    }
+
+    if (payload.pressure_atm !== undefined && (payload.pressure_atm < this.PRESSURE_MIN || payload.pressure_atm > this.PRESSURE_MAX)) {
+      errors.push(
+        `Pressure ${payload.pressure_atm} hPa is outside valid range (${this.PRESSURE_MIN} hPa to ${this.PRESSURE_MAX} hPa)`,
       )
     }
 

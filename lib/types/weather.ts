@@ -3,6 +3,7 @@ export interface WeatherReading {
   id: string
   temperature: number
   humidity: number
+  pressure_atm?: number
   recorded_at: string
   created_at: string
 }
@@ -26,6 +27,7 @@ export interface DailyExtremes {
 export interface ESP32Payload {
   temperature: number
   humidity: number
+  pressure_atm?: number // Opcional, presión atmosférica en hPa
   timestamp?: string // Opcional, si la ESP32 envía su timestamp
 }
 
