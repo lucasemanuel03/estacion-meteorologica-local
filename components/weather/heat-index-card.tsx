@@ -134,21 +134,6 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
       <CardContent className="relative z-10 pb-6">
         {heatIndex ? (
           <>
-            {/* Valor principal - más compacto */}
-            <div className="flex items-baseline justify-center gap-1 py-1">
-              <span
-                className={cn(
-                  "text-3xl sm:text-4xl font-bold tracking-wide",
-                  "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
-                  "drop-shadow-sm"
-                )}
-              >
-                {heatIndex.value.toFixed(1)}
-              </span>
-              <span className="text-xl sm:text-2xl font-bold text-muted-foreground/80">
-                °C
-              </span>
-            </div>
 
             {/* Badge de categoría */}
             <div className="flex justify-center mt-2">

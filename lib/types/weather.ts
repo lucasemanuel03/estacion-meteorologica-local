@@ -1,3 +1,5 @@
+import { WeatherPrediction } from "../utils/functions/predictWeather"
+
 // Tipos para las lecturas meteorológicas
 export interface WeatherReading {
   id: string
@@ -43,11 +45,16 @@ export interface HeatIndex {
   description: string
 }
 
+export interface WeatherPredictions {
+  now: WeatherPrediction
+}
+
 // Tipo para la respuesta del dashboard
 export interface WeatherDashboardData {
   latestReading: WeatherReading | null
   todayExtremes: DailyExtremes | null
   heatIndex: HeatIndex | null
+  predictions: WeatherPredictions | null
 }
 
 // Tipo para los promedios horarios

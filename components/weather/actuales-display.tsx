@@ -9,12 +9,14 @@ import HeatIndexCard from "./heat-index-card"
 import { HeatIndex } from "@/lib/types/weather"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
 import { useState } from "react"
+import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
 
 interface ActualesDisplayProps {
   temperature: number | null
   humidity: number | null
   pressure: number | null
   altitude: number | null
+  prediction?: WeatherPrediction | null
   heatIndex: HeatIndex | null
   tempTrend?: { differential: number; message: string }
   humTrend?: { differential: number; message: string }
@@ -25,6 +27,7 @@ export default function ActualesDisplay({
   humidity,
   pressure,
   altitude,
+  prediction,
   tempTrend,
   humTrend,
   heatIndex,
@@ -82,6 +85,8 @@ export default function ActualesDisplay({
               <WeatherCard
                 title="Presión Atmosférica"
                 value={pressure?.toFixed(1) ?? null}
+                diferencial={prediction? prediction.deltaPressure : undefined}
+                subtitle={`Delta de presión: ${prediction ? prediction.deltaPressure : undefined} hPa.`}
                 unit="hPa"
                 icon={<ArrowDown className="h-full w-full text-sky-700" />}
                 variant="default"
@@ -92,22 +97,32 @@ export default function ActualesDisplay({
           </div>
           <div className="grid md:grid-cols-2 gap-6 mt-6">
             <div className="">
-              <SecondaryWeatherCard 
-                title="Altura sobre el nivel del mar"
-                value={altitude?.toFixed(1) ?? "---"}
-                unit="m.s.n.m."
-                icon={<Mountain className="h-full w-full text-amber-700" />}
-                variant="default"
-              />
+              {(esDeDia) ? (
+                <SecondaryWeatherCard 
+                  title="Presión Atmosférica"
+                  value={pressure?.toFixed(1) ?? "---"}
+                  unit="hPa"
+                  icon={<ArrowDown className="h-full w-full text-sky-700" />}
+                  variant="default"
+                />
+              ) : (
+                  <SecondaryWeatherCard 
+                    title="Altura sobre el nivel del mar"
+                    value={altitude?.toFixed(1) ?? "---"}
+                    unit="m.s.n.m."
+                    icon={<Mountain className="h-full w-full text-amber-700" />}
+                    variant="default"
+                  />
+              )}
+
             </div>
 
             <div className="">
               <SecondaryWeatherCard 
-                title="Próximas horas"
-                unit="hPa"
+                title="Predicción del clima"
                 icon={<CheckCircle2 className="h-full w-full text-emerald-500" />}
                 variant="default"
-                subtitle="Clima estable, sin cambios significativos"
+                subtitle={prediction?.message ?? "Predicción no disponible"}
               />
             </div>
           </div>

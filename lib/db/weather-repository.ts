@@ -67,6 +67,51 @@ export class WeatherRepository {
     return data || []
   }
 
+  /**
+   * :: PRESIÓN ATMOSFÉRICA ::
+   * 
+  * Obtiene las últimas N lecturas de presión
+  */
+  static async getLastPressureReadings(limit: number) {
+    
+    const supabase = await createClient()
+    
+    const { data, error } = await supabase
+      .from("weather_readings")
+      .select("pressure, recorded_at")
+      .not("pressure", "is", null)
+      .order("recorded_at", { ascending: false })
+      .limit(limit)
+
+    if (error) throw error
+    return data || []
+  }
+
+  /**
+   * Obtiene lecturas de hace aproximadamente N horas
+   */
+  static async getPressureReadingsFromHoursAgo(hours: number, limit: number = 10) {
+    const supabase = await createClient()
+    const targetTime = new Date()
+    targetTime.setHours(targetTime.getHours() - hours)
+    
+    // Rango de ±15 minutos alrededor del tiempo objetivo
+    const startTime = new Date(targetTime.getTime() - 30 * 60 * 1000)
+    const endTime = new Date(targetTime.getTime() + 30 * 60 * 1000)
+
+    const { data, error } = await supabase
+      .from("weather_readings")
+      .select("pressure, recorded_at")
+      .not("pressure", "is", null)
+      .gte("recorded_at", startTime.toISOString())
+      .lte("recorded_at", endTime.toISOString())
+      .order("recorded_at", { ascending: false })
+      .limit(limit)
+
+    if (error) throw error
+    return data || []
+  }
+
 
   /**
    * Inserta una nueva lectura meteorológica

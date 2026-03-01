@@ -7,7 +7,7 @@ export interface HeatIndexResult {
   /** Índice de calor en grados Celsius */
   value: number
   /** Categoría del índice de calor */
-  category: "SEGURO" | "PRECAUCIÓN" | "PRECAUCIÓN EXTREMA" | "PELIGRO" | "PELIGRO EXTREMO" | "MÁS ALLÁ DEL UMBRAL HUMANO"
+  category: "SEGURO" | "PRECAUCIÓN" | "PRECAUCIÓN EXTREMA" | "PELIGRO" | "PELIGRO EXTREMO" | "ERROR AL CALCULAR"
   /** Leyenda descriptiva del impacto en salud */
   description: string
 }
@@ -58,34 +58,34 @@ function calculateHeatIndexFahrenheit(temperature: number, humidity: number): nu
  * @param heatIndexCelsius Índice de calor en grados Celsius
  */
 function getCategoryAndDescription(heatIndexCelsius: number): Pick<HeatIndexResult, "category" | "description"> {
-  if (heatIndexCelsius < 26) {
+  if (heatIndexCelsius < 27.0) {
     return {
       category: "SEGURO",
       description: "No se esperan efectos adversos debidos al calor."
     }
-  } else if (heatIndexCelsius >= 27 && heatIndexCelsius <= 32) {
+  } else if (heatIndexCelsius >= 27.0 && heatIndexCelsius < 32.0) {
     return {
       category: "PRECAUCIÓN",
       description: "Fatiga posible con exposición prolongada y/o actividad física."
     }
-  } else if (heatIndexCelsius >= 33 && heatIndexCelsius <= 40) {
+  } else if (heatIndexCelsius >= 32.0 && heatIndexCelsius < 40.0) {
     return {
       category: "PRECAUCIÓN EXTREMA",
       description: "Posible golpe de calor, calambres o agotamiento por calor con exposición prolongada y/o actividad física."
     }
-  } else if (heatIndexCelsius >= 41 && heatIndexCelsius <= 51) {
+  } else if (heatIndexCelsius >= 40.0 && heatIndexCelsius < 51.0) {
     return {
       category: "PELIGRO",
       description: "Calambres o agotamiento por calor probables y golpe de calor posible con exposición prolongada y/o actividad física."
     }
-  } else if (heatIndexCelsius >= 52 && heatIndexCelsius <= 92) {
+  } else if (heatIndexCelsius >= 51.0 && heatIndexCelsius <= 92.0) {
     return {
       category: "PELIGRO EXTREMO",
       description: "Golpe de calor altamente probable."
     }
   } else {
     return {
-      category: "MÁS ALLÁ DEL UMBRAL HUMANO",
+      category: "ERROR AL CALCULAR",
       description: "Valores más allá de la resistencia humana al calor."
     }
   }
