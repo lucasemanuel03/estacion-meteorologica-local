@@ -14,7 +14,7 @@ import { calculateHeatIndex } from "@/lib/utils/functions/heat-index"
  * {
  *   "temperature": 23.5,
  *   "humidity": 65.2,
- *   "pressure_atm": 104.4 (opcional),
+ *   "pressure": 104.4 (opcional),
  *   "timestamp": "2025-01-01T12:00:00Z" (opcional)
  * }
  */
@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
         id: reading.id,
         temperature: reading.temperature,
         humidity: reading.humidity,
+        pressure: reading.pressure,
         recorded_at: reading.recorded_at,
       },
       heatIndex: {
@@ -108,8 +109,8 @@ export async function POST(request: NextRequest) {
       },
     }
 
-    if (reading.pressure_atm !== null && reading.pressure_atm !== undefined) {
-      response.reading = { ...response.reading as object, pressure_atm: reading.pressure_atm }
+    if (reading.pressure !== null && reading.pressure !== undefined) {
+      response.reading = { ...response.reading as object, pressure: reading.pressure }
     }
 
     return NextResponse.json(response)

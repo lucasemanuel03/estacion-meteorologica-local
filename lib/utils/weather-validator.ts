@@ -35,7 +35,7 @@ export class WeatherValidator {
     }
 
     // Presión atmosférica es opcional pero si viene debe ser número
-    if (data.pressure_atm !== undefined && (typeof data.pressure_atm !== "number" || isNaN(data.pressure_atm))) {
+    if (data.pressure !== undefined && (typeof data.pressure !== "number" || isNaN(data.pressure))) {
       return false
     }
 
@@ -68,9 +68,9 @@ export class WeatherValidator {
       )
     }
 
-    if (payload.pressure_atm !== undefined && (payload.pressure_atm < this.PRESSURE_MIN || payload.pressure_atm > this.PRESSURE_MAX)) {
+    if (payload.pressure !== undefined && (payload.pressure < this.PRESSURE_MIN || payload.pressure > this.PRESSURE_MAX)) {
       errors.push(
-        `Pressure ${payload.pressure_atm} hPa is outside valid range (${this.PRESSURE_MIN} hPa to ${this.PRESSURE_MAX} hPa)`,
+        `Pressure ${payload.pressure} hPa is outside valid range (${this.PRESSURE_MIN} hPa to ${this.PRESSURE_MAX} hPa)`,
       )
     }
 
