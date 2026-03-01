@@ -73,14 +73,14 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
       <CardContent className="relative z-10">
         <div className="flex items-baseline justify-center gap-2 py-4">
           <span className={cn(
-            "text-6xl sm:text-7xl font-bold font-mono tracking-tight",
+            "text-6xl sm:text-7xl font-bold tracking-tight font-mono",
             "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
             "drop-shadow-sm"
           )}>
             {value ?? "--"}
           </span>
           {unit && (
-            <span className="text-3xl sm:text-4xl font-mono font-bold text-muted-foreground/80">
+            <span className="text-3xl sm:text-4xl font-semibold text-muted-foreground">
               {unit}
             </span>
           )}

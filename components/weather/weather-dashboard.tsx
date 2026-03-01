@@ -169,6 +169,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       <ActualesDisplay
         temperature={data?.latestReading?.temperature ?? null}
         humidity={data?.latestReading?.humidity ?? null}
+        pressure={data?.latestReading?.pressure ?? null}
         heatIndex={data?.heatIndex ?? null}
         tempTrend={tempTrend ?? undefined}
         humTrend={humTrend ?? undefined}
