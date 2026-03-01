@@ -71,7 +71,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
                 "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
                 "drop-shadow-sm"
               )}>
-                {value ?? "--"}
+                {value ?? "No disponible"}
               </span>
               {unit && (
                 <span className="text-xl sm:text-2xl font-semibold text-muted-foreground/80">

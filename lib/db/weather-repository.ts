@@ -79,6 +79,7 @@ export class WeatherRepository {
       .insert({
         temperature: payload.temperature,
         humidity: payload.humidity,
+        altitude: payload.altitude ?? null,
         pressure: payload.pressure || null,
         recorded_at: payload.timestamp || new Date().toISOString(),
       })

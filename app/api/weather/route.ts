@@ -15,6 +15,7 @@ import { calculateHeatIndex } from "@/lib/utils/functions/heat-index"
  *   "temperature": 23.5,
  *   "humidity": 65.2,
  *   "pressure": 104.4 (opcional),
+ *   "altitude": 699.6 (opcional),
  *   "timestamp": "2025-01-01T12:00:00Z" (opcional)
  * }
  */
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
     if (!WeatherValidator.validatePayload(body)) {
       console.log(`[v1][req:${requestId}] Invalid payload format:`, body)
       return NextResponse.json(
-        { error: "Invalid payload format. Required: {temperature: number, humidity: number}" },
+        { error: "Invalid payload format. Required: {temperature: number, humidity: number, altitude?: number, pressure?: number, timestamp?: string}" },
         { status: 400 },
       )
     }
@@ -99,6 +100,7 @@ export async function POST(request: NextRequest) {
         id: reading.id,
         temperature: reading.temperature,
         humidity: reading.humidity,
+        altitude: reading.altitude,
         pressure: reading.pressure,
         recorded_at: reading.recorded_at,
       },

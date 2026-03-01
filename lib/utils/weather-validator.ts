@@ -11,6 +11,8 @@ export class WeatherValidator {
   private static readonly TEMP_MAX = 60
   private static readonly HUMIDITY_MIN = 0
   private static readonly HUMIDITY_MAX = 100
+  private static readonly ALTITUDE_MIN = -500 // m
+  private static readonly ALTITUDE_MAX = 9000 // m
   private static readonly PRESSURE_MIN = 300 // hPa
   private static readonly PRESSURE_MAX = 1100 // hPa
 
@@ -31,6 +33,11 @@ export class WeatherValidator {
 
     // Verificar humedad
     if (typeof data.humidity !== "number" || isNaN(data.humidity)) {
+      return false
+    }
+
+    // Altitud es opcional pero si viene debe ser número
+    if (data.altitude !== undefined && (typeof data.altitude !== "number" || isNaN(data.altitude))) {
       return false
     }
 
@@ -65,6 +72,12 @@ export class WeatherValidator {
     if (payload.humidity < this.HUMIDITY_MIN || payload.humidity > this.HUMIDITY_MAX) {
       errors.push(
         `Humidity ${payload.humidity}% is outside valid range (${this.HUMIDITY_MIN}% to ${this.HUMIDITY_MAX}%)`,
+      )
+    }
+
+    if (payload.altitude !== undefined && (payload.altitude < this.ALTITUDE_MIN || payload.altitude > this.ALTITUDE_MAX)) {
+      errors.push(
+        `Altitude ${payload.altitude} m is outside valid range (${this.ALTITUDE_MIN} m to ${this.ALTITUDE_MAX} m)`,
       )
     }
 

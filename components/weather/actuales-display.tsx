@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { WeatherCard } from "./weather-card"
-import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck } from "lucide-react"
+import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck, ArrowDownToLine, ArrowDown, Mountain } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
 import { cn } from "@/lib/utils"
 import HeatIndexCard from "./heat-index-card"
@@ -14,6 +14,7 @@ interface ActualesDisplayProps {
   temperature: number | null
   humidity: number | null
   pressure: number | null
+  altitude: number | null
   heatIndex: HeatIndex | null
   tempTrend?: { differential: number; message: string }
   humTrend?: { differential: number; message: string }
@@ -23,11 +24,15 @@ export default function ActualesDisplay({
   temperature,
   humidity,
   pressure,
+  altitude,
   tempTrend,
   humTrend,
   heatIndex,
 }: ActualesDisplayProps) {
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
+  const esDeDia = hora >= "06:00:00" && hora <= "20:00:00";
+
+  // [TODO] Actualizar la hora cada minuto para cambiar el fondo dinámicamente
 
   return (
     <Card
@@ -69,18 +74,18 @@ export default function ActualesDisplay({
               subtitle={humTrend ? humTrend.message : undefined}
               diferencial={humTrend ? humTrend.differential : undefined}
             />
-            {(hora >= "06:00:00" && hora <= "20:00:00") ?
+            {(esDeDia) ?
               (<HeatIndexCard heatIndex={heatIndex} />
 
               ) :
               (
               <WeatherCard
-                title="Sensación Térmica"
-                value={22.3}
-                unit="°C"
-                icon={<BadgeCheck className="h-full w-full text-amber-300" />}
+                title="Presión Atmosférica"
+                value={pressure?.toFixed(1) ?? null}
+                unit="hPa"
+                icon={<ArrowDown className="h-full w-full text-sky-700" />}
                 variant="default"
-                subtitle={"Viento fresco, sensación térmica agradable"}
+
               />
             )}
              
@@ -88,10 +93,10 @@ export default function ActualesDisplay({
           <div className="grid md:grid-cols-2 gap-6 mt-6">
             <div className="">
               <SecondaryWeatherCard 
-                title="Presión Atmosférica"
-                value={pressure}
-                unit="hPa"
-                icon={<CloudRainWind className="h-full w-full text-blue-400" />}
+                title="Altura sobre el nivel del mar"
+                value={altitude?.toFixed(1) ?? "---"}
+                unit="m.s.n.m."
+                icon={<Mountain className="h-full w-full text-amber-700" />}
                 variant="default"
               />
             </div>
