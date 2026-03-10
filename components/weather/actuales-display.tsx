@@ -64,7 +64,7 @@ export default function ActualesDisplay({
               icon={<Thermometer className="h-full w-full" />}
               variant="temperature"
               tempColor={getTempColor(temperature ?? 16)}
-              subtitle={tempTrend ? tempTrend.message : undefined}
+              subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}
               diferencial={tempTrend ? tempTrend.differential : undefined}
             />
 
@@ -74,7 +74,7 @@ export default function ActualesDisplay({
               unit="%"
               icon={<Droplets className="h-full w-full" />}
               variant="humidity"
-              subtitle={humTrend ? humTrend.message : undefined}
+              subtitle={humTrend ? humTrend.message.toUpperCase() : undefined}
               diferencial={humTrend ? humTrend.differential : undefined}
             />
             {(esDeDia) ?
@@ -87,7 +87,7 @@ export default function ActualesDisplay({
                 value={pressure?.toFixed(1) ?? null}
                 diferencial={prediction? prediction.deltaPressure : undefined}
                 treshold={0.5}
-                subtitle={`La presión está ${prediction ? prediction.trendPressure : undefined}`}
+                subtitle={prediction ? prediction.trendPressure.toUpperCase() : undefined}
                 unit="hPa"
                 icon={<ArrowDown className="h-full w-full text-sky-700" />}
                 variant="default"

@@ -139,14 +139,14 @@ export class StatsRepository {
     const tempDiff = Number((avg(latest, "temperature") - avg(previous, "temperature")).toFixed(2))
     const humDiff = Number((avg(latest, "humidity") - avg(previous, "humidity")).toFixed(2))
 
-    const trendMessage = (diff: number, label: string) => {
-      if (Math.abs(diff) <= threshold) return `${label} estable`
-      return diff > 0 ? `${label} en aumento` : `${label} en descenso`
+    const trendMessage = (diff: number) => {
+      if (Math.abs(diff) <= threshold) return `Estable`
+      return diff > 0 ? `En aumento` : `En descenso`
     }
 
     return {
-      tempTrend: { differential: tempDiff, message: trendMessage(tempDiff, "Temperatura") },
-      humTrend: { differential: humDiff, message: trendMessage(humDiff, "Humedad") },
+      tempTrend: { differential: tempDiff, message: trendMessage(tempDiff) },
+      humTrend: { differential: humDiff, message: trendMessage(humDiff) },
     }
   }
 }
