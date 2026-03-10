@@ -13,9 +13,10 @@ interface WeatherCardProps {
   variant?: "default" | "temperature" | "humidity"
   tempColor?: string
   diferencial?: number
+  treshold?: number
 }
 
-export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial }: WeatherCardProps) {
+export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: WeatherCardProps) {
   const variants = {
     default: {
       gradient: "from-slate-500/10 to-slate-600/10",
@@ -87,7 +88,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         </div>
         {subtitle && (
           <div className="flex  items-center justify-center gap-2 mt-2 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
-            {diferencial !== undefined && <TrendIcon diferencial={diferencial} />}
+            {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold}/>}
             <p className="text-sm sm:text-base font-medium text-muted-foreground">
               {subtitle}
             </p>

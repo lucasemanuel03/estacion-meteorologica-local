@@ -54,7 +54,7 @@ export default function ActualesDisplay({
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="relative z-10 flex flex-col gap-7">
+      <CardContent className="relative z-10 flex flex-col gap-2">
         <div className="grid gap-6 md:grid-cols-3 ">
 
             <WeatherCard
@@ -86,7 +86,8 @@ export default function ActualesDisplay({
                 title="Presión Atmosférica"
                 value={pressure?.toFixed(1) ?? null}
                 diferencial={prediction? prediction.deltaPressure : undefined}
-                subtitle={`Delta de presión: ${prediction ? prediction.deltaPressure : undefined} hPa.`}
+                treshold={0.5}
+                subtitle={`La presión está ${prediction ? prediction.trendPressure : undefined}`}
                 unit="hPa"
                 icon={<ArrowDown className="h-full w-full text-sky-700" />}
                 variant="default"
@@ -104,6 +105,8 @@ export default function ActualesDisplay({
                   unit="hPa"
                   icon={<ArrowDown className="h-full w-full text-sky-700" />}
                   variant="default"
+                  diferencial={prediction? prediction.deltaPressure : undefined }
+                  treshold={0.5}
                 />
               ) : (
                   <SecondaryWeatherCard 

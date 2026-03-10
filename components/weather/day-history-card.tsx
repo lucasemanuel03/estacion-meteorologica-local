@@ -139,7 +139,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
       "transition-all duration-500 hover:shadow-xl",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
       "from-slate-500/5 via-background to-slate-500/10",
-      "border-slate-400/30"
+      "border-border/50"
     )}>
       <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
 

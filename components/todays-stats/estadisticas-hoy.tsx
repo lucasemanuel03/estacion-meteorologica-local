@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import TrendIcon from "../weather/trend-icon";
 import { cn } from "@/lib/utils";
 
-export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-999, humDiferencial=-999, presionAtmosferica }: {temp_max: number | null, temp_min: number | null, tempDiferencial?: number, humDiferencial?: number, presionAtmosferica: number | null}) {
+export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-999, humDiferencial=-999, deltaPressure }: {temp_max: number | null, temp_min: number | null, tempDiferencial?: number, humDiferencial?: number, deltaPressure: number | null}) {
     const amplitudTermica = temp_max !== null && temp_min !== null ? (temp_max - temp_min).toFixed(1) : "--"
     
     return(
@@ -55,12 +55,12 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                         "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
                     )}>
                         <div className="p-2 rounded-lg bg-blue-500/15 group-hover:scale-110 transition-transform">
-                            <ArrowDownFromLine className="w-5 h-5 text-blue-600 dark:text-sky-400" />
+                            <TrendIcon diferencial={deltaPressure ?? 0} threshold={0.5} />
                         </div>
                         <p className="text-sm sm:text-base leading-relaxed">
-                            La presión atmosférica Actual es de {" "}
+                            La variación de presión atmosférica en las últimas 3 horas es de {" "}
                             <span className="font-black text-lg">
-                                {presionAtmosferica?.toFixed(1) ?? "--"} hPa
+                                {deltaPressure ? deltaPressure.toFixed(1) : "--"} hPa
                             </span>
                         </p>
                     </div>

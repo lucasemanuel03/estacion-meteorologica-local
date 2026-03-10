@@ -125,7 +125,10 @@ export default function ProximasHorasDisplay({
 
 				<div className="text-sm md:text-base font-medium flex items-center gap-3">
 					<Megaphone className="h-auto w-12 bg-slate-500/10 p-2 rounded-2xl text-foreground" />
-					<p>Se espera para las próximas horas <b>{prediction?.message ?? "Predicción no disponible"}</b></p>
+					<div>
+						<b>La presión atmosférica está {prediction?.trendPressure ?? "---"}</b>
+						<p>Se espera para las próximas horas <b>{prediction?.message ?? "Predicción no disponible"}</b></p>
+					</div>
 				</div>
       </CardContent>
     </Card>

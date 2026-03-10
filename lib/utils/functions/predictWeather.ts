@@ -1,5 +1,6 @@
 export interface WeatherPrediction {
   deltaPressure: number
+  trendPressure: string
   status: string
   message: string
 }
@@ -14,36 +15,36 @@ const WEATHER_PREDICTION_MATRIX = {
   baja: {
     bajando: {
       status: "Alerta: Tormentas",
-      message: "Alerta: Tormentas / Lluvias inminentes"
+      message: "Aumentará las condiciones de baja presión, probable alerta de Tormentas / Lluvias inminentes"
     },
     estable: {
       status: "Inestable",
-      message: "Inestable / Nubosidad persistente"
+      message: "Persistira la baja presión, el clima se mantendrá Inestable / Nubosidad persistente"
     },
     subiendo: {
       status: "Mejorando",
       message: "Inestable, pero mejorando lentamente"
     }
   },
-  // Normal (1010 - 1015 hPa)
+  // Normal (1010 - 1020 hPa)
   normal: {
     bajando: {
       status: "Cambio en camino",
-      message: "Cambio gradual, posible deterioro en las próximas horas"
+      message: "Una zona de baja presión que provocararía desmejoras en el clima."
     },
     estable: {
-      status: "Estable",
-      message: "Clima estable / Despejado"
+      status: "Sin Cambios",
+      message: "Condiciones similares a las actuales, sin cambios significativos"
     },
     subiendo: {
       status: "Mejora progresiva",
-      message: "Mejora progresiva en camino"
+      message: "Condiciones de alta presión que mejorarían progresivamente el clima."
     }
   },
-  // Alta (> 1016 hPa)
+  // Alta (> 1021 hPa)
   alta: {
     bajando: {
-      status: "Cambios en camino",
+      status: "Cambio en camino",
       message: "Buen tiempo, pero con cambios en camino"
     },
     estable: {
@@ -52,7 +53,7 @@ const WEATHER_PREDICTION_MATRIX = {
     },
     subiendo: {
       status: "Excelente",
-      message: "Buen tiempo reforzándose, condiciones óptimas"
+      message: "Continúen las condiciones de alta presión, se mantiene el buen clima."
     }
   }
 } as const
@@ -62,7 +63,7 @@ const WEATHER_PREDICTION_MATRIX = {
  */
 function classifyPressureLevel(pressure: number): 'baja' | 'normal' | 'alta' {
   if (pressure < 1009) return 'baja'
-  if (pressure <= 1015) return 'normal'
+  if (pressure <= 1020) return 'normal'
   return 'alta'
 }
 
@@ -93,6 +94,7 @@ export function predictWeather(currentAvg: number, pastAvg: number): WeatherPred
   
   return {
     deltaPressure,
+    trendPressure: trend,
     status: prediction.status,
     message: prediction.message
   }

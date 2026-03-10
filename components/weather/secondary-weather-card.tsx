@@ -13,9 +13,10 @@ interface SecondaryWeatherCardProps {
   variant?: "default" | "temperature" | "humidity"
   tempColor?: string
   diferencial?: number
+  treshold?: number
 }
 
-export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial }: SecondaryWeatherCardProps) {
+export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: SecondaryWeatherCardProps) {
   const variants = {
     default: {
       gradient: "from-slate-500/10 to-slate-600/10",
@@ -46,7 +47,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
     <Card 
       className={cn(
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
-        "transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl",
+        "  hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
         "p-1 h-full",
         style.gradient,
@@ -57,24 +58,27 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
       {/* Atmospheric background effect */}
       <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
       
-      <div className="flex items-center justify-between p-4 relative z-10">
+      <div className="flex items-center justify-between px-4 py-2 relative z-10">
         {/* Left side: Title, Value, Subtitle */}
         <div className="flex-1 min-w-0 mr-6">
-          <CardTitle className="text-xs sm:text-sm md:text-base font-semibold tracking-wide text-foreground/80 mb-2">
+          <CardTitle className="text-xs sm:text-sm font-semibold tracking-wide text-foreground/80 mb-1">
             {title}
           </CardTitle>
           
           {value && (
-            <div className="flex items-baseline gap-1 mb-1">
+            <div className="flex items-baseline gap-1">
+
+              {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold} />}
+
               <span className={cn(
-                "text-xl sm:text-2xl font-bold tracking-wide",
+                "text-lg sm:text-xl font-bold tracking-wide",
                 "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
                 "drop-shadow-sm"
               )}>
                 {value ?? "No disponible"}
               </span>
               {unit && (
-                <span className="text-lg sm:text-xl font-normal text-muted-foreground/80">
+                <span className="text-sm sm:text-base font-normal text-muted-foreground/80">
                   {unit}
                 </span>
               )}
@@ -83,8 +87,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
           
           {subtitle && (
             <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-background/50 backdrop-blur-sm">
-              {diferencial !== undefined && <TrendIcon diferencial={diferencial} />}
-              <p className="text-sm sm:text-lg font-medium text-foreground/90 ">
+              <p className="text-sm sm:text-base font-medium text-foreground/90 ">
                 {subtitle}
               </p>
             </div>
@@ -93,7 +96,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
 
         {/* Right side: Icon */}
         <div className={cn(
-          "shrink-0 p-3 rounded-3xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+          "shrink-0 p-2 rounded-xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
           style.iconBg
         )}>
           <div className={cn("w-4 h-4 sm:w-6 sm:h-6", style.iconColor)}>

@@ -190,7 +190,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         temp_min={data?.todayExtremes?.temp_min ?? null}
         tempDiferencial={tempTrend ? tempTrend.differential : undefined}
         humDiferencial={humTrend ? humTrend.differential : undefined}
-        presionAtmosferica={data?.latestReading?.pressure ?? null}
+        deltaPressure={data?.predictions?.now.deltaPressure ?? null}
       />
 
       {/* Modal de error crítico */}
