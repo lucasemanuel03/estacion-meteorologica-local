@@ -1,9 +1,9 @@
-import { Activity, ChevronsLeftRightEllipsis } from "lucide-react";
+import { Activity, ArrowDownFromLine, ChevronsLeftRightEllipsis } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import TrendIcon from "../weather/trend-icon";
 import { cn } from "@/lib/utils";
 
-export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-999, humDiferencial=-999 }: {temp_max: number | null, temp_min: number | null, tempDiferencial?: number, humDiferencial?: number}) {
+export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-999, humDiferencial=-999, presionAtmosferica }: {temp_max: number | null, temp_min: number | null, tempDiferencial?: number, humDiferencial?: number, presionAtmosferica: number | null}) {
     const amplitudTermica = temp_max !== null && temp_min !== null ? (temp_max - temp_min).toFixed(1) : "--"
     
     return(
@@ -43,6 +43,24 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                             La amplitud térmica del día es de{" "}
                             <span className="font-black text-lg">
                                 {amplitudTermica} °C
+                            </span>
+                        </p>
+                    </div>
+                    
+                    {/* Presión Atmosférica */}
+                    <div className={cn(
+                        "group flex items-center gap-3 p-4 rounded-xl",
+                        "bg-linear-to-r from-gray-500/10 to-sky-500/5",
+                        "border border-blue-400/20",
+                        "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                    )}>
+                        <div className="p-2 rounded-lg bg-blue-500/15 group-hover:scale-110 transition-transform">
+                            <ArrowDownFromLine className="w-5 h-5 text-blue-600 dark:text-sky-400" />
+                        </div>
+                        <p className="text-sm sm:text-base leading-relaxed">
+                            La presión atmosférica Actual es de {" "}
+                            <span className="font-black text-lg">
+                                {presionAtmosferica?.toFixed(1) ?? "--"} hPa
                             </span>
                         </p>
                     </div>

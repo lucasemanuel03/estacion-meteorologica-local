@@ -123,7 +123,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         </CardTitle>
         <div
           className={cn(
-            "p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+            "p-2 md:p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
             style.iconBg
           )}
         >
@@ -136,10 +136,10 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
           <>
 
             {/* Badge de categoría */}
-            <div className="flex justify-center mt-2">
+            <div className="flex justify-center">
               <span
                 className={cn(
-                  "inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider",
+                  "inline-flex items-center px-4 py-1.5 rounded-full text-sm sm:text-base font-bold uppercase tracking-wider",
                   "backdrop-blur-sm border border-current/20",
                   "animate-in zoom-in-90 duration-500 delay-150",
                   style.badgeBg,

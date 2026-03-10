@@ -61,7 +61,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
           {title}
         </CardTitle>
         <div className={cn(
-          "p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+          "p-2 md:p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
           style.iconBg
         )}>
           <div className={cn("w-7 h-7", style.iconColor)}>
@@ -71,7 +71,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
       </CardHeader>
       
       <CardContent className="relative z-10">
-        <div className="flex items-baseline justify-center gap-2 py-4">
+        <div className="flex gap-2 items-baseline justify-center">
           <span className={cn(
             "text-6xl sm:text-7xl font-bold tracking-tight font-mono",
             "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
@@ -86,7 +86,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
           )}
         </div>
         {subtitle && (
-          <div className="flex  items-center justify-center gap-2 mt-3 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+          <div className="flex  items-center justify-center gap-2 mt-2 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
             {diferencial !== undefined && <TrendIcon diferencial={diferencial} />}
             <p className="text-sm sm:text-base font-medium text-muted-foreground">
               {subtitle}

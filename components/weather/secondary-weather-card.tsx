@@ -48,7 +48,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
         "transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
-        "p-2 h-full",
+        "p-1 h-full",
         style.gradient,
         style.border,
         style.glow
@@ -65,16 +65,16 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
           </CardTitle>
           
           {value && (
-            <div className="flex items-baseline gap-2 mb-2">
+            <div className="flex items-baseline gap-1 mb-1">
               <span className={cn(
-                "text-2xl sm:text-3xl font-extrabold tracking-wide",
+                "text-xl sm:text-2xl font-bold tracking-wide",
                 "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
                 "drop-shadow-sm"
               )}>
                 {value ?? "No disponible"}
               </span>
               {unit && (
-                <span className="text-xl sm:text-2xl font-semibold text-muted-foreground/80">
+                <span className="text-lg sm:text-xl font-normal text-muted-foreground/80">
                   {unit}
                 </span>
               )}
@@ -84,7 +84,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
           {subtitle && (
             <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-background/50 backdrop-blur-sm">
               {diferencial !== undefined && <TrendIcon diferencial={diferencial} />}
-              <p className="text-sm sm:text-lg font-semibold text-foreground/90 ">
+              <p className="text-sm sm:text-lg font-medium text-foreground/90 ">
                 {subtitle}
               </p>
             </div>
@@ -96,7 +96,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
           "shrink-0 p-3 rounded-3xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
           style.iconBg
         )}>
-          <div className={cn("w-6 h-6 sm:w-10 sm:h-10", style.iconColor)}>
+          <div className={cn("w-4 h-4 sm:w-6 sm:h-6", style.iconColor)}>
             {icon}
           </div>
         </div>

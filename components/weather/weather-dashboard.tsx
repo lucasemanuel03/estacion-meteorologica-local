@@ -9,6 +9,7 @@ import ActualesDisplay from "./actuales-display"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
 import { MapPin } from "lucide-react"
+import ProximasHorasDisplay from "./proximas-horas-display"
 
 type TrendResponse = {
   success: boolean
@@ -177,6 +178,11 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         humTrend={humTrend ?? undefined}
       />
 
+      <ProximasHorasDisplay 
+        pressure={data?.latestReading?.pressure ?? null}
+        prediction={data?.predictions?.now ?? null}
+      />
+
       <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
 
       <EstadisticasHoy 
@@ -184,6 +190,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         temp_min={data?.todayExtremes?.temp_min ?? null}
         tempDiferencial={tempTrend ? tempTrend.differential : undefined}
         humDiferencial={humTrend ? humTrend.differential : undefined}
+        presionAtmosferica={data?.latestReading?.pressure ?? null}
       />
 
       {/* Modal de error crítico */}
