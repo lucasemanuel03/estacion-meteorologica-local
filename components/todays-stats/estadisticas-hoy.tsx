@@ -79,7 +79,7 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                             <p className="text-sm sm:text-base leading-relaxed">
                                 La temperatura{" "}
                                 <span className="font-bold">
-                                    {tempDiferencial > 0 ? "aumentó" : tempDiferencial < 0 ? "disminuyó" : "se mantuvo"}
+                                    {tempDiferencial > 0 ? "aumentó" : tempDiferencial < 0 ? "disminuyó" : "se mantuvo estable"}
                                 </span>
                                 {tempDiferencial !== 0 && (
                                     <span className="font-black ">
@@ -105,7 +105,7 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                             <p className="text-sm sm:text-base leading-relaxed">
                                 La humedad{" "}
                                 <span className="font-bold">
-                                    {humDiferencial > 0 ? "aumentó" : humDiferencial < 0 ? "disminuyó" : "se mantuvo"}
+                                    {humDiferencial > 0 ? "aumentó" : humDiferencial < 0 ? "disminuyó" : "se mantuvo estable"}
                                 </span>
                                 {humDiferencial !== 0 && (
                                     <span className="font-black">

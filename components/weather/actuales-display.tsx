@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { WeatherCard } from "./weather-card"
-import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck, ArrowDownToLine, ArrowDown, Mountain } from "lucide-react"
+import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck, ArrowDownToLine, ArrowDown, Mountain, ThermometerSun } from "lucide-react"
 import getTempColor from "@/lib/utils/functions/getTempColor"
 import { cn } from "@/lib/utils"
 import HeatIndexCard from "./heat-index-card"
@@ -10,6 +10,7 @@ import { HeatIndex } from "@/lib/types/weather"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
 import { useState } from "react"
 import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
+import { Separator } from "../ui/separator"
 
 interface ActualesDisplayProps {
   temperature: number | null
@@ -51,6 +52,7 @@ export default function ActualesDisplay({
       <CardHeader className="relative z-10">
         <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">
           Valores Actuales
+          <Separator className="my-2" />
         </CardTitle>
       </CardHeader>
 
@@ -61,7 +63,7 @@ export default function ActualesDisplay({
               title="Temperatura"
               value={temperature}
               unit="°C"
-              icon={<Thermometer className="h-full w-full" />}
+              icon={<ThermometerSun className="h-full w-full" />}
               variant="temperature"
               tempColor={getTempColor(temperature ?? 16)}
               subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}

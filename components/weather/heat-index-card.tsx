@@ -33,6 +33,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
         "transition-all duration-300 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
+        "py-4",
         style.gradient,
         style.border,
         style.glow
@@ -43,7 +44,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
 
       <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
         <CardTitle 
-            className="text-lg sm:text-xl md:text-2xl font-semibold tracking-wide text-foreground/90">
+            className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
                 <p className="flex gap-2 items-center">
                     Índice de Calor
                     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -123,11 +124,11 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         </CardTitle>
         <div
           className={cn(
-            "p-2 md:p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+            "p-2 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
             style.iconBg
           )}
         >
-          <Flame className={cn("w-7 h-7", style.iconColor)} />
+          <Flame className={cn("w-6 h-6", style.iconColor)} />
         </div>
       </CardHeader>
 
@@ -139,7 +140,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
             <div className="flex justify-center">
               <span
                 className={cn(
-                  "inline-flex items-center px-4 py-1.5 rounded-full text-sm sm:text-base font-bold uppercase tracking-wider",
+                  "inline-flex items-center px-4 py-2 rounded-full text-sm sm:text-base font-bold uppercase tracking-wider",
                   "backdrop-blur-sm border border-current/20",
                   "animate-in zoom-in-90 duration-500 delay-150",
                   style.badgeBg,
@@ -151,7 +152,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
             </div>
 
             {/* Descripción compacta */}
-            <div className="mt-3 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+            <div className="mt-5 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
               <p className="text-xs sm:text-sm text-center font-medium text-muted-foreground leading-relaxed">
                 {heatIndex.description}
               </p>

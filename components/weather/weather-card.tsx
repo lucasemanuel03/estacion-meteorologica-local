@@ -49,6 +49,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
         "transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
+        "py-4",
         style.gradient,
         style.border,
         style.glow
@@ -58,14 +59,14 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
       <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
       
       <CardHeader className="flex flex-row items-center justify-between relative z-10">
-        <CardTitle className="text-lg sm:text-xl md:text-2xl font-semibold tracking-wide text-foreground/90">
+        <CardTitle className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
           {title}
         </CardTitle>
         <div className={cn(
-          "p-2 md:p-3 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+          "p-2 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
           style.iconBg
         )}>
-          <div className={cn("w-7 h-7", style.iconColor)}>
+          <div className={cn("w-6 h-6", style.iconColor)}>
             {icon}
           </div>
         </div>
@@ -74,20 +75,20 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
       <CardContent className="relative z-10">
         <div className="flex gap-2 items-baseline justify-center">
           <span className={cn(
-            "text-6xl sm:text-7xl font-bold tracking-tight font-mono",
+            "text-5xl sm:text-6xl font-bold tracking-wide ",
             "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
             "drop-shadow-sm"
           )}>
             {value ?? "--"}
           </span>
           {unit && (
-            <span className="text-3xl sm:text-4xl font-semibold text-muted-foreground">
+            <span className="text-2xl sm:text-3xl font-medium text-muted-foreground">
               {unit}
             </span>
           )}
         </div>
         {subtitle && (
-          <div className="flex  items-center justify-center gap-2 mt-2 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+          <div className="flex  items-center justify-center gap-2 mt-5 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
             {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold}/>}
             <p className="text-sm font-medium text-muted-foreground">
               {subtitle}
