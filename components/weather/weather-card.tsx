@@ -47,7 +47,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
     <Card 
       className={cn(
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
-        "transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl",
+        "transition-all duration-500 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
         "py-4",
         style.gradient,
@@ -63,10 +63,10 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
           {title}
         </CardTitle>
         <div className={cn(
-          "p-2 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+          "p-2 rounded-2xl backdrop-blur-sm",
           style.iconBg
         )}>
-          <div className={cn("w-6 h-6", style.iconColor)}>
+          <div className="w-6 h-6">
             {icon}
           </div>
         </div>
