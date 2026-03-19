@@ -19,21 +19,21 @@ interface WeatherCardProps {
 export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: WeatherCardProps) {
   const variants = {
     default: {
-      gradient: "from-slate-500/10 to-slate-600/10",
+      gradient: "from-slate-600/10 to-slate-500/20",
       border: "border-slate-400/30",
       iconBg: "bg-slate-500/10",
       iconColor: "text-slate-600",
       glow: "shadow-slate-500/20",
     },
     temperature: {
-      gradient: "from-amber-500/5 via-transparent to-amber-500/30",
+      gradient: "from-amber-600/10  to-amber-500/30",
       border: "border-orange-400/30",
       iconBg: "bg-linear-to-br from-orange-500/20 to-red-500/20",
       iconColor: tempColor,
       glow: "shadow-orange-500/20",
     },
     humidity: {
-      gradient: "from-background/20 via-transparent to-sky-500/30",
+      gradient: "from-sky-600/10  to-sky-500/30",
       border: "border-blue-400/30",
       iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/20",
       iconColor: "text-blue-500",

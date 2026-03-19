@@ -25,7 +25,7 @@ export default function CardExtremesDisplay({valor, title, unit, time, variant =
       glow: "shadow-slate-400/10",
     },
     max: {
-      gradient: "from-red-500/10 to-orange-500/5",
+      gradient: "from-red-600/10 to-orange-500/5",
       border: "border-red-400/30",
       iconBg: "bg-red-500/15",
       icon: <ArrowUp className="w-5 h-5 text-red-500" />,
@@ -65,7 +65,7 @@ export default function CardExtremesDisplay({valor, title, unit, time, variant =
       </div>
       
       <div className="relative z-10">
-        <p className="text-3xl sm:text-4xl font-mono font-black tracking-tight">
+        <p className="text-3xl sm:text-4xl font-bold tracking-wide">
           {valor ?? "--"}
           <span className="text-lg font-bold text-muted-foreground ml-1.5">{unit}</span>
         </p>

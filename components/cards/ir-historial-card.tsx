@@ -8,7 +8,7 @@ export default function IrAlHistorialCard() {
   return (
     <Card className={cn(
       "relative overflow-hidden backdrop-blur-xl",
-      "bg-linear-to-br from-emerald-500/10 via-background/95 to-teal-500/10",
+      "bg-linear-to-br from-emerald-400/20 to-emerald-600/10",
       "border-emerald-400/30 shadow-2xl shadow-emerald-500/20",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
       "group  transition-all"
