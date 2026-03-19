@@ -6,7 +6,7 @@ import { Search, Loader2, CalendarDays } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DayHistoryCard } from "@/components/weather/day-history-card"
+import { DayHistoryCard } from "@/components/weather-history/day-history-card"
 import type { DailyExtremes } from "@/lib/types/weather"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -43,7 +43,7 @@ export default function WeatherHistoryPage() {
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
       {/* Atmospheric background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-600/5 via-background to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-600/5 via-background to-background pointer-events-none" />
       <div className="absolute top-0 right-0 w-125 h-125 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -125,7 +125,7 @@ export default function WeatherHistoryPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 animate-in fade-in-50 slide-in-from-bottom-10 duration-700">
             {history.map((day) => (
               <DayHistoryCard key={day.id} day={day} />
             ))}
