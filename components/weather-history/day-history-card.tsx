@@ -51,7 +51,7 @@ function StatItem({
     max: {
       gradient: "from-red-500/20 to-red-600/10",
       border: "border-red-400/30",
-      iconColor: "text-red-300",
+      iconColor: "text-red-400",
     },
     min: {
       gradient: "from-blue-500/20 to-cyan-600/10",
@@ -65,13 +65,11 @@ function StatItem({
 
   return (
     <div className={cn(
-      "flex items-center justify-between rounded-lg border px-3 py-2",
+      "flex items-center justify-between rounded-lg px-2 py-1",
       "bg-linear-to-br backdrop-blur-sm transition-all duration-300",
-      style.gradient,
-      style.border
     )}>
-      <div className="flex flex-col items-start">
-        <span className={cn("text-base font-black", "text-primary/80")}>
+      <div className="flex flex-row gap-2 items-start">
+        <span className={cn("text-base font-normal", style.iconColor)}>
           {isMax ? "↑" : "↓"}
         </span>
         <div>
@@ -130,9 +128,9 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
 
       <CardHeader className="relative z-10 flex flex-row items-center justify-between gap-4 pb-1">
         <div className="flex-1">
-          <CardTitle className="text-2xl font-semibold tracking-wide text-foreground capitalize">
+          <CardTitle className="text-xl font-semibold tracking-wide text-foreground capitalize">
             <div className="flex items-center">
-              <Calendar className="inline-block h-5 w-5 mr-2 " />
+              <Calendar className="inline-block h-4 w-4 mr-2 " />
               {formatDate(day.date)}
             </div>
           </CardTitle>
