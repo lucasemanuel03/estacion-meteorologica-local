@@ -16,7 +16,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
 
   // Estilo por defecto cuando no hay datos
   const defaultStyle = {
-    gradient: "from-slate-500/5 via-transparent to-slate-500/10",
+    gradient: "from-slate-600/10 to-slate-500/20",
     border: "border-slate-400/30",
     iconBg: "bg-slate-500/10",
     iconColor: "text-slate-500",
@@ -51,7 +51,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                       <DialogTrigger asChild>
                         <HelpCircle className="text-primary/50 cursor-pointer hover:text-primary transition-colors w-5 h-5" />
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
+                      <DialogContent className="max-w-md md:max-w-2xl">
                         <DialogHeader>
                           <DialogTitle className="text-2xl flex items-center gap-2">
                             <Flame className="w-6 h-6 text-orange-500" />
@@ -128,7 +128,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
             style.iconBg
           )}
         >
-          <Flame className={cn("w-6 h-6", style.iconColor)} />
+          <Flame className={"w-6 h-6"} />
         </div>
       </CardHeader>
 
