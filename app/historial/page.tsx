@@ -6,10 +6,8 @@ import { Search, Loader2, CalendarDays } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { DayHistoryCard } from "@/components/weather-history/day-history-card"
-import { PeriodStatsCards } from "@/components/weather-history/period-stats-cards"
+import { DayHistoryCard } from "@/components/weather/day-history-card"
 import type { DailyExtremes } from "@/lib/types/weather"
-import { Separator } from "@/components/ui/separator"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -19,7 +17,7 @@ interface WeatherHistoryResponse {
   limit: number
 }
 
-export default function WeatherHistoryPage() {
+export default function HistorialPage() {
   const [daysInput, setDaysInput] = useState("7")
   const [days, setDays] = useState(7)
 
@@ -44,31 +42,33 @@ export default function WeatherHistoryPage() {
 
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
-      {/* Atmospheric background effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-600/5 via-background to-background pointer-events-none" />
       <div className="absolute top-0 right-0 w-125 h-125 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto py-8 px-4 relative z-10">
-        {/* Header */}
-        <div className="mb-4 space-y-2">
+        <div className="mb-8 space-y-2">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-blue-500/10">
-              <CalendarDays className="h-5 w-5 text-blue-500" />
+            <div className="p-3 rounded-2xl bg-blue-500/10">
+              <CalendarDays className="h-7 w-7 text-blue-500" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Historial de Clima</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Historial de clima</h1>
           </div>
-          <p className="text-sm text-muted-foreground max-w-2xl">
+          <p className="text-base text-muted-foreground max-w-2xl">
             Consulta los extremos diarios registrados. Selecciona cuántos días quieres ver (1-30).
           </p>
         </div>
 
-        {/* Search Card */}
-        <div className="mb-10">
-            <form className="flex items-end gap-4 w-fit" onSubmit={handleSearch}>
+        <Card className="relative overflow-hidden border backdrop-blur-xl bg-linear-to-br from-blue-500/5 via-transparent to-emerald-700/30 border-emerald-400/30 mb-8 animate-in fade-in-50 slide-in-from-bottom-10 duration-700">
+          <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
+
+          <CardContent className="relative z-10">
+            <form className="flex flex-col gap-4 sm:flex-row sm:items-end" onSubmit={handleSearch}>
               <div className="flex flex-1 flex-col gap-2">
+                <label className="text-sm sm:text-base font-medium text-foreground" htmlFor="days">
+                  Cantidad de días (1-30)
+                </label>
                 <Input
-                  placeholder="Días a mostrar (1-30)"
                   id="days"
                   name="days"
                   type="number"
@@ -76,15 +76,10 @@ export default function WeatherHistoryPage() {
                   max={30}
                   value={daysInput}
                   onChange={(event) => setDaysInput(event.target.value)}
-                  className="w-50 h-10 backdrop-blur-sm"
+                  className="w-full sm:w-42 h-10 backdrop-blur-sm"
                 />
               </div>
-              <Button
-                type="submit"
-                variant="dinamic"
-                disabled={isValidating}
-                className="w-32"
-              >
+              <Button type="submit" variant="dinamic" disabled={isValidating} className="w-32">
                 {isValidating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -98,23 +93,21 @@ export default function WeatherHistoryPage() {
                 )}
               </Button>
             </form>
-            
+
             {data?.timestamp && (
               <p className="mt-4 text-sm text-muted-foreground">
-                📅 Última actualización: {new Date(data.timestamp).toLocaleString("es-ES")}
+                Última actualización: {new Date(data.timestamp).toLocaleString("es-ES")}
               </p>
             )}
 
             {error && (
               <p className="mt-4 text-sm text-destructive">
-                ⚠️ No se pudo cargar el historial. Inténtalo nuevamente.
+                No se pudo cargar el historial. Inténtalo nuevamente.
               </p>
             )}
-        </div>
-        <Separator  className="mb-4"/>
-        {!error && <PeriodStatsCards history={history} days={days} />}
-      
-        {/* Results */}
+          </CardContent>
+        </Card>
+
         {history.length === 0 && !error && !isValidating ? (
           <Card className="relative overflow-hidden border backdrop-blur-xl bg-linear-to-br from-slate-500/5 via-transparent to-slate-500/10 border-slate-400/30">
             <CardContent className="py-12 px-6 text-center">
@@ -123,7 +116,7 @@ export default function WeatherHistoryPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 animate-in fade-in-50 slide-in-from-bottom-10 duration-700">
+          <div className="grid gap-4">
             {history.map((day) => (
               <DayHistoryCard key={day.id} day={day} />
             ))}
@@ -132,8 +125,4 @@ export default function WeatherHistoryPage() {
       </div>
     </main>
   )
-import { redirect } from "next/navigation"
-
-export default function LegacyWeatherHistoryPage() {
-  redirect("/historial")
 }

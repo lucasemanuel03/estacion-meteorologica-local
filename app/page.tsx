@@ -2,6 +2,7 @@ import IrAlHistorialCard from "@/components/cards/ir-historial-card"
 import CurveToday from "@/components/todays-stats/curve-today"
 import { WeatherDashboard } from "@/components/weather/weather-dashboard"
 
+import { redirect } from "next/navigation"
 
 export default function Home() {
   return (
@@ -24,4 +25,5 @@ export default function Home() {
       </div>
     </main>
   )
+  redirect("/inicio")
 }

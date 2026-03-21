@@ -6,6 +6,7 @@ import "./globals.css"
 import Header from "@/components/header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AutoThemeWrapper } from "@/components/auto-theme-wrapper"
+import BottomNavigation from "@/components/bottom-navigation"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -52,7 +53,10 @@ export default function RootLayout({
             darkModeStart={22}
           >
             <Header />
-            {children}
+            <div className="pb-24">
+              {children}
+            </div>
+            <BottomNavigation />
           </AutoThemeWrapper>
           <Analytics />
         </ThemeProvider>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   DialogContent,
   DialogDescription,
@@ -12,32 +12,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CurvaTempHum from "@/components/curva-temp-hum"
-import { HourlyAverages } from "@/lib/types/weather"
+import { useHourlyAverages } from "../../hooks/use-hourly-averages"
 
-export default function ModalDetails({ day }: { day: string }) {
+export default function ModalDetails({ day, open }: { day: string; open: boolean }) {
   const [metric, setMetric] = useState<"temperature" | "humidity">("temperature")
-  const [data, setData] = useState<HourlyAverages[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        const res = await fetch(`/api/day-stats/measurements-per-hours?date=${encodeURIComponent(day)}`)
-        if (!res.ok) throw new Error(`Status ${res.status}`)
-        const json = await res.json()
-        setData(json?.hourlyAverages ?? [])
-      } catch (e) {
-        setError(e instanceof Error ? e.message : String(e))
-        setData([])
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [day])
+  const { data, loading, error } = useHourlyAverages(day, open)
 
   return (
     <DialogContent className="max-w-5xl">
