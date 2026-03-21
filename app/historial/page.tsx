@@ -6,8 +6,9 @@ import { Search, Loader2, CalendarDays } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { DayHistoryCard } from "@/components/weather/day-history-card"
+import { DayHistoryCard } from "@/components/weather-history/day-history-card"
 import type { DailyExtremes } from "@/lib/types/weather"
+import { Separator } from "@/components/ui/separator"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -59,16 +60,12 @@ export default function HistorialPage() {
           </p>
         </div>
 
-        <Card className="relative overflow-hidden border backdrop-blur-xl bg-linear-to-br from-blue-500/5 via-transparent to-emerald-700/30 border-emerald-400/30 mb-8 animate-in fade-in-50 slide-in-from-bottom-10 duration-700">
-          <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-
-          <CardContent className="relative z-10">
-            <form className="flex flex-col gap-4 sm:flex-row sm:items-end" onSubmit={handleSearch}>
+                {/* Search Card */}
+        <div className="mb-10">
+            <form className="flex items-end gap-4 w-fit" onSubmit={handleSearch}>
               <div className="flex flex-1 flex-col gap-2">
-                <label className="text-sm sm:text-base font-medium text-foreground" htmlFor="days">
-                  Cantidad de días (1-30)
-                </label>
                 <Input
+                  placeholder="Días a mostrar (1-30)"
                   id="days"
                   name="days"
                   type="number"
@@ -76,10 +73,15 @@ export default function HistorialPage() {
                   max={30}
                   value={daysInput}
                   onChange={(event) => setDaysInput(event.target.value)}
-                  className="w-full sm:w-42 h-10 backdrop-blur-sm"
+                  className="w-50 h-10 backdrop-blur-sm"
                 />
               </div>
-              <Button type="submit" variant="dinamic" disabled={isValidating} className="w-32">
+              <Button
+                type="submit"
+                variant="dinamic"
+                disabled={isValidating}
+                className="w-32"
+              >
                 {isValidating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -93,20 +95,20 @@ export default function HistorialPage() {
                 )}
               </Button>
             </form>
-
+            
             {data?.timestamp && (
               <p className="mt-4 text-sm text-muted-foreground">
-                Última actualización: {new Date(data.timestamp).toLocaleString("es-ES")}
+                📅 Última actualización: {new Date(data.timestamp).toLocaleString("es-ES")}
               </p>
             )}
 
             {error && (
               <p className="mt-4 text-sm text-destructive">
-                No se pudo cargar el historial. Inténtalo nuevamente.
+                ⚠️ No se pudo cargar el historial. Inténtalo nuevamente.
               </p>
             )}
-          </CardContent>
-        </Card>
+        </div>
+        <Separator  className="mb-4"/>
 
         {history.length === 0 && !error && !isValidating ? (
           <Card className="relative overflow-hidden border backdrop-blur-xl bg-linear-to-br from-slate-500/5 via-transparent to-slate-500/10 border-slate-400/30">
@@ -116,7 +118,7 @@ export default function HistorialPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {history.map((day) => (
               <DayHistoryCard key={day.id} day={day} />
             ))}

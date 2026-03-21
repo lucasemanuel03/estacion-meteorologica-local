@@ -132,8 +132,4 @@ export default function WeatherHistoryPage() {
       </div>
     </main>
   )
-import { redirect } from "next/navigation"
-
-export default function LegacyWeatherHistoryPage() {
-  redirect("/historial")
 }
