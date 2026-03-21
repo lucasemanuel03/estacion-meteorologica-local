@@ -48,7 +48,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
       className={cn(
         "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
         "transition-all duration-500 hover:shadow-2xl",
-        "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
+        "animate-in fade-in-50 slide-in-from-bottom-10 duration-500",
         "py-4",
         style.gradient,
         style.border,
