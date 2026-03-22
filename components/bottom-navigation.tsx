@@ -61,7 +61,7 @@ export default function BottomNavigation() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl border text-xs font-semibold transition-all duration-300",
+                    "flex h-13 sm:h-16 p-1.5 mb-2 sm:mb-4 flex-col items-center justify-center gap-1 rounded-xl border text-xs font-semibold transition-all duration-300",
                     active
                       ? item.border + " bg-background " + item.color
                       : "border-transparent text-muted-foreground hover:border-border hover:bg-background/50 hover:text-foreground hover:shadow-2xl " + item.glow,

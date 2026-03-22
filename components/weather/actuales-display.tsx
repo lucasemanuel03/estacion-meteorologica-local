@@ -124,10 +124,10 @@ export default function ActualesDisplay({
 
             <div className="">
               <SecondaryWeatherCard 
-                title="Predicción del clima"
-                icon={<CheckCircle2 className="h-full w-full text-emerald-500" />}
+                title="Acumulado de lluvia (24h)"
+                value={"N/A"}
+                icon={<CloudRainWind className="h-full w-full text-sky-500" />}
                 variant="default"
-                subtitle={prediction?.message ?? "Predicción no disponible"}
               />
             </div>
           </div>

@@ -16,7 +16,7 @@ export default function CurveToday() {
   return (
     <Card className={cn(
       "overflow-hidden backdrop-blur-xl",
-      "bg-linear-to-br from-cyan-500/5 via-background/95 to-blue-500/5",
+      "bg-linear-to-br from-background/95 to-muted/30",
       "border-cyan-400/20 shadow-xl shadow-cyan-500/10",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
     )}
@@ -27,7 +27,7 @@ export default function CurveToday() {
       <CardHeader className="flex flex-row items-center justify-between gap-4 relative z-10">
         <div className="space-y-1">
           <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">
-            Curva diaria de hoy
+            Evolución del Día
           </CardTitle>
           <CardDescription className="text-sm sm:text-base">
             Promedio por hora de temperatura y humedad

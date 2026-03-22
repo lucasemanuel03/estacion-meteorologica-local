@@ -212,7 +212,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
                 Detalles
               </Button>
             </DialogTrigger>
-            <ModalDetails day={day.date} />
+            <ModalDetails day={day.date} open={open} />
           </Dialog>
         </div>
       </CardContent>

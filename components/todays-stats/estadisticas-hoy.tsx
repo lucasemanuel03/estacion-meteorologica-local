@@ -20,10 +20,7 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
             
             <CardHeader className="relative z-10">
                 <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl">
-                    <div className="p-2.5 rounded-xl bg-linear-to-br from-violet-500/20 to-indigo-500/20 backdrop-blur-sm">
-                        <Activity className="w-6 h-6 text-violet-600 dark:text-violet-400" />
-                    </div>
-                    <span className="font-bold tracking-wide">Estadísticas Actuales</span>
+                    <span className="font-bold tracking-wide">Estadísticas del día</span>
                 </CardTitle>
             </CardHeader>
             
@@ -32,12 +29,12 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                     {/* Amplitud Térmica */}
                     <div className={cn(
                         "group flex items-center gap-3 p-4 rounded-xl",
-                        "bg-linear-to-r from-orange-500/10 to-amber-500/5",
+                        "bg-linear-to-r from-slate-500/10 to-slate-500/5",
                         "border border-orange-400/20",
-                        "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                        "transition-all duration-400 hover:shadow-2xl shadow-orange-500/10"
                     )}>
-                        <div className="p-2 rounded-lg bg-orange-500/15 group-hover:scale-110 transition-transform">
-                            <ChevronsLeftRightEllipsis className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                        <div className="p-2 rounded-lg bg-orange-500/15">
+                            <ChevronsLeftRightEllipsis className="w-5 h-5 text-foreground" />
                         </div>
                         <p className="text-sm sm:text-base leading-relaxed">
                             La amplitud térmica del día es de{" "}
@@ -52,9 +49,9 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                         "group flex items-center gap-3 p-4 rounded-xl",
                         "bg-linear-to-r from-gray-500/10 to-sky-500/5",
                         "border border-blue-400/20",
-                        "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                        "transition-all duration-300 hover:shadow-2xl shadow-blue-500/10"
                     )}>
-                        <div className="p-2 rounded-lg bg-blue-500/15 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-blue-500/15 ">
                             <TrendIcon diferencial={deltaPressure ?? 0} threshold={0.5} />
                         </div>
                         <p className="text-sm sm:text-base leading-relaxed">
@@ -69,11 +66,11 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                     {tempDiferencial !== -999 && (
                         <div className={cn(
                             "group flex items-center gap-3 p-4 rounded-xl",
-                            "bg-linear-to-r from-red-500/10 to-pink-500/5",
+                            "bg-linear-to-r from-slate-500/10 to-slate-500/5",
                             "border border-red-400/20",
-                            "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                            "transition-all duration-300 hover:shadow-2xl shadow-red-500/10"
                         )}>
-                            <div className="p-2 rounded-lg bg-red-500/15 group-hover:scale-110 transition-transform">
+                            <div className="p-2 rounded-lg bg-red-500/15">
                                 <TrendIcon diferencial={tempDiferencial!} />
                             </div>
                             <p className="text-sm sm:text-base leading-relaxed">
@@ -95,11 +92,11 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
                     {humDiferencial !== -999 && (
                         <div className={cn(
                             "group flex items-center gap-3 p-4 rounded-xl",
-                            "bg-linear-to-r from-blue-500/10 to-cyan-500/5",
+                            "bg-linear-to-r from-slate-500/10 to-slate-500/5",
                             "border border-blue-400/20",
-                            "transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                            "transition-all duration-300 hover:shadow-2xl shadow-blue-500/10"
                         )}>
-                            <div className="p-2 rounded-lg bg-blue-500/15 group-hover:scale-110 transition-transform">
+                            <div className="p-2 rounded-lg bg-blue-500/15">
                                 <TrendIcon diferencial={humDiferencial!} />
                             </div>
                             <p className="text-sm sm:text-base leading-relaxed">
