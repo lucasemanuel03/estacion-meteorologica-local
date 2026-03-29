@@ -9,15 +9,12 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
     return(
         <Card className={cn(
             "overflow-hidden backdrop-blur-xl",
-            "bg-linear-to-br from-violet-500/5 via-background/95 to-indigo-500/5",
-            "border-violet-400/20 shadow-xl shadow-violet-500/10",
+            "bg-card",
+            "border-border/50 shadow-xl shadow-border/50",
             "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
         )}
         style={{ animationDelay: "400ms" }}
-        >
-            {/* Atmospheric background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(139,92,246,0.1),rgba(255,255,255,0))] pointer-events-none" />
-            
+        >   
             <CardHeader className="relative z-10">
                 <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl">
                     <span className="font-bold tracking-wide">Estadísticas del día</span>

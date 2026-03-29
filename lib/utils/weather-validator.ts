@@ -46,6 +46,14 @@ export class WeatherValidator {
       return false
     }
 
+    // sensor_id es opcional pero si viene debe ser entero >= 0
+    if (
+      data.sensor_id !== undefined
+      && (typeof data.sensor_id !== "number" || !Number.isInteger(data.sensor_id) || data.sensor_id < 0)
+    ) {
+      return false
+    }
+
     // Timestamp es opcional
     if (data.timestamp !== undefined && typeof data.timestamp !== "string") {
       return false
@@ -85,6 +93,10 @@ export class WeatherValidator {
       errors.push(
         `Pressure ${payload.pressure} hPa is outside valid range (${this.PRESSURE_MIN} hPa to ${this.PRESSURE_MAX} hPa)`,
       )
+    }
+
+    if (payload.sensor_id !== undefined && payload.sensor_id < 0) {
+      errors.push("sensor_id must be greater than or equal to 0")
     }
 
     return {

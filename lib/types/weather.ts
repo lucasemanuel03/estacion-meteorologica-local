@@ -7,6 +7,8 @@ export interface WeatherReading {
   humidity: number
   altitude?: number
   pressure?: number
+  sensor_id?: number
+  location_id?: number
   recorded_at: string
   created_at: string
 }
@@ -32,6 +34,7 @@ export interface ESP32Payload {
   humidity: number
   altitude?: number // Opcional, altitud en metros
   pressure?: number // Opcional, presión atmosférica en hPa
+  sensor_id?: number // Opcional, por defecto 0 si no se envía
   timestamp?: string // Opcional, si la ESP32 envía su timestamp
 }
 

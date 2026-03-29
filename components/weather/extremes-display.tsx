@@ -83,7 +83,7 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
   return (
     <Card className={cn(
       "col-span-full overflow-hidden backdrop-blur-xl",
-      "bg-linear-to-br from-background/95 to-muted/30",
+      "bg-card",
       "border-border/50 shadow-xl",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
     )}
