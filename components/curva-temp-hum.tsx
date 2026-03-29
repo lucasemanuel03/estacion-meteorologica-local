@@ -37,7 +37,7 @@ export default function CurvaTempHum({
   error = null,
   showAllHours = false 
 }: CurvaTempHumProps) {
-  const chartData = useMemo(() => {
+  const { chartData, yAxisDomain } = useMemo(() => {
     const currentHour = getCurrentLocalHour()
     const maxHour = showAllHours ? 23 : currentHour
     
@@ -62,15 +62,30 @@ export default function CurvaTempHum({
       const found = map.get(h)
       filled.push({
         hour: h,
-        label: `${h.toString().padStart(2, "0")}h.`,
+        label: `${h.toString().padStart(2, "0")}`,
         avgTemperature: found ? found.avgTemperature : null,
         avgHumidity: found ? found.avgHumidity : null,
         count: found ? found.count : 0,
       })
     }
 
-    return filled
-  }, [data, showAllHours])
+    // Calcular el dominio del eje Y según la métrica
+    let domain: [number, number]
+    if (metric === "temperature") {
+      // Detectar si hay temperaturas negativas
+      const temperatures = filled
+        .map((d) => d.avgTemperature)
+        .filter((t) => t !== null) as number[]
+      const minTemp = temperatures.length > 0 ? Math.min(...temperatures) : 0
+      
+      domain = minTemp < 0 ? [-20, 45] : [0, 45] // Si hay temperaturas negativas, ajustar el mínimo a -20°C
+    } else {
+      // Humedad siempre 0-100
+      domain = [20, 100] // Ajustar el mínimo a 20% para mejor visualización
+    }
+
+    return { chartData: filled, yAxisDomain: domain }
+  }, [data, showAllHours, metric])
 
   if (loading) {
     return (
@@ -95,22 +110,36 @@ export default function CurvaTempHum({
   const yLabel = metric === "temperature" ? "Temperatura (°C)" : "Humedad (%)"
 
   return (
-    <div className="h-72 w-full">
+    <div className="h-75 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
+        <AreaChart data={chartData} margin={{ top: 16, right: 24, left: 24, bottom: 30 }}>
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.3} />
-          <XAxis dataKey="label" tickLine={false} axisLine={false} />
+          <XAxis 
+            dataKey="label"
+            height={52}
+            label={{ value: "Horas", angle: 0, position: "insideBottom" }}
+            tickLine={false} 
+            axisLine={false} 
+          />
           <YAxis
             tickLine={false}
             axisLine={false}
-            width={70}
-            label={{ value: yLabel, angle: -90, position: "insideLeft" }}
-            domain={["auto", "auto"]}
+            width={108}
+            tickMargin={8}
+            label={{
+              value: yLabel,
+              angle: -90,
+              position: "insideLeft",
+              offset: 30,
+              style: { textAnchor: "middle", dominantBaseline: "central" },
+            }}
+            domain={yAxisDomain}
           />
           <Tooltip
-            formatter={(value: number | null, _name, item) => {
-              const cnt = chartData[item?.payload?.hour]?.count ?? 0
+            formatter={(value: any) => {
               if (value === null || value === undefined) return ["Sin datos", ""]
+              const hour = Math.floor(value)
+              const cnt = chartData.find((d) => d.hour === hour)?.count ?? 0
               return [`${value} ${metric === "temperature" ? "°C" : "%"} (Con ${cnt} muestra/s)`]
             }}
             labelFormatter={(label) => `Hora: ${label}`}
@@ -121,7 +150,7 @@ export default function CurvaTempHum({
             }}
             labelStyle={{ color: "var(--foreground)" }}
           />
-          <Legend />
+
           <Area
             type="monotone"
             dataKey={dataKey}
@@ -129,7 +158,7 @@ export default function CurvaTempHum({
             stroke={color}
             fill={color}
             fillOpacity={0.25}
-            strokeWidth={2}
+            strokeWidth={3}
             connectNulls={false}
           />
         </AreaChart>
