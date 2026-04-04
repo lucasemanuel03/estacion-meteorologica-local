@@ -257,4 +257,76 @@
       transparent
     );
   }
+
+  /*Animación para las tendencias*/
+  .animate-descenso {
+    border-radius: 0.75rem;
+    /* Usamos mask para que el icono tome el color actual del texto (currentColor) */
+    background-color: currentColor;
+    -webkit-mask-image: url("/icons-trend/arrow-down.svg");
+    mask-image: url("/icons-trend/arrow-down.svg");
+    -webkit-mask-size: 24px 24px;
+    mask-size: 24px 24px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    animation: slide-diagonal-down 3s linear infinite;
+    opacity: 0.1; /* Para que sea sutil y no tape el texto */
+  }
+
+  .animate-ascenso {
+    background-color: currentColor;
+    -webkit-mask-image: url("/icons-trend/arrow-up.svg");
+    mask-image: url("/icons-trend/arrow-up.svg");
+    -webkit-mask-size: 24px 24px;
+    mask-size: 24px 24px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    animation: slide-diagonal-up 3s linear infinite;
+    opacity: 0.1;
+  }
+
+  .animate-estable {
+    border-radius: 0.75rem;
+    background-color: currentColor;
+    -webkit-mask-image: url("/icons-trend/equal.svg");
+    mask-image: url("/icons-trend/equal.svg");
+    -webkit-mask-size: 12px 12px;
+    mask-size: 12px 12px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    animation: breathing-glow 3s ease-in-out infinite;
+    opacity: 0.1;
+  }
+
+  @keyframes slide-diagonal-down {
+    from {
+      background-position: 0 0;
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+    to {
+      background-position: 24px 24px;
+      -webkit-mask-position: 24px 24px;
+      mask-position: 24px 24px;
+    }
+  }
+
+  @keyframes breathing-glow {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.2; }
+  }
+
+  @keyframes slide-diagonal-up {
+    from {
+      background-position: 0 0;
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+    to {
+      background-position: -24px -24px;
+      -webkit-mask-position: -24px -24px;
+      mask-position: -24px -24px;
+    }
+  }
+
 }

@@ -12,9 +12,6 @@ export default function Home() {
           ubicacion="Las Margaritas, Córdoba"
         />
         <div className="mt-8">
-          <CurveToday/>
-        </div>
-        <div className="mt-8">
           <IrAlHistorialCard />
         </div>
       </div>

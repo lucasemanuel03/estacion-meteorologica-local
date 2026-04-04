@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { WeatherCard } from "./weather-card"
+import { TemperatureWeatherCard } from "./temperature-weather-card"
 import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck, ArrowDownToLine, ArrowDown, Mountain, ThermometerSun } from "lucide-react"
-import getTempColor from "@/lib/utils/functions/getTempColor"
 import { cn } from "@/lib/utils"
 import HeatIndexCard from "./heat-index-card"
 import { HeatIndex } from "@/lib/types/weather"
@@ -57,13 +57,10 @@ export default function ActualesDisplay({
       <CardContent className="relative z-10 flex flex-col gap-2">
         <div className="grid gap-6 md:grid-cols-3 ">
 
-            <WeatherCard
+            <TemperatureWeatherCard
               title="Temperatura"
-              value={temperature}
-              unit="°C"
+              temperature={31}
               icon={<ThermometerSun className="h-full w-full" />}
-              variant="temperature"
-              tempColor={getTempColor(temperature ?? 16)}
               subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}
               diferencial={tempTrend ? tempTrend.differential : undefined}
             />

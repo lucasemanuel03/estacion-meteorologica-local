@@ -17,7 +17,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    href: "/inicio",
+    href: "/",
     label: "Actual",
     border: "border-emerald-800/50 dark:border-emerald-400/50",
 		color: "text-emerald-800 dark:text-emerald-300",

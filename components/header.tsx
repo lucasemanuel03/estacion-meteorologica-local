@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { CloudSun } from "lucide-react";
+
 import ThemeSelector from "./theme-selector";
 
 export default function Header() {
@@ -18,10 +18,13 @@ export default function Header() {
             <div className="flex items-center gap-2.5">
               <div className="relative">
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
-                <img 
-                  src="/EML-isotipo.svg" 
-                  alt="Estación Meteorológica Local" 
-                  className="h-10 w-10 sm:h-11 sm:w-11 relative z-10 drop-shadow-lg" 
+                <div
+                  className="h-10 w-10 sm:h-11 sm:w-11 text-foreground relative z-10 drop-shadow-lg"
+                  style={{
+                    backgroundColor: "currentColor",
+                    WebkitMask: "url('/EML-isotipo.svg') center / contain no-repeat",
+                    mask: "url('/EML-isotipo.svg') center / contain no-repeat",
+                  }}
                 />
               </div>
               <h1 className={cn(
