@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { ExtremesDisplay } from "./extremes-display"
 import type { WeatherDashboardData } from "@/lib/types/weather"
-import EstadisticasHoy from "../todays-stats/estadisticas-hoy"
 import ActualesDisplay from "./actuales-display"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
@@ -97,7 +95,14 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
 
   useEffect(() => {
     if (data?.latestReading?.recorded_at) {
-      const time = new Date(data.latestReading.recorded_at).toLocaleString("es-ES", {
+      const readingDate = new Date(data.latestReading.recorded_at)
+      const now = new Date()
+      const isToday =
+        readingDate.getDate() === now.getDate() &&
+        readingDate.getMonth() === now.getMonth() &&
+        readingDate.getFullYear() === now.getFullYear()
+
+      const time = readingDate.toLocaleString("es-ES", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -105,7 +110,17 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         minute: "2-digit",
         second: "2-digit",
       })
-      setLastUpdate(time)
+
+      if (isToday) {
+        const todayTime = readingDate.toLocaleTimeString("es-ES", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+        setLastUpdate(`Hoy a las ${todayTime}`)
+      } else {
+        setLastUpdate(time)
+      }
     }
   }, [data])
 
@@ -130,15 +145,15 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
               <span className="text-sm font-medium text-primary">Actualizando...</span>
             </div>
           ) : (
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 ">
-                <MapPin className="h-8 w-8"/>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+            <div className="space-y-1 flex flex-col justify-center items-center">
+              <div className="flex items-baseline gap-1 ">
+                <MapPin className="h-6 w-6"/>
+                <h2 className="text-lg sm:text-xl font-extrabold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
                   {ubicacion}
                 </h2>
               </div>
               {lastUpdate && (
-                <p className="text-sm sm:text-base text-muted-foreground font-medium flex items-center gap-2 ml-12">
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   Última Medición: {lastUpdate}
                 </p>
@@ -181,16 +196,6 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
       <ProximasHorasDisplay 
         pressure={data?.latestReading?.pressure ?? null}
         prediction={data?.predictions?.now ?? null}
-      />
-
-      <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
-
-      <EstadisticasHoy 
-        temp_max={data?.todayExtremes?.temp_max ?? null} 
-        temp_min={data?.todayExtremes?.temp_min ?? null}
-        tempDiferencial={tempTrend ? tempTrend.differential : undefined}
-        humDiferencial={humTrend ? humTrend.differential : undefined}
-        deltaPressure={data?.predictions?.now.deltaPressure ?? null}
       />
 
       {/* Modal de error crítico */}

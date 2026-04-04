@@ -17,6 +17,13 @@ interface WeatherCardProps {
 }
 
 export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: WeatherCardProps) {
+  const getTrendState = (value?: number, thresholdValue = 0.2) => {
+    if (value === undefined || Number.isNaN(value)) return "stable"
+    if (value > thresholdValue) return "up"
+    if (value < -thresholdValue) return "down"
+    return "stable"
+  }
+
   const variants = {
     default: {
       gradient: "from-slate-600/10 to-slate-500/20",
@@ -42,6 +49,13 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
   }
 
   const style = variants[variant]
+  const trendState = getTrendState(diferencial, treshold)
+
+  const trendAnimationClass = {
+    up: "animate-ascenso",
+    down: "animate-descenso",
+    stable: "animate-estable",
+  }[trendState]
 
   return (
     <Card 
@@ -55,8 +69,6 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         style.glow
       )}
     >
-      {/* Atmospheric background effect */}
-      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
       
       <CardHeader className="flex flex-row items-center justify-between relative z-10">
         <CardTitle className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
@@ -88,7 +100,11 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
           )}
         </div>
         {subtitle && (
+          
           <div className="flex  items-center justify-center gap-2 mt-5 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+            {/* Capa de animación de fondo */}
+            <div className={cn("absolute inset-0 pointer-events-none", trendAnimationClass, tempColor)} />
+            
             {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold}/>}
             <p className="text-sm font-medium text-muted-foreground">
               {subtitle}
