@@ -20,35 +20,34 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
   const variants = {
     default: {
       gradient: "from-slate-500/10 to-slate-600/10",
-      border: "border-slate-400/30",
+      border: "hover:border-slate-400/30",
       iconBg: "bg-slate-500/10",
       iconColor: "text-slate-600",
-      glow: "shadow-slate-500/20",
+      glow: "hover:shadow-slate-500/20",
     },
     temperature: {
       gradient: "from-amber-500/5 via-transparent to-amber-500/30",
-      border: "border-orange-400/30",
+      border: "hover:border-orange-400/30",
       iconBg: "bg-linear-to-br from-orange-500/20 to-red-500/20",
       iconColor: tempColor,
-      glow: "shadow-orange-500/20",
+      glow: "hover:shadow-orange-500/20",
     },
     humidity: {
       gradient: "from-background/20 via-transparent to-sky-500/30",
-      border: "border-blue-400/30",
+      border: "hover:border-blue-400/30",
       iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/20",
       iconColor: "text-blue-500",
-      glow: "shadow-blue-500/20",
+      glow: "hover:shadow-blue-500/20",
     },
   }
 
   const style = variants[variant]
 
   return (
-    <Card
-      glowColor={style.iconColor} 
+    <Card 
       className={cn(
         "glass-card",
-        "  hover:shadow-2xl",
+        "hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
         "p-1 h-full",
         style.gradient,
@@ -56,9 +55,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
         style.glow
       )}
     >
-      {/* Atmospheric background effect */}
-      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-      
+
       <div className="flex items-center justify-between px-4 py-2 relative z-10">
         {/* Left side: Title, Value, Subtitle */}
         <div className="flex-1 min-w-0 mr-6">

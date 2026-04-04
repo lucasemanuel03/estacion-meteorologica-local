@@ -27,24 +27,24 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
   const variants = {
     default: {
       gradient: "from-slate-600/10 to-slate-500/20",
-      border: "border-slate-400/30",
+      border: "hover:border-slate-400/30",
       iconBg: "bg-slate-500/10",
       iconColor: "text-slate-600",
-      glow: "shadow-slate-500/20",
+      glow: "hover:shadow-slate-500/20",
     },
     temperature: {
       gradient: "from-amber-600/10  to-amber-500/30",
-      border: "border-orange-400/30",
+      border: "hover:border-orange-400/30",
       iconBg: "bg-linear-to-br from-orange-500/20 to-red-500/20",
       iconColor: tempColor,
-      glow: "shadow-orange-500/20",
+      glow: "hover:shadow-orange-500/20",
     },
     humidity: {
       gradient: "from-sky-600/10  to-sky-500/30",
-      border: "border-blue-400/30",
+      border: "hover:border-blue-400/30",
       iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/20",
       iconColor: "text-blue-500",
-      glow: "shadow-blue-500/20",
+      glow: "hover:shadow-blue-500/20",
     },
   }
 
@@ -84,7 +84,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         </div>
       </CardHeader>
       
-      <CardContent className="relative z-10">
+      <CardContent className="relative z-10 ">
         <div className="flex gap-2 items-baseline justify-center">
           <span className={cn(
             "text-5xl sm:text-6xl font-bold tracking-wide ",
@@ -101,12 +101,12 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         </div>
         {subtitle && (
           
-          <div className="flex  items-center justify-center gap-2 mt-5 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+          <div className="flex  items-center justify-center gap-2 mt-4 px-3 py-1 rounded-xl bg-background/40 backdrop-blur-sm">
             {/* Capa de animación de fondo */}
-            <div className={cn("absolute inset-0 pointer-events-none", trendAnimationClass, tempColor)} />
+            <div className={cn("absolute inset-0 pointer-events-none inset-shadow-sm inset-shadow-background blur-xs", trendAnimationClass, tempColor)} />
             
             {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold}/>}
-            <p className="text-sm font-medium text-muted-foreground">
+            <p className="text-sm font-medium text-foreground/80">
               {subtitle}
             </p>
           </div>

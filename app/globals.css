@@ -229,8 +229,8 @@
     /* Modo Claro por defecto */
     background: rgba(255, 255, 255, 0.4);
     border-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   }
 
@@ -318,14 +318,14 @@
 
   @keyframes slide-diagonal-up {
     from {
+      background-position: -24px 24px;
+      -webkit-mask-position: -24px 24px;
+      mask-position: -24px 24px;
+    }
+    to {
       background-position: 0 0;
       -webkit-mask-position: 0 0;
       mask-position: 0 0;
-    }
-    to {
-      background-position: -24px -24px;
-      -webkit-mask-position: -24px -24px;
-      mask-position: -24px -24px;
     }
   }
 

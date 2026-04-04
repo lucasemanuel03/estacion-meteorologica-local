@@ -17,10 +17,10 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
   // Estilo por defecto cuando no hay datos
   const defaultStyle = {
     gradient: "from-slate-600/10 to-slate-500/20",
-    border: "border-slate-400/30",
+    border: "hover:border-slate-400/30",
     iconBg: "bg-slate-500/10",
     iconColor: "text-slate-500",
-    glow: "shadow-slate-500/10",
+    glow: "hover:shadow-slate-500/10",
     badgeBg: "bg-slate-500/10",
     badgeText: "text-slate-600 dark:text-slate-400",
   }
@@ -39,9 +39,6 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         style.glow
       )}
     >
-      {/* Efecto de fondo atmosférico */}
-      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-
       <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
         <CardTitle 
             className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
@@ -53,20 +50,20 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                       </DialogTrigger>
                       <DialogContent className="max-w-md md:max-w-2xl">
                         <DialogHeader>
-                          <DialogTitle className="text-2xl flex items-center gap-2">
+                          <DialogTitle className="text-xl flex items-center gap-2">
                             <Flame className="w-6 h-6 text-orange-500" />
                             ¿Qué es el Índice de Calor?
                           </DialogTitle>
-                          <DialogDescription className="text-base leading-relaxed pt-4">
+                          <DialogDescription className="text-sm text-muted-foreground pt-4">
                             {leyendas.heatIndexLeyenda}
                           </DialogDescription>
                         </DialogHeader>
                         
                         <div className="space-y-3 pt-4">
-                          <h3 className="font-semibold text-lg">Categorías de Advertencia</h3>
+                          <h3 className="font-semibold text-base">Categorías de Advertencia</h3>
                           
                           <div className="space-y-2">
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border-green-500/20">
                               <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0" />
                               <div>
                                 <p className="font-semibold text-green-700 dark:text-green-400">SEGURO (&lt; 26°C)</p>
@@ -74,7 +71,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-yellow-500/20">
                               <div className="w-3 h-3 rounded-full bg-yellow-500 mt-1 shrink-0" />
                               <div>
                                 <p className="font-semibold text-yellow-700 dark:text-yellow-400">PRECAUCIÓN (27-32°C)</p>
@@ -82,7 +79,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-orange-500/20">
                               <div className="w-3 h-3 rounded-full bg-orange-500 mt-1 shrink-0" />
                               <div>
                                 <p className="font-semibold text-orange-700 dark:text-orange-400">PRECAUCIÓN EXTREMA (33-40°C)</p>
@@ -90,7 +87,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-red-500/20">
                               <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
                               <div>
                                 <p className="font-semibold text-red-700 dark:text-red-400">PELIGRO (41-51°C)</p>
@@ -98,19 +95,11 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-purple-500/20">
                               <div className="w-3 h-3 rounded-full bg-purple-500 mt-1 shrink-0" />
                               <div>
-                                <p className="font-semibold text-purple-700 dark:text-purple-400">PELIGRO EXTREMO (52-92°C)</p>
+                                <p className="font-semibold text-purple-700 dark:text-purple-400">PELIGRO EXTREMO (≥ 52°C)</p>
                                 <p className="text-sm text-muted-foreground">Golpe de calor altamente probable.</p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-500/10 border border-slate-500/20">
-                              <div className="w-3 h-3 rounded-full bg-slate-700 dark:bg-slate-400 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-slate-700 dark:text-slate-300">MÁS ALLÁ DEL UMBRAL HUMANO (≥93°C)</p>
-                                <p className="text-sm text-muted-foreground">Valores más allá de la resistencia humana al calor.</p>
                               </div>
                             </div>
                           </div>
@@ -124,7 +113,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         </CardTitle>
         <div
           className={cn(
-            "p-2 rounded-2xl backdrop-blur-sm transition-transform duration-300 hover:scale-110",
+            "p-2 rounded-2xl",
             style.iconBg
           )}
         >
@@ -141,7 +130,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
               <span
                 className={cn(
                   "inline-flex items-center px-4 py-2 rounded-full text-sm sm:text-base font-bold uppercase tracking-wider",
-                  "backdrop-blur-sm border border-current/20",
+                  "glass-card ",
                   "animate-in zoom-in-90 duration-500 delay-150",
                   style.badgeBg,
                   style.badgeText
@@ -152,7 +141,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
             </div>
 
             {/* Descripción compacta */}
-            <div className="mt-5 px-3 py-2 rounded-lg bg-background/40 backdrop-blur-sm">
+            <div className="mt-4 px-3 py-2 rounded-lg bg-background/60 ">
               <p className="text-xs sm:text-sm text-center font-medium text-muted-foreground leading-relaxed">
                 {heatIndex.description}
               </p>

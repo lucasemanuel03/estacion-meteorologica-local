@@ -112,11 +112,11 @@ export default function ProximasHorasDisplay({
       </div>
 
       <div className={cn(
-        "relative overflow-hidden rounded-3xl backdrop-blur-xl",
+        "relative overflow-hidden backdrop-blur-xl",
         "glass-card",
       )}>
         <div className={cn("absolute inset-0 pointer-events-none", style.glow)} />
-        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
+       
 
         <div className="relative z-10 p-5 sm:p-6">
           <div className="text-sm md:text-base font-medium flex items-center gap-3">

@@ -19,10 +19,10 @@ export function getHeatIndexStyle(category: HeatIndex["category"]): HeatIndexSty
     case "SEGURO":
       return {
         gradient: "from-green-600/10  to-green-500/20",
-        border: "border-green-400/40",
+        border: "hover:border-green-400/40",
         iconBg: "bg-linear-to-br from-green-500/20 to-emerald-500/20",
         iconColor: "text-green-300",
-        glow: "shadow-green-500/20",
+        glow: "hover:shadow-green-500/20",
         badgeBg: "bg-green-500/15",
         badgeText: "text-green-700 dark:text-green-400",
       }
@@ -30,10 +30,10 @@ export function getHeatIndexStyle(category: HeatIndex["category"]): HeatIndexSty
     case "PRECAUCIÓN":
       return {
         gradient: "from-yellow-600/10 via-transparent to-yellow-500/20",
-        border: "border-yellow-400/40",
+        border: "hover:border-yellow-400/40",
         iconBg: "bg-linear-to-br from-yellow-500/20 to-amber-500/20",
         iconColor: "text-yellow-300",
-        glow: "shadow-yellow-500/20",
+        glow: "hover:shadow-yellow-500/20",
         badgeBg: "bg-yellow-500/15",
         badgeText: "text-yellow-700 dark:text-yellow-400",
       }
@@ -44,7 +44,7 @@ export function getHeatIndexStyle(category: HeatIndex["category"]): HeatIndexSty
         border: "border-orange-400/40",
         iconBg: "bg-linear-to-br from-orange-500/20 to-amber-600/20",
         iconColor: "text-orange-300",
-        glow: "shadow-orange-500/25",
+        glow: "hover:shadow-orange-500/25",
         badgeBg: "bg-orange-500/15",
         badgeText: "text-orange-700 dark:text-orange-400",
       }
@@ -55,7 +55,7 @@ export function getHeatIndexStyle(category: HeatIndex["category"]): HeatIndexSty
         border: "border-red-400/40",
         iconBg: "bg-linear-to-br from-red-500/20 to-rose-600/20",
         iconColor: "text-red-300",
-        glow: "shadow-red-500/25",
+        glow: "shadow-red-500/25 ",
         badgeBg: "bg-red-500/15",
         badgeText: "text-red-700 dark:text-red-400",
       }

@@ -18,12 +18,14 @@ function Card({ className, style, glowColor, ...props }: CardProps) {
     <div
       data-slot="card"
       className={cn(
-        'glass-card border-2 text-card-foreground flex flex-col gap-6 rounded-xl py-6 shadow-sm',
+        'glass-card border-2 text-card-foreground flex flex-col gap-2  py-5 shadow-sm',
         className,
       )}
       style={mergedStyle}
       {...props}
+      
     />
+    
   )
 }
 
