@@ -14,7 +14,7 @@ export default function Header() {
       
       <div className="container flex justify-between items-center mx-auto relative z-10">
         <div className="flex flex-col items-center justify-center">
-          <Link href="/inicio" className="group">
+          <Link href="/" className="group">
             <div className="flex items-center gap-2.5">
               <div className="relative">
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />

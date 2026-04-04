@@ -1,9 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
-import { SecondaryWeatherCard } from "./secondary-weather-card"
 import {
   CloudLightning,
   Cloud,
@@ -76,9 +74,7 @@ function getPredictionStyle(status?: string | null) {
 function BadgePrediction({prediction} : {prediction?: WeatherPrediction | null}) {
 	const style = getPredictionStyle(prediction?.status)
 	return(
-		<>
-			        {/* Badge de estado */}
-        <div className="flex justify-center">
+		<div className="flex justify-center">
           <span
             className={cn(
               "inline-flex items-center gap-2 px-4 py-1.5 rounded-full",
@@ -91,7 +87,6 @@ function BadgePrediction({prediction} : {prediction?: WeatherPrediction | null})
             {prediction?.status ?? "Sin datos"}
           </span>
         </div>
-		</>
 	)
 }
 
@@ -102,35 +97,37 @@ export default function ProximasHorasDisplay({
   const style = getPredictionStyle(prediction?.status)
 
   return (
-    <Card
+    <section
       className={cn(
-        "col-span-full overflow-hidden backdrop-blur-xl",
-        "bg-card",
-        "border-border/50 shadow-xl",
-        "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
+        "col-span-full mb-8",
+        "animate-in fade-in-50 slide-in-from-bottom-8 duration-700"
       )}
+      style={{ animationDelay: "500ms" }}
     >
-      <div className={cn("absolute inset-0 pointer-events-none", style.glow)} />
+      <div className="flex  items-center gap-2 mb-4">
+        <div className="space-y-1 flex flex-col md:flex-row gap-2 items-center justify-between w-full">
+          <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Próximas horas</h2>
+          <BadgePrediction prediction={prediction} />
+        </div>
+      </div>
 
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-lg sm:text-2xl font-bold tracking-wide">
-					<div className="flex flex-col sm:flex-row gap-5 items-center">
-          	<p>Próximas horas</p>
-						<BadgePrediction prediction={prediction} />
-					</div>
-        </CardTitle>
-      </CardHeader>
+      <div className={cn(
+        "relative overflow-hidden rounded-3xl backdrop-blur-xl",
+        "glass-card",
+      )}>
+        <div className={cn("absolute inset-0 pointer-events-none", style.glow)} />
+        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
 
-      <CardContent className="relative z-10 flex flex-col gap-6">
-
-				<div className="text-sm md:text-base font-medium flex items-center gap-3">
-					<Megaphone className="h-auto w-12 bg-slate-500/10 p-2 rounded-2xl text-foreground" />
-					<div>
-						<b>La presión atmosférica está {prediction?.trendPressure ?? "---"}</b>
-						<p>Se espera para las próximas horas <b>{prediction?.message ?? "Predicción no disponible"}</b></p>
-					</div>
-				</div>
-      </CardContent>
-    </Card>
+        <div className="relative z-10 p-5 sm:p-6">
+          <div className="text-sm md:text-base font-medium flex items-center gap-3">
+            <Megaphone className="h-auto w-12 bg-slate-500/10 p-2 rounded-2xl text-foreground" />
+            <div>
+              <b>La presión atmosférica está {prediction?.trendPressure ?? "---"}</b>
+              <p>Se espera para las próximas horas <b>{prediction?.message ?? "Predicción no disponible"}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }

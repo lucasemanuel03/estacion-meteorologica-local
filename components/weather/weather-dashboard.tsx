@@ -8,6 +8,7 @@ import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
 import { MapPin } from "lucide-react"
 import ProximasHorasDisplay from "./proximas-horas-display"
+import { Separator } from "../ui/separator"
 
 type TrendResponse = {
   success: boolean
@@ -133,7 +134,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Header con efecto de gradiente */}
       <div className="relative">
         <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
@@ -182,21 +183,26 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         )}
       </div>
 
-      <ActualesDisplay
-        temperature={data?.latestReading?.temperature ?? null}
-        humidity={data?.latestReading?.humidity ?? null}
-        pressure={data?.latestReading?.pressure ?? null}
-        altitude={data?.latestReading?.altitude ?? null} 
-        heatIndex={data?.heatIndex ?? null}
-        prediction={data?.predictions?.now ?? null}
-        tempTrend={tempTrend ?? undefined}
-        humTrend={humTrend ?? undefined}
-      />
+      <section className="flex flex-col gap-6">
+        <ActualesDisplay
+          temperature={data?.latestReading?.temperature ?? null}
+          humidity={data?.latestReading?.humidity ?? null}
+          pressure={data?.latestReading?.pressure ?? null}
+          altitude={data?.latestReading?.altitude ?? null} 
+          heatIndex={data?.heatIndex ?? null}
+          prediction={data?.predictions?.now ?? null}
+          tempTrend={tempTrend ?? undefined}
+          humTrend={humTrend ?? undefined}
+        />
 
-      <ProximasHorasDisplay 
-        pressure={data?.latestReading?.pressure ?? null}
-        prediction={data?.predictions?.now ?? null}
-      />
+        <Separator />
+
+        <ProximasHorasDisplay 
+          pressure={data?.latestReading?.pressure ?? null}
+          prediction={data?.predictions?.now ?? null}
+        />
+      </section>
+
 
       {/* Modal de error crítico */}
       <ModalError

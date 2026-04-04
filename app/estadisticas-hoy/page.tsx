@@ -12,7 +12,7 @@ export default function EstadisticasHoyPage() {
 
   return (
     <main className="app-stage min-h-screen relative overflow-hidden">
-      <div className="container mx-auto py-8 px-4 relative z-10 space-y-8">
+      <div className="container flex flex-col gap-6 mx-auto py-8 px-4 relative z-10">
 
         {error && (
           <p className="text-center text-destructive">No se pudieron cargar las estadísticas actuales.</p>

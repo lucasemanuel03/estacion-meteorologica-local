@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
     isActive: (pathname) => pathname.startsWith("/estadisticas-hoy"),
   },
   {
-    href: "/historial",
+    href: "/weather-history",
     label: "Últimos Días",
     border: "border-sky-800/50 dark:border-sky-400/50",
 		color: "text-sky-800 dark:text-sky-300",

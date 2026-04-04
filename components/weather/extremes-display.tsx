@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { DailyExtremes } from "@/lib/types/weather"
 import { cn } from "@/lib/utils"
 import { ArrowDown, ArrowUp, Droplets, ThermometerSun } from "lucide-react"
@@ -81,23 +80,28 @@ export default function CardExtremesDisplay({valor, unit, time, variant = "defau
 
 export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
   return (
-    <Card className={cn(
-      "col-span-full overflow-hidden",
-      "glass-card",
-      "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
-    )}
-    style={{ animationDelay: "300ms" }}
+    <section
+      className={cn(
+        "col-span-full mb-8",
+        "animate-in fade-in-50 slide-in-from-bottom-8 duration-700"
+      )}
+      style={{ animationDelay: "300ms" }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))] pointer-events-none" />
-      
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">
-          Valores Históricos del Día
-        </CardTitle>
-      </CardHeader>
-      
-      <CardContent className="relative z-10">
-        <div className="grid sm:grid-cols-2 gap-6 text-foreground/80 w-full">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="p-2 rounded-xl bg-violet-500/10">
+          <ThermometerSun className="h-4 w-4 text-violet-500" />
+        </div>
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Valores históricos del día</h2>
+      </div>
+
+      <div className={cn(
+        "relative overflow-hidden rounded-3xl backdrop-blur-xl",
+        "glass-card",
+      )}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))] pointer-events-none" />
+
+        <div className="relative z-10 p-5 sm:p-6">
+          <div className="grid sm:grid-cols-2 gap-6 text-foreground/80 w-full">
           <section className="flex flex-col gap-3">
             <div className="flex items-center gap-1">
               <ThermometerSun className="w-5 h-5"/>
@@ -142,8 +146,9 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
               />
             </div>
           </section>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   )
 }

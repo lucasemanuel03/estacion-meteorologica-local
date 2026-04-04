@@ -1,16 +1,12 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { WeatherCard } from "./weather-card"
 import { TemperatureWeatherCard } from "./temperature-weather-card"
-import { Thermometer, Droplets, Clock, Umbrella, Wind, TriangleAlert, CloudRainWind, Smile, CheckCircle2, BadgeCheck, ArrowDownToLine, ArrowDown, Mountain, ThermometerSun } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Droplets, CloudRainWind, ArrowDown, Mountain, ThermometerSun, Radio } from "lucide-react"
 import HeatIndexCard from "./heat-index-card"
 import { HeatIndex } from "@/lib/types/weather"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
-import { useState } from "react"
 import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
-import { Separator } from "../ui/separator"
 
 interface ActualesDisplayProps {
   temperature: number | null
@@ -33,28 +29,21 @@ export default function ActualesDisplay({
   humTrend,
   heatIndex,
 }: ActualesDisplayProps) {
-  const [hora, setHora] = useState(new Date().toLocaleTimeString());
+  const hora = new Date().toLocaleTimeString("es-AR", { hour12: false });
   const esDeDia = hora >= "06:00:00" && hora <= "20:00:00";
 
   // [TODO] Actualizar la hora cada minuto para cambiar el fondo dinámicamente
 
   return (
-    <Card
-      className={cn(
-        "glass-card",
-        "col-span-full overflow-hidden",
-        "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
-      )}
-    >
+    <section className="mb-4 animate-in fade-in-50 slide-in-from-bottom-8 duration-700">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="p-2 rounded-xl bg-emerald-950/20">
+          <Radio className="h-4 w-4 text-emerald-500" />
+        </div>
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Valores actuales</h2>
+      </div>
 
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">
-          Valores Actuales
-          <Separator className="my-2" />
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent className="relative z-10 flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <div className="grid gap-6 md:grid-cols-3 ">
 
             <TemperatureWeatherCard
@@ -126,8 +115,8 @@ export default function ActualesDisplay({
               />
             </div>
           </div>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   )
 }
 
