@@ -1,12 +1,13 @@
+import "./globals.css"
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
 import Header from "@/components/header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AutoThemeWrapper } from "@/components/auto-theme-wrapper"
 import BottomNavigation from "@/components/bottom-navigation"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -59,6 +60,7 @@ export default function RootLayout({
             <BottomNavigation />
           </AutoThemeWrapper>
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
