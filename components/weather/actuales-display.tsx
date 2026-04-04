@@ -59,7 +59,7 @@ export default function ActualesDisplay({
 
             <TemperatureWeatherCard
               title="Temperatura"
-              temperature={31}
+              temperature={temperature}
               icon={<ThermometerSun className="h-full w-full" />}
               subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}
               diferencial={tempTrend ? tempTrend.differential : undefined}
