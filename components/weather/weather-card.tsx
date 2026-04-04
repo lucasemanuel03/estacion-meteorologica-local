@@ -46,7 +46,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
   return (
     <Card 
       className={cn(
-        "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
+        "glass-card",
         "transition-all duration-500 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-500",
         "py-4",

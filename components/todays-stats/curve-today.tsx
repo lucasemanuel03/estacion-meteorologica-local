@@ -10,15 +10,13 @@ export default function CurveToday() {
 
   return (
     <Card className={cn(
-      "overflow-hidden backdrop-blur-xl",
-      "bg-card",
-      "border-border/50 shadow-xl shadow-border/50",
-      "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
+      "overflow-hidden",
+      "glass-card",
+      "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
     )}
     style={{ animationDelay: "500ms" }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(6,182,212,0.1),rgba(255,255,255,0))] pointer-events-none" />
-      
+
       <CardHeader className="flex flex-row items-center justify-between gap-4 relative z-10">
         <div className="space-y-1">
           <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">

@@ -22,12 +22,12 @@ export default function ModalDetails({ day, open }: { day: string; open: boolean
     <DialogContent className="max-w-5xl">
       <DialogHeader>
         <DialogTitle>Detalles del historial meteorológico</DialogTitle>
-        <DialogDescription>
+        <DialogDescription className="text-white/90">
           Información detallada sobre las mediciones históricas de temperatura y humedad.
         </DialogDescription>
       </DialogHeader>
 
-      <div className="mt-4">
+      <div className="mt-4 text-white/90">
         <Tabs value={metric} onValueChange={(v) => setMetric(v as "temperature" | "humidity")}>
           <TabsList>
             <TabsTrigger value="temperature">Temperatura</TabsTrigger>

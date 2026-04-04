@@ -42,11 +42,7 @@ export default function HistorialPage() {
   }, [data?.weatherHistory])
 
   return (
-    <main className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-600/5 via-background to-background pointer-events-none" />
-      <div className="absolute top-0 right-0 w-125 h-125 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-
+    <main className="app-stage min-h-screen relative overflow-hidden">
       <div className="container mx-auto py-8 px-4 relative z-10">
         <div className="mb-8 space-y-2">
           <div className="flex items-center gap-3">

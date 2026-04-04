@@ -82,9 +82,8 @@ export default function CardExtremesDisplay({valor, unit, time, variant = "defau
 export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
   return (
     <Card className={cn(
-      "col-span-full overflow-hidden backdrop-blur-xl",
-      "bg-card",
-      "border-border/50 shadow-xl",
+      "col-span-full overflow-hidden",
+      "glass-card",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
     )}
     style={{ animationDelay: "300ms" }}

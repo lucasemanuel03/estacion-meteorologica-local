@@ -118,13 +118,10 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
 
   return (
     <Card className={cn(
-      "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
+      "glass-card relative overflow-hidden",
       "transition-all duration-500 hover:shadow-xl",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
-      "from-slate-500/5 via-background to-slate-500/10",
-      "border-border/50",
     )}>
-      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
 
       <CardHeader className="relative z-10 flex flex-row items-center justify-between gap-4 pb-1">
         <div className="flex-1">
@@ -188,7 +185,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
         {/* Amplitud térmica */}
         <div className={cn(
           "relative w-full overflow-hidden rounded-lg border backdrop-blur-sm bg-linear-to-br py-0.5 px-3",
-          "from-slate-500/10  to-slate-500/20",
+          "from-slate-500/10  to-slate-500/5",
           "border-border"
           )}>
 

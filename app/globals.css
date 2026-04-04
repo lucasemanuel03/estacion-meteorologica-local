@@ -24,6 +24,18 @@
   }
 }
 
+@keyframes ambient-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 .animate-shimmer {
   animation: shimmer 3s infinite linear;
   background: linear-gradient(
@@ -38,6 +50,11 @@
 :root {
   --background: oklch(99.029% 0.00532 198.238);
   --foreground: oklch(0.145 0 0);
+  --ambient-bg: oklch(97.8% 0.01 204);
+  --ambient-1: oklch(88% 0.052 205 / 0.55);
+  --ambient-2: oklch(90% 0.05 120 / 0.42);
+  --ambient-3: oklch(93% 0.038 28 / 0.3);
+  --ambient-grid: oklch(55% 0.02 230 / 0.09);
   --card: oklch(95.514% 0.00011 271.152 / 0.65);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -75,6 +92,11 @@
 .dark {
   --background: oklch(23.039% 0.01947 225.82);
   --foreground: oklch(0.985 0 0);
+  --ambient-bg: oklch(17.6% 0.016 233);
+  --ambient-1: oklch(52% 0.105 240 / 0.2);
+  --ambient-2: oklch(61% 0.09 175 / 0.15);
+  --ambient-3: oklch(66% 0.11 35 / 0.12);
+  --ambient-grid: oklch(90% 0.02 250 / 0.06);
   --card: oklch(20.019% 0.00002 271.152);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
@@ -156,5 +178,83 @@
   }
   body {
     @apply bg-background text-foreground;
+    min-height: 100vh;
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    background-color: var(--ambient-bg);
+    background-image:
+      radial-gradient(circle at 12% 14%, var(--ambient-1), transparent 48%),
+      radial-gradient(circle at 84% 22%, var(--ambient-2), transparent 45%),
+      radial-gradient(circle at 50% 86%, var(--ambient-3), transparent 50%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--background) 92%, transparent), var(--background));
+    background-attachment: fixed;
+  }
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -20vh -14vw;
+    z-index: -2;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  body::before {
+    opacity: 0.55;
+    background:
+      radial-gradient(circle at 18% 22%, var(--ambient-1), transparent 55%),
+      radial-gradient(circle at 78% 32%, var(--ambient-2), transparent 52%),
+      radial-gradient(circle at 52% 82%, var(--ambient-3), transparent 58%);
+    filter: blur(38px);
+    animation: ambient-drift 18s ease-in-out infinite;
+  }
+
+  body::after {
+    z-index: -1;
+    opacity: 0.22;
+    background-image:
+      linear-gradient(to right, var(--ambient-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--ambient-grid) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(circle at center, black 38%, transparent 85%);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden rounded-3xl border transition-all duration-500;
+    --glow-color: color-mix(in oklch, var(--primary) 65%, white);
+    /* Modo Claro por defecto */
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark .glass-card {
+    /* Ajustes para Modo Oscuro */
+    --glow-color: color-mix(in oklch, var(--primary) 75%, black);
+    background: rgba(15, 15, 15, 0.3);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Glow Borders dinámicos */
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 1px;
+    opacity: 0.6;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--glow-color),
+      transparent
+    );
   }
 }

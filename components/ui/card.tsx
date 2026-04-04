@@ -2,14 +2,26 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+type CardProps = React.ComponentProps<'div'> & {
+  glowColor?: string
+}
+
+function Card({ className, style, glowColor, ...props }: CardProps) {
+  const mergedStyle = glowColor
+    ? ({
+        ...(style ?? {}),
+        ['--glow-color' as string]: glowColor,
+      } as React.CSSProperties)
+    : style
+
   return (
     <div
       data-slot="card"
       className={cn(
-        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
+        'glass-card border-2 text-card-foreground flex flex-col gap-6 rounded-xl py-6 shadow-sm',
         className,
       )}
+      style={mergedStyle}
       {...props}
     />
   )

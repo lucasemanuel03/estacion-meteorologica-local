@@ -8,9 +8,8 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
     
     return(
         <Card className={cn(
-            "overflow-hidden backdrop-blur-xl",
-            "bg-card",
-            "border-border/50 shadow-xl shadow-border/50",
+            "overflow-hidden",
+            "glass-card",
             "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
         )}
         style={{ animationDelay: "400ms" }}

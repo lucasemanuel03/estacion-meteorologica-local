@@ -30,7 +30,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
   return (
     <Card
       className={cn(
-        "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
+        "glass-card",
         "transition-all duration-300 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
         "py-4",

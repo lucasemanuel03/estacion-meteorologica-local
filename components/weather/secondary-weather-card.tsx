@@ -44,9 +44,10 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
   const style = variants[variant]
 
   return (
-    <Card 
+    <Card
+      glowColor={style.iconColor} 
       className={cn(
-        "relative overflow-hidden border backdrop-blur-xl bg-linear-to-br",
+        "glass-card",
         "  hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
         "p-1 h-full",

@@ -20,11 +20,7 @@ export default function InicioPage() {
   } = useConnectionStatus(data?.latestReading?.recorded_at ?? null)
 
   return (
-    <main className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-500/5 via-background to-background pointer-events-none" />
-      <div className="absolute top-0 right-0 w-125 h-125 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-125 h-125 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-
+    <main className="app-stage min-h-screen relative overflow-hidden">
       <div className="container mx-auto py-8 px-4 relative z-10 space-y-8">
         <div className="flex items-center justify-center pb-2">
           {isLoading ? (

@@ -41,13 +41,11 @@ export default function ActualesDisplay({
   return (
     <Card
       className={cn(
-        "col-span-full overflow-hidden backdrop-blur-xl",
-        "bg-linear-to-br from-background/95 to-muted/30",
-        "border-border/50 shadow-xl",
+        "glass-card",
+        "col-span-full overflow-hidden",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700"
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))] pointer-events-none" />
 
       <CardHeader className="relative z-10">
         <CardTitle className="text-xl sm:text-2xl font-bold tracking-wide">
