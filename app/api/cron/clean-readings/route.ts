@@ -41,6 +41,16 @@ function isAfterDate(a: string, b: string): boolean {
   return a > b
 }
 
+async function getWeatherReadingsCountByDate(supabase: Awaited<ReturnType<typeof createClient>>, date: string) {
+  const { start, end } = getUtcRangeForLocalDate(date)
+
+  return supabase
+    .from("weather_readings")
+    .select("id", { count: "exact", head: true })
+    .gte("recorded_at", start)
+    .lt("recorded_at", end)
+}
+
 export async function GET() {
   const requestId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`
   const prefix = `[v1-cron][req:${requestId}]`
@@ -186,9 +196,86 @@ export async function GET() {
         })
       }
 
-      console.log(`${prefix} Stage 3 start: deleting weather_readings`, { date })
+      const deleteDate = addDaysToDate(date, -1)
+      console.log(`${prefix} Stage 3 start: checking deferred weather_readings deletion`, {
+        processedDate: date,
+        deleteDate,
+      })
 
-      const { start, end } = getUtcRangeForLocalDate(date)
+      const { count: readingsToDeleteCount, error: readingsToDeleteError } =
+        await getWeatherReadingsCountByDate(supabase, deleteDate)
+
+      if (readingsToDeleteError) {
+        console.error(`${prefix} Stage 3 error: failed to check weather_readings`, {
+          deleteDate,
+          error: readingsToDeleteError,
+        })
+        skippedDates.push({ date: deleteDate, reason: "weather_readings_check_failed" })
+        continue
+      }
+
+      if ((readingsToDeleteCount ?? 0) === 0) {
+        console.log(`${prefix} Stage 3 skipped: weather_readings already deleted or missing`, {
+          deleteDate,
+        })
+        processedDates.push(date)
+        continue
+      }
+
+      const deleteDateHourlyAverages = await DayStatsRepository.getAveragesByHourForDate(deleteDate)
+
+      if (deleteDateHourlyAverages.length === 0) {
+        console.error(`${prefix} Stage 3 validation failed: readings exist but averages are empty`, {
+          deleteDate,
+          readingsToDeleteCount: readingsToDeleteCount ?? 0,
+        })
+        skippedDates.push({ date: deleteDate, reason: "delete_date_hourly_averages_missing" })
+        continue
+      }
+
+      const { count: deleteDateHourlyStatsCount, error: deleteDateHourlyStatsError } = await supabase
+        .from("hourly_stats")
+        .select("hour", { count: "exact", head: true })
+        .eq("date", deleteDate)
+
+      if (deleteDateHourlyStatsError) {
+        console.error(`${prefix} Stage 3 error: failed to validate hourly_stats for delete date`, {
+          deleteDate,
+          error: deleteDateHourlyStatsError,
+        })
+        skippedDates.push({ date: deleteDate, reason: "delete_date_hourly_stats_check_failed" })
+        continue
+      }
+
+      if ((deleteDateHourlyStatsCount ?? 0) >= deleteDateHourlyAverages.length) {
+        console.log(`${prefix} Stage 3 validation complete: delete date hourly_stats already present`, {
+          deleteDate,
+          existingCount: deleteDateHourlyStatsCount ?? 0,
+          expected: deleteDateHourlyAverages.length,
+        })
+      } else if ((deleteDateHourlyStatsCount ?? 0) > 0) {
+        console.error(`${prefix} Stage 3 validation failed: partial hourly_stats detected for delete date`, {
+          deleteDate,
+          existingCount: deleteDateHourlyStatsCount ?? 0,
+          expected: deleteDateHourlyAverages.length,
+        })
+        skippedDates.push({ date: deleteDate, reason: "delete_date_partial_hourly_stats" })
+        continue
+      } else {
+        console.log(`${prefix} Stage 3 skipped: delete date has readings but no hourly_stats yet`, {
+          deleteDate,
+          expected: deleteDateHourlyAverages.length,
+        })
+        skippedDates.push({ date: deleteDate, reason: "delete_date_hourly_stats_missing" })
+        continue
+      }
+
+      console.log(`${prefix} Stage 3 delete start: deleting deferred weather_readings`, {
+        deleteDate,
+        readingsToDeleteCount: readingsToDeleteCount ?? 0,
+      })
+
+      const { start, end } = getUtcRangeForLocalDate(deleteDate)
       const { error: deleteError, count: deletedCount, data: deletedRows } = await supabase
         .from("weather_readings")
         .delete({ count: "exact" })
@@ -196,13 +283,16 @@ export async function GET() {
         .lt("recorded_at", end)
 
       if (deleteError) {
-        console.error(`${prefix} Stage 3 error: failed to delete weather_readings`, deleteError)
-        skippedDates.push({ date, reason: "weather_readings_delete_failed" })
+        console.error(`${prefix} Stage 3 error: failed to delete weather_readings`, {
+          deleteDate,
+          error: deleteError,
+        })
+        skippedDates.push({ date: deleteDate, reason: "weather_readings_delete_failed" })
         continue
       }
 
-      console.log(`${prefix} Stage 3 complete: weather_readings deleted`, {
-        date,
+      console.log(`${prefix} Stage 3 complete: deferred weather_readings deleted`, {
+        deleteDate,
         deletedCount: deletedCount ?? deletedRows?.length ?? 0,
       })
 
