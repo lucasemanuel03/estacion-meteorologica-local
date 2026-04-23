@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "api-key:create": "node scripts/create-api-key.mjs",
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",

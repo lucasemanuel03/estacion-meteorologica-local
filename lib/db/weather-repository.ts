@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import type { WeatherReading, DailyExtremes, ESP32Payload } from "@/lib/types/weather"
 import { toARLocalDateString, todayARLocalDate } from "@/lib/utils/timezone"
+import { hashApiKey } from "@/lib/security/api-key"
 
 /**
  * Repositorio para operaciones de base de datos relacionadas con el clima
@@ -246,12 +248,13 @@ export class WeatherRepository {
    * Verifica si una API key es válida
    */
   static async validateApiKey(apiKey: string): Promise<boolean> {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
+    const apiKeyHash = hashApiKey(apiKey)
 
     const { data, error } = await supabase
       .from("api_keys")
-      .select("is_active")
-      .eq("key", apiKey)
+      .select("id,is_active")
+      .eq("key_hash", apiKeyHash)
       .eq("is_active", true)
       .single()
 
@@ -260,7 +263,10 @@ export class WeatherRepository {
     }
 
     // Actualizar last_used_at
-    await supabase.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("key", apiKey)
+    await supabase
+      .from("api_keys")
+      .update({ last_used_at: new Date().toISOString() })
+      .eq("id", data.id)
 
     return true
   }

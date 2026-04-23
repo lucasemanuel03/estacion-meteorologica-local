@@ -1,12 +1,17 @@
--- Tabla para almacenar las API keys (Agregamos hash para mayor seguridad si quisieras)
+-- Tabla para almacenar API keys de forma segura.
+-- No se guarda la key en texto plano: solo su hash HMAC-SHA256.
 CREATE TABLE IF NOT EXISTS api_keys (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  key TEXT UNIQUE NOT NULL, 
+  key_hash TEXT UNIQUE NOT NULL,
+  key_prefix TEXT,
   name TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   last_used_at TIMESTAMPTZ,
   is_active BOOLEAN DEFAULT true
 );
+
+CREATE INDEX IF NOT EXISTS idx_api_keys_key_hash ON api_keys(key_hash);
+CREATE INDEX IF NOT EXISTS idx_api_keys_is_active ON api_keys(is_active);
 
 -- Tabla para lecturas detalladas
 CREATE TABLE IF NOT EXISTS weather_readings (
