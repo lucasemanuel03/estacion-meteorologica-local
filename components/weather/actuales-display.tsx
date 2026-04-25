@@ -7,6 +7,7 @@ import HeatIndexCard from "./heat-index-card"
 import { HeatIndex } from "@/lib/types/weather"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
 import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
+import calcularPuntoRocio from "@/lib/utils/functions/calcularPuntoRocio"
 
 interface ActualesDisplayProps {
   temperature: number | null
@@ -108,8 +109,9 @@ export default function ActualesDisplay({
 
             <div className="">
               <SecondaryWeatherCard 
-                title="Acumulado de lluvia (24h)"
-                value={"N/A"}
+                title="Punto de Rocío"
+                value={calcularPuntoRocio(temperature, humidity)?.toFixed(1) ?? "---"}
+                unit="°C"
                 icon={<CloudRainWind className="h-full w-full text-sky-500" />}
                 variant="default"
               />
