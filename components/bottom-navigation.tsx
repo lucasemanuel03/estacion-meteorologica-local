@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, CloudSun, History } from "lucide-react"
+import { BarChart3, Check, CheckCircle, CloudSun, History, MonitorDot } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type NavItem = {
@@ -43,6 +43,15 @@ const navItems: NavItem[] = [
     icon: History,
     isActive: (pathname) => pathname.startsWith("/historial") || pathname.startsWith("/weather-history"),
   },
+  {
+    href: "/station-status",
+    label: "Estado",
+    border: "border-gray-800/50 dark:border-gray-400/50",
+		color: "text-gray-800 dark:text-gray-300",
+		glow: "shadow-gray-500/20",
+    icon: MonitorDot,
+    isActive: (pathname) => pathname.startsWith("/station-status"),
+  },
 ]
 
 export default function BottomNavigation() {
@@ -51,7 +60,7 @@ export default function BottomNavigation() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/30 backdrop-blur-xl">
       <div className="container mx-auto px-2 py-2 flex items-center justify-center">
-        <ul className="grid grid-cols-3 gap-2 max-w-2xl w-full">
+        <ul className="grid grid-cols-4 gap-2 max-w-2xl w-full">
           {navItems.map((item) => {
             const Icon = item.icon
             const active = item.isActive(pathname)

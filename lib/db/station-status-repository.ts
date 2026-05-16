@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin"
+import { createClient } from "@/lib/supabase/server"
 import type { StationStatusInsert, StationStatusReport } from "@/lib/types/station-status"
 
 export class StationStatusRepository {
@@ -17,6 +18,41 @@ export class StationStatusRepository {
     }
 
     return data
+  }
+
+  static async getLatest(): Promise<StationStatusReport | null> {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from("station_status_reports")
+      .select("*")
+      .order("recorded_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (error) {
+      console.error("[station-status] Error fetching latest report:", error)
+      return null
+    }
+
+    return data
+  }
+
+  static async getRecent(limit: number): Promise<StationStatusReport[] | null> {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from("station_status_reports")
+      .select("*")
+      .order("recorded_at", { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error("[station-status] Error fetching recent reports:", error)
+      return null
+    }
+
+    return data ?? []
   }
 
   static async getLatestByMac(macAddress: string): Promise<StationStatusReport | null> {
