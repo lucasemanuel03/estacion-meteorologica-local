@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import type { RainEvent, RainEventInsert } from "@/lib/types/rain"
 
 export class RainRepository {
@@ -7,7 +7,7 @@ export class RainRepository {
       return []
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { data, error } = await supabase.from("rain_events").insert(events).select()
 
