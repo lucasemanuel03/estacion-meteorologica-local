@@ -1,13 +1,4 @@
-import type { ComponentType } from "react"
-import {
-  Clock,
-  Cpu,
-  Droplets,
-  Gauge,
-  Power,
-  Thermometer,
-  Wifi,
-} from "lucide-react"
+import { Clock, Cpu, Gauge, Power, Wifi } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { FormattedStationStatusReport } from "@/lib/types/station-status"
 import {
@@ -15,44 +6,7 @@ import {
   formatUptime,
   getWifiSignalLabel,
 } from "@/lib/utils/functions/format-station-status"
-import { SensorStatusBadge } from "./sensor-status-badge"
-
-function ReportTypeBadge({ type }: { type: FormattedStationStatusReport["report_type"] }) {
-  const isBoot = type === "BOOT"
-
-  return (
-    <span
-      className={cn(
-        "rounded-md border px-2 py-0.5 text-xs font-semibold",
-        isBoot
-          ? "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300"
-          : "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300",
-      )}
-    >
-      {isBoot ? "Arranque" : "Rutina"}
-    </span>
-  )
-}
-
-function MiniStat({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: ComponentType<{ className?: string }>
-  label: string
-  value: string
-}) {
-  return (
-    <div className="flex items-start gap-2 rounded-lg bg-background/40 px-2 py-1.5">
-      <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-      <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
-        <p className="truncate text-sm font-medium">{value}</p>
-      </div>
-    </div>
-  )
-}
+import { MiniStat, ReportTypeBadge, SensorRow } from "./status-detail-parts"
 
 function RecentStatusCard({
   report,
@@ -98,34 +52,15 @@ function RecentStatusCard({
 
       <div className="grid gap-2 sm:grid-cols-2">
         <MiniStat icon={Wifi} label="WiFi" value={`${report.board.wifi_rssi_dbm} dBm`} />
-        <MiniStat icon={Cpu} label="Memoria libre" value={`${report.board.free_heap_bytes.toLocaleString("es-ES")} B`} />
+        <MiniStat icon={Cpu} label="Memoria libre" value={`${report.board.free_heap_bytes / 1024} KB`} />
         <MiniStat icon={Power} label="Uptime" value={formatUptime(report.uptime_sec)} />
-        <MiniStat icon={Gauge} label="Reinicio" value={report.board.reset_reason} />
+        <MiniStat icon={Gauge} label="Último Reinicio" value={report.board.reset_reason} />
       </div>
 
-      <SensorRow report={report} />
+      <div className="mt-3 border-t border-border/40 pt-3">
+        <SensorRow report={report} />
+      </div>
     </article>
-  )
-}
-
-function SensorRow({ report }: { report: FormattedStationStatusReport }) {
-  return (
-    <div className="mt-3 flex flex-wrap gap-3 border-t border-border/40 pt-3">
-      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Thermometer className="h-3.5 w-3.5" />
-        DHT
-        <SensorStatusBadge status={report.sensors.dht.status} />
-      </span>
-      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Gauge className="h-3.5 w-3.5" />
-        BMP180
-        <SensorStatusBadge status={report.sensors.bmp180.status} />
-      </span>
-      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Droplets className="h-3.5 w-3.5" />
-        Pin {report.sensors.rain_gauge.current_pin_state} · {report.sensors.rain_gauge.unsent_events_count} sin enviar
-      </span>
-    </div>
   )
 }
 

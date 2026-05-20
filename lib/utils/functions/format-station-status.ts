@@ -36,7 +36,7 @@ export function formatRecordedAtLabel(iso: string): string {
 
 export function getWifiSignalLabel(rssi: number): { label: string; tone: "good" | "fair" | "poor" } {
   if (rssi >= -60) return { label: "Excelente", tone: "good" }
-  if (rssi >= -75) return { label: "Buena", tone: "good" }
+  if (rssi >= -75) return { label: "Bueno", tone: "good" }
   if (rssi >= -85) return { label: "Regular", tone: "fair" }
   return { label: "Débil", tone: "poor" }
 }

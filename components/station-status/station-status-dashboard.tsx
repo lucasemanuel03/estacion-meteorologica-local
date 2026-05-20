@@ -1,19 +1,8 @@
 "use client"
 
-import { useCallback, useEffect, useState, type ComponentType } from "react"
+import { useCallback, useEffect, useState } from "react"
 import useSWR from "swr"
-import {
-  Activity,
-  Cpu,
-  Droplets,
-  Gauge,
-  History,
-  Loader2,
-  MonitorDot,
-  Power,
-  Thermometer,
-  Wifi,
-} from "lucide-react"
+import { Clock, Cpu, EyeOff, Gauge, History, Loader2, MonitorDot, Power, Wifi } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type {
   FormattedStationStatusReport,
@@ -29,8 +18,7 @@ import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { SecondaryWeatherCard } from "@/components/weather/secondary-weather-card"
-import { SensorStatusBadge } from "./sensor-status-badge"
+import { MiniStat, ReportTypeBadge, SensorRow } from "./status-detail-parts"
 import { RecentStatusList } from "./recent-status-list"
 
 const latestFetcher = async (url: string): Promise<StationStatusLatestResponse & { report?: FormattedStationStatusReport | null }> => {
@@ -45,175 +33,73 @@ const latestFetcher = async (url: string): Promise<StationStatusLatestResponse &
 
 type ConnectionState = "normal" | "warning" | "error"
 
-function ReportTypeBadge({ type }: { type: FormattedStationStatusReport["report_type"] }) {
-  const isBoot = type === "BOOT"
-
-  return (
-    <span
-      className={cn(
-        "rounded-lg border px-3 py-1 text-sm font-semibold",
-        isBoot
-          ? "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300"
-          : "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300",
-      )}
-    >
-      {isBoot ? "Arranque (BOOT)" : "Rutina (ROUTINE)"}
-    </span>
-  )
-}
-
-function StatusOverviewCard({ report }: { report: FormattedStationStatusReport }) {
+function LatestStatusCards({ report }: { report: FormattedStationStatusReport }) {
   const wifi = getWifiSignalLabel(report.board.wifi_rssi_dbm)
+  const hasSensorError =
+    report.sensors.dht.status === "ERROR" || report.sensors.bmp180.status === "ERROR"
 
   return (
-    <Card
-      className={cn(
-        "glass-card border-2 animate-in fade-in-50 slide-in-from-bottom-8 duration-700",
-        "bg-linear-to-br from-sky-500/5 via-transparent to-emerald-500/10",
-        "hover:border-sky-400/30 hover:shadow-2xl hover:shadow-sky-500/15",
-      )}
-    >
-      <CardHeader className="pb-2">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <CardTitle className="text-base font-semibold text-foreground/90">Resumen del reporte</CardTitle>
-          <ReportTypeBadge type={report.report_type} />
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <OverviewGrid report={report} wifi={wifi} />
-      </CardContent>
-    </Card>
-  )
-}
+    <div className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-8 duration-700">
+      <Card
+        className={cn(
+          "glass-card border transition-all duration-300 hover:shadow-lg",
+          "border-border/40 hover:shadow-sky-500/10",
+        )}
+      >
+        <CardHeader className="pb-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle className="text-base font-semibold">Placa</CardTitle>
+            <ReportTypeBadge type={report.report_type} />
+            {!report.ntp_synced && (
+              <span className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-300">
+                Sin NTP
+              </span>
+            )}
+            <span
+              className={cn(
+                "ml-auto text-xs font-medium",
+                wifi.tone === "good" && "text-emerald-600 dark:text-emerald-400",
+                wifi.tone === "fair" && "text-amber-600 dark:text-amber-400",
+                wifi.tone === "poor" && "text-red-600 dark:text-red-400",
+              )}
+            >
+              {wifi.label}
+            </span>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <MiniStat icon={Wifi} label="WiFi" value={`${report.board.wifi_rssi_dbm} dBm`} />
+            <MiniStat
+              icon={Cpu}
+              label="Memoria libre"
+              value={`${report.board.free_heap_bytes / 1024} KB`}
+            />
+            <MiniStat icon={Power} label="Uptime" value={formatUptime(report.uptime_sec)} />
+            <MiniStat
+              icon={Clock}
+              label="NTP"
+              value={report.ntp_synced ? "Sincronizado" : "Sin sincronizar"}
+            />
+            <MiniStat icon={Gauge} label="Último Reinicio" value={report.board.reset_reason} />
+            <MiniStat icon={MonitorDot} label="MAC" value={report.board.mac_address} />
+          </div>
+        </CardContent>
+      </Card>
 
-function OverviewGrid({
-  report,
-  wifi,
-}: {
-  report: FormattedStationStatusReport
-  wifi: ReturnType<typeof getWifiSignalLabel>
-}) {
-  return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div className="rounded-xl border border-border/40 bg-background/40 px-4 py-3">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Uptime</p>
-        <p className="mt-1 text-xl font-bold">{formatUptime(report.uptime_sec)}</p>
-      </div>
-      <div className="rounded-xl border border-border/40 bg-background/40 px-4 py-3">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Sincronización NTP</p>
-        <p className={cn("mt-1 text-xl font-bold", report.ntp_synced ? "text-emerald-600" : "text-amber-600")}>
-          {report.ntp_synced ? "Sincronizado" : "Sin sincronizar"}
-        </p>
-      </div>
-      <div className="rounded-xl border border-border/40 bg-background/40 px-4 py-3 sm:col-span-2">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Señal WiFi</p>
-        <p className="mt-1 text-xl font-bold">
-          {report.board.wifi_rssi_dbm} dBm · {wifi.label}
-        </p>
-      </div>
-    </div>
-  )
-}
-
-function SensorsSection({ report }: { report: FormattedStationStatusReport }) {
-  return (
-    <section className="animate-in fade-in-50 slide-in-from-bottom-8 duration-700" style={{ animationDelay: "150ms" }}>
-      <div className="mb-4 flex items-center gap-2">
-        <div className="rounded-xl bg-emerald-500/10 p-2">
-          <Activity className="h-4 w-4 text-emerald-500" />
-        </div>
-        <h2 className="text-xl font-semibold tracking-tight md:text-2xl">Sensores y placa</h2>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SecondaryWeatherCard
-          title="WiFi (RSSI)"
-          value={report.board.wifi_rssi_dbm}
-          unit="dBm"
-          subtitle={getWifiSignalLabel(report.board.wifi_rssi_dbm).label.toUpperCase()}
-          icon={<Wifi className="h-full w-full text-sky-500" />}
-          variant="humidity"
-        />
-        <SecondaryWeatherCard
-          title="Memoria libre"
-          value={report.board.free_heap_bytes.toLocaleString("es-ES")}
-          unit="B"
-          icon={<Cpu className="h-full w-full text-slate-500" />}
-        />
-        <SecondaryWeatherCard
-          title="Motivo de reinicio"
-          value={report.board.reset_reason}
-          icon={<Power className="h-full w-full text-amber-500" />}
-        />
-        <SecondaryWeatherCard
-          title="MAC"
-          value={report.board.mac_address}
-          icon={<MonitorDot className="h-full w-full text-violet-500" />}
-        />
-      </div>
-
-      <div className="mt-4 grid gap-4 md:grid-cols-3">
-        <SensorCard name="DHT22 (Temperatura y Humedad)" icon={Thermometer} status={report.sensors.dht.status} />
-        <SensorCard name="BMP180 (Presión y Altitud)" icon={Gauge} status={report.sensors.bmp180.status} />
-        <RainGaugeCard report={report} />
-      </div>
-    </section>
-  )
-}
-
-function SensorCard({
-  name,
-  icon: Icon,
-  status,
-}: {
-  name: string
-  icon: ComponentType<{ className?: string }>
-  status: FormattedStationStatusReport["sensors"]["dht"]["status"]
-}) {
-  const hasError = status === "ERROR"
-
-  return (
-    <div
-      className={cn(
-        "glass-card flex items-center justify-between rounded-xl border p-4",
-        hasError ? "border-red-400/30 hover:shadow-red-500/10" : "border-emerald-400/20 hover:shadow-emerald-500/10",
-        "transition-all duration-300 hover:shadow-lg",
-      )}
-    >
-      <div className="flex items-center gap-3">
-        <div className={cn("rounded-lg p-2", hasError ? "bg-red-500/15" : "bg-emerald-500/15")}>
-          <Icon className={cn("h-5 w-5", hasError ? "text-red-500" : "text-emerald-500")} />
-        </div>
-        <span className="font-semibold">{name}</span>
-      </div>
-      <SensorStatusBadge status={status} />
-    </div>
-  )
-}
-
-function RainGaugeCard({ report }: { report: FormattedStationStatusReport }) {
-  const rain = report.sensors.rain_gauge
-
-  return (
-    <div className="glass-card rounded-xl border border-sky-400/20 p-4 transition-all duration-300 hover:shadow-lg hover:shadow-sky-500/10">
-      <div className="mb-3 flex items-center gap-3">
-        <div className="rounded-lg bg-sky-500/15 p-2">
-          <Droplets className="h-5 w-5 text-sky-500" />
-        </div>
-        <span className="font-semibold">Pluviómetro</span>
-      </div>
-      <div className="space-y-2 text-sm">
-        <p>
-          Pin actual: <span className="font-bold">{rain.current_pin_state}</span>
-        </p>
-        <p>
-          Eventos desde boot:{" "}
-          <span className="font-bold">{rain.total_events_since_boot.toLocaleString("es-ES")}</span>
-        </p>
-        <p>
-          Sin enviar: <span className="font-bold">{rain.unsent_events_count}</span>
-        </p>
-      </div>
+      <Card
+        className={cn(
+          "glass-card border transition-all duration-300 hover:shadow-lg",
+          hasSensorError ? "border-red-400/25 hover:shadow-red-500/10" : "border-border/40 hover:shadow-emerald-500/10",
+        )}
+      >
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold">Sensores</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SensorRow report={report} />
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -298,7 +184,7 @@ export function StationStatusDashboard() {
             <div className="rounded-xl bg-sky-500/10 p-3">
               <MonitorDot className="h-6 w-6 text-sky-500" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Estado de la Estación y Sensores</h1>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Estado de la Estación</h1>
           </div>
 
           {isLoading ? (
@@ -340,12 +226,7 @@ export function StationStatusDashboard() {
         </Card>
       )}
 
-      {report && (
-        <>
-          <StatusOverviewCard report={report} />
-          <SensorsSection report={report} />
-        </>
-      )}
+      {report && <LatestStatusCards report={report} />}
 
       <Separator />
 
@@ -353,7 +234,7 @@ export function StationStatusDashboard() {
         <Button
           type="button"
           variant="dinamic"
-          className="w-full max-w-sm"
+          className="w-full max-w-xs"
           disabled={isLoading || historyLoading}
           onClick={loadHistory}
         >
@@ -363,7 +244,10 @@ export function StationStatusDashboard() {
               Cargando registros...
             </>
           ) : showHistory ? (
-            "Ocultar últimos registros"
+            <>
+              <EyeOff className="mr-2 h-4 w-4" />
+              Ocultar últimos registros
+              </>
           ) : (
             <>
               <History className="mr-2 h-4 w-4" />
