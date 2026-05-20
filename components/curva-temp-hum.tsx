@@ -30,6 +30,58 @@ function getCurrentLocalHour(): number {
   return local.getUTCHours()
 }
 
+function roundDown(value: number, step: number): number {
+  return Math.floor(value / step) * step
+}
+
+function roundUp(value: number, step: number): number {
+  return Math.ceil(value / step) * step
+}
+
+function computeYDomain(values: number[], metric: Metric): [number, number] {
+  if (values.length === 0) {
+    return metric === "temperature" ? [0, 30] : [0, 100]
+  }
+
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const span = max - min || 1
+
+  if (metric === "temperature") {
+    const pad = Math.max(span * 0.12, 2)
+    let lo = roundDown(min - pad, 5)
+    let hi = roundUp(max + pad, 5)
+    if (hi - lo < 10) {
+      const mid = (min + max) / 2
+      lo = roundDown(mid - 5, 5)
+      hi = roundUp(mid + 5, 5)
+    }
+    return [lo, hi]
+  }
+
+  const pad = Math.max(span * 0.12, 5)
+  let lo = Math.max(0, roundDown(min - pad, 10))
+  let hi = Math.min(100, roundUp(max + pad, 10))
+  if (hi - lo < 20) {
+    const mid = (min + max) / 2
+    lo = Math.max(0, roundDown(mid - 10, 10))
+    hi = Math.min(100, roundUp(mid + 10, 10))
+  }
+  return [lo, hi]
+}
+
+function hourTicks(maxHour: number): number[] {
+  const step = maxHour > 12 ? 2 : 1
+  const ticks: number[] = []
+  for (let h = 0; h <= maxHour; h += step) {
+    ticks.push(h)
+  }
+  if (ticks[ticks.length - 1] !== maxHour) {
+    ticks.push(maxHour)
+  }
+  return ticks
+}
+
 export default function CurvaTempHum({ 
   data, 
   metric, 
@@ -37,7 +89,7 @@ export default function CurvaTempHum({
   error = null,
   showAllHours = false 
 }: CurvaTempHumProps) {
-  const { chartData, yAxisDomain } = useMemo(() => {
+  const { chartData, yAxisDomain, maxHour } = useMemo(() => {
     const currentHour = getCurrentLocalHour()
     const maxHour = showAllHours ? 23 : currentHour
     
@@ -69,22 +121,13 @@ export default function CurvaTempHum({
       })
     }
 
-    // Calcular el dominio del eje Y según la métrica
-    let domain: [number, number]
-    if (metric === "temperature") {
-      // Detectar si hay temperaturas negativas
-      const temperatures = filled
-        .map((d) => d.avgTemperature)
-        .filter((t) => t !== null) as number[]
-      const minTemp = temperatures.length > 0 ? Math.min(...temperatures) : 0
-      
-      domain = minTemp < 0 ? [-20, 45] : [0, 45] // Si hay temperaturas negativas, ajustar el mínimo a -20°C
-    } else {
-      // Humedad siempre 0-100
-      domain = [20, 100] // Ajustar el mínimo a 20% para mejor visualización
-    }
+    const values = filled
+      .map((d) => (metric === "temperature" ? d.avgTemperature : d.avgHumidity))
+      .filter((v): v is number => v !== null)
 
-    return { chartData: filled, yAxisDomain: domain }
+    const domain = computeYDomain(values, metric)
+
+    return { chartData: filled, yAxisDomain: domain, maxHour }
   }, [data, showAllHours, metric])
 
   if (loading) {
@@ -112,28 +155,35 @@ export default function CurvaTempHum({
   return (
     <div className="h-75 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 16, right: 24, left: 24, bottom: 30 }}>
+        <AreaChart data={chartData} margin={{ top: 12, right: 8, left: 4, bottom: 28 }}>
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.3} />
-          <XAxis 
-            dataKey="label"
-            height={52}
+          <XAxis
+            type="number"
+            dataKey="hour"
+            domain={[0, maxHour]}
+            allowDecimals={false}
+            padding={{ left: 0, right: 0 }}
+            ticks={hourTicks(maxHour)}
+            height={48}
+            tickFormatter={(h) => `${Number(h).toString().padStart(2, "0")}`}
             label={{ value: "Horas", angle: 0, position: "insideBottom" }}
-            tickLine={false} 
-            axisLine={false} 
+            tickLine={false}
+            axisLine={false}
           />
           <YAxis
             tickLine={false}
             axisLine={false}
-            width={108}
-            tickMargin={8}
+            width={56}
+            tickMargin={6}
             label={{
               value: yLabel,
               angle: -90,
               position: "insideLeft",
-              offset: 30,
+              offset: 14,
               style: { textAnchor: "middle", dominantBaseline: "central" },
             }}
             domain={yAxisDomain}
+            allowDecimals={false}
           />
           <Tooltip
             formatter={(value: any) => {
