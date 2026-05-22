@@ -150,7 +150,7 @@ export default function CurvaTempHum({
 
   const dataKey = metric === "temperature" ? "avgTemperature" : "avgHumidity"
   const color = metric === "temperature" ? "#f97316" : "#0ea5e9"
-  const yLabel = metric === "temperature" ? "Temperatura (°C)" : "Humedad (%)"
+
 
   return (
     <div className="h-75 w-full">
@@ -173,15 +173,8 @@ export default function CurvaTempHum({
           <YAxis
             tickLine={false}
             axisLine={false}
-            width={56}
-            tickMargin={6}
-            label={{
-              value: yLabel,
-              angle: -90,
-              position: "insideLeft",
-              offset: 14,
-              style: { textAnchor: "middle", dominantBaseline: "central" },
-            }}
+            width={30}
+            tickMargin={1}
             domain={yAxisDomain}
             allowDecimals={false}
           />

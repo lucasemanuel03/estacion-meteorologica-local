@@ -1,9 +1,60 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { CardDescription } from "@/components/ui/card"
 import CurvaTempHum from "../curva-temp-hum"
 import { cn } from "@/lib/utils"
 import { useHourlyAverages } from "../../hooks/use-hourly-averages"
+import { LineChart } from "lucide-react"
+
+function ChartPanel({
+  title,
+  accent,
+  children,
+}: {
+  title: string
+  accent: "temperature" | "humidity"
+  children: ReactNode
+}) {
+  const accents = {
+    temperature: {
+      dot: "bg-orange-500",
+      title: "text-orange-600 dark:text-orange-400",
+      border: "border-orange-400/20",
+      glow: "hover:shadow-orange-500/10",
+    },
+    humidity: {
+      dot: "bg-sky-500",
+      title: "text-sky-600 dark:text-sky-400",
+      border: "border-sky-400/20",
+      glow: "hover:shadow-sky-500/10",
+    },
+  }
+
+  const style = accents[accent]
+
+  return (
+    <section
+      className={cn(
+        "min-w-0 flex-1 space-y-4 rounded-2xl border p-4 sm:p-5",
+        "glass-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg",
+        style.border,
+        style.glow,
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <span
+          className={cn("inline-block h-2.5 w-2.5 rounded-full", style.dot)}
+          aria-hidden="true"
+        />
+        <h3 className={cn("text-sm font-semibold tracking-wide", style.title)}>
+          {title}
+        </h3>
+      </div>
+      {children}
+    </section>
+  )
+}
 
 export default function CurveToday() {
   const { data, loading, error } = useHourlyAverages()
@@ -14,34 +65,25 @@ export default function CurveToday() {
         "mb-8",
         "animate-in fade-in-50 slide-in-from-bottom-8 duration-700",
       )}
-    style={{ animationDelay: "500ms" }}
+      style={{ animationDelay: "500ms" }}
     >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="p-2 rounded-xl bg-emerald-500/10">
-          <span className="inline-block h-4 w-4 rounded-full bg-emerald-500" aria-hidden="true" />
+      <div className="mb-4 flex items-center gap-2">
+        <div className="rounded-xl bg-emerald-500/10 p-2">
+          <LineChart className="h-4 w-4 text-emerald-500" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Evolución del día</h2>
+          <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
+            Evolución del día
+          </h2>
           <CardDescription className="text-sm sm:text-base">
-            Curvas simultáneas por hora de temperatura y humedad
+            Curvas por hora de temperatura y humedad
           </CardDescription>
         </div>
       </div>
 
-      <div className={cn(
-        "relative overflow-hidden rounded-3xl  backdrop-blur-xl",
-        "glass-card",
-      )}>
-        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-
-        <div className="relative z-10 flex w-full flex-col items-stretch gap-8 p-5 sm:p-6 md:flex-row md:gap-10">
-          <section className="min-w-0 flex-1 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-2.5 w-2.5 rounded-full bg-orange-500" aria-hidden="true" />
-              <h3 className="text-sm font-semibold tracking-wide text-orange-600 dark:text-orange-400">
-                Temperatura
-              </h3>
-            </div>
+      <div>
+        <div className="relative z-10 flex w-full flex-col gap-5 p-5 sm:p-6 md:flex-row md:gap-6">
+          <ChartPanel title="Temperatura" accent="temperature">
             <CurvaTempHum
               data={data}
               metric="temperature"
@@ -49,20 +91,9 @@ export default function CurveToday() {
               error={error}
               showAllHours={false}
             />
-          </section>
+          </ChartPanel>
 
-          <section
-            className="h-px w-full shrink-0 bg-border/70 md:h-auto md:w-px md:self-stretch"
-            aria-hidden="true"
-          />
-
-          <section className="min-w-0 flex-1 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-2.5 w-2.5 rounded-full bg-sky-500" aria-hidden="true" />
-              <h3 className="text-sm font-semibold tracking-wide text-sky-600 dark:text-sky-400">
-                Humedad
-              </h3>
-            </div>
+          <ChartPanel title="Humedad" accent="humidity">
             <CurvaTempHum
               data={data}
               metric="humidity"
@@ -70,7 +101,7 @@ export default function CurveToday() {
               error={error}
               showAllHours={false}
             />
-          </section>
+          </ChartPanel>
         </div>
       </div>
     </section>

@@ -1,80 +1,128 @@
+import type { ReactNode } from "react"
 import type { DailyExtremes } from "@/lib/types/weather"
 import { cn } from "@/lib/utils"
-import { ArrowDown, ArrowUp, Droplets, ThermometerSun } from "lucide-react"
+import {
+  ArrowDown,
+  ArrowUp,
+  Clock,
+  Droplets,
+  ThermometerSun,
+} from "lucide-react"
 
 interface ExtremesDisplayProps {
   extremes: DailyExtremes | null
 }
 
-export default function CardExtremesDisplay({valor, unit, time, variant = "default", index = 0} : {valor: number | null, unit: string, time: string | null, variant?: "default" | "max" | "min", index?: number}) {
-  const formatTime = (timestamp: string | null) => {
-    if (!timestamp) return "--:--"
-    return new Date(timestamp).toLocaleTimeString("es-ES", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
-  
-  const variants = {
-    default: {
-      gradient: "from-slate-500/10 to-slate-600/5",
-      border: "border-slate-400/30",
-      iconBg: "bg-slate-500/15",
-      icon: <Droplets className="w-5 h-5 text-slate-500" />,
-      valueColor: "text-foreground",
+function formatTime(timestamp: string | null) {
+  if (!timestamp) return "--:--"
+  return new Date(timestamp).toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
+
+function formatValue(value: number | null) {
+  if (value === null || value === undefined) return "--"
+  return value.toFixed(1)
+}
+
+function ExtremeValueCard({
+  label,
+  value,
+  unit,
+  time,
+  variant,
+  index = 0,
+}: {
+  label: string
+  value: number | null
+  unit: string
+  time: string | null
+  variant: "min" | "max"
+  index?: number
+}) {
+  const styles = {
+    min: {
+      border: "border-sky-400/25",
+      iconBg: "bg-sky-500/15",
+      icon: <ArrowDown className="h-4 w-4 text-sky-600 dark:text-sky-400" />,
+      valueColor: "text-sky-600 dark:text-sky-400",
+      glow: "hover:shadow-sky-500/15",
     },
     max: {
-      gradient: "from-red-400/20 to-red-500/10",
-      border: "border-border/50",
-      iconBg: "bg-red-500/30",
-      icon: <ArrowUp className="w-5 h-5" />,
-      valueColor: "text-red-400",
-    },
-    min: {
-      gradient: "from-blue-400/20 to-cyan-500/10",
-      border: "border-border/50",
-      iconBg: "bg-blue-500/30",
-      icon: <ArrowDown className="w-5 h-5" />,
-      valueColor: "text-blue-500",
+      border: "border-orange-400/25",
+      iconBg: "bg-orange-500/15",
+      icon: <ArrowUp className="h-4 w-4 text-orange-600 dark:text-orange-400" />,
+      valueColor: "text-orange-600 dark:text-orange-400",
+      glow: "hover:shadow-orange-500/15",
     },
   }
 
-  const style = variants[variant]
-  
-  return(
-    <div 
+  const style = styles[variant]
+
+  return (
+    <article
       className={cn(
-        "relative overflow-hidden rounded-lg border px-3 py-2 w-full",
-        "bg-linear-to-br backdrop-blur-sm transition-all duration-300 hover:shadow-md",
-        "animate-in fade-in-50 slide-in-from-bottom-8 duration-700",
-        style.gradient,
-        style.border
+        "flex flex-col gap-3 rounded-xl p-2.5 sm:p-4",
+        "glass-card border transition-all duration-300 hover:shadow-lg",
+        style.border,
+        style.glow,
+        "animate-in fade-in-50 slide-in-from-bottom-6 duration-700",
       )}
-      style={{ animationDelay: `${index * 100}ms` }}
+      style={{ animationDelay: `${index * 80}ms` }}
     >
-      <div className="absolute w-full inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-      
-      <div className="relative z-10 flex items-center justify-between gap-2">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-          <div className={cn("p-1.5 rounded-md", style.iconBg)}>
-            {style.icon}
-          </div>
-        </div>
-
-        <div className="flex items-baseline gap-1.5">
-          <span className={cn("text-lg sm:text-xl font-bold text-foreground")}>
-            {valor ?? "--"}
-          </span>
-          <span className="text-xs text-muted-foreground">{unit}</span>
-        </div>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {label}
+        </span>
+        <div className={cn("rounded-lg p-2", style.iconBg)}>{style.icon}</div>
       </div>
 
-      <div className="relative z-10 mt-1 pt-1 border-t border-border/40">
-        <p className="text-xs text-muted-foreground text-right">
-          {formatTime(time ?? null)}
-        </p>
+      <div className="flex items-baseline gap-1.5">
+        <span
+          className={cn(
+            "text-2xl sm:text-3xl font-bold tabular-nums tracking-tight",
+            style.valueColor,
+          )}
+        >
+          {formatValue(value)}
+        </span>
+        <span className="text-sm font-medium text-muted-foreground">{unit}</span>
       </div>
-    </div>
+
+      <div className="flex items-center gap-1.5 border-t border-border/50 pt-3 text-xs text-muted-foreground">
+        <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        <span>Registrado a las {formatTime(time)}</span>
+      </div>
+    </article>
+  )
+}
+
+function MetricGroup({
+  title,
+  icon,
+  accentBorder,
+  children,
+}: {
+  title: string
+  icon: ReactNode
+  accentBorder: string
+  children: ReactNode
+}) {
+  return (
+    <section
+      className={cn(
+        "rounded-2xl border p-4 sm:p-5",
+        "bg-background/25 backdrop-blur-sm",
+        accentBorder,
+      )}
+    >
+      <div className="mb-4 flex items-center gap-2">
+        {icon}
+        <h3 className="text-sm font-semibold tracking-wide text-foreground">{title}</h3>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{children}</div>
+    </section>
   )
 }
 
@@ -83,70 +131,77 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
     <section
       className={cn(
         "col-span-full mb-8",
-        "animate-in fade-in-50 slide-in-from-bottom-8 duration-700"
+        "animate-in fade-in-50 slide-in-from-bottom-8 duration-700",
       )}
       style={{ animationDelay: "300ms" }}
     >
-      <div className="flex items-center gap-2 mb-4">
-        <div className="p-2 rounded-xl bg-violet-500/10">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="rounded-xl bg-violet-500/10 p-2">
           <ThermometerSun className="h-4 w-4 text-violet-500" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Valores históricos del día</h2>
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
+            Valores históricos del día
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Mínimos y máximos registrados hoy
+          </p>
+        </div>
       </div>
 
-      <div className={cn(
-        "relative overflow-hidden rounded-3xl backdrop-blur-xl",
-        "glass-card",
-      )}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))] pointer-events-none" />
+      <div>
+        <div className="relative z-10 grid grid-cols-1 gap-4 sm:p-6 lg:grid-cols-2 lg:gap-6">
+          <MetricGroup
+            title="Temperatura"
+            accentBorder="border-orange-400/20"
+            icon={
+              <ThermometerSun className="h-4 w-4 text-orange-500" aria-hidden="true" />
+            }
+          >
+           <div className="grid grid-cols-2 gap-2 lg:gap-4">
+            <ExtremeValueCard
+              label="Mínima"
+              value={extremes?.temp_min ?? null}
+              unit="°C"
+              time={extremes?.temp_min_time ?? null}
+              variant="min"
+              index={0}
+            />
+            <ExtremeValueCard
+              label="Máxima"
+              value={extremes?.temp_max ?? null}
+              unit="°C"
+              time={extremes?.temp_max_time ?? null}
+              variant="max"
+              index={1}
+            />
+            </div> 
+          </MetricGroup>
 
-        <div className="relative z-10 p-5 sm:p-6">
-          <div className="grid sm:grid-cols-2 gap-6 text-foreground/80 w-full">
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-1">
-              <ThermometerSun className="w-5 h-5"/>
-              <p className="text-sm font-semibold">Temperatura</p>
-            </div>
-            <div className="flex flex-row gap-2">
-              <CardExtremesDisplay
-                valor={extremes?.temp_min ?? null}
-                unit="°C"
-                variant="min"
-                time={extremes?.temp_min_time ?? null}
-                index={0}
-              />
-              <CardExtremesDisplay
-                valor={extremes?.temp_max ?? null}
-                unit="°C"
-                variant="max"
-                time={extremes?.temp_max_time ?? null}
-                index={1}
-              />
-            </div>
-          </section>
-          <section className="flex flex-col w-full gap-3">
-            <div className="flex items-center gap-1">
-              <Droplets className="h-5 w-5"/>
-              <p className="text-sm font-semibold">Humedad</p>
-            </div>
-            <div className="flex flex-row w-full gap-2">
-              <CardExtremesDisplay
-                valor={extremes?.humidity_min ?? null}
-                variant="min"
+          <MetricGroup
+            title="Humedad"
+            accentBorder="border-sky-400/20"
+            icon={<Droplets className="h-4 w-4 text-sky-500" aria-hidden="true" />}
+          >
+            <div className="grid grid-cols-2 gap-2 lg:gap-4">
+              <ExtremeValueCard
+                label="Mínima"
+                value={extremes?.humidity_min ?? null}
                 unit="%"
                 time={extremes?.humidity_min_time ?? null}
+                variant="min"
                 index={2}
               />
-              <CardExtremesDisplay
-                valor={extremes?.humidity_max ?? null}
-                variant="max"
+              <ExtremeValueCard
+                label="Máxima"
+                value={extremes?.humidity_max ?? null}
                 unit="%"
                 time={extremes?.humidity_max_time ?? null}
+                variant="max"
                 index={3}
               />
             </div>
-          </section>
-          </div>
+          </MetricGroup>
         </div>
       </div>
     </section>
