@@ -20,7 +20,7 @@ export default function EstadisticasHoy({temp_max, temp_min, tempDiferencial=-99
 				<h2 className="text-xl md:text-2xl font-semibold tracking-tight">Estadísticas del día</h2>
 			</div>
 
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 sm:p-6">
 				{/* Amplitud Térmica */}
 				<div className={cn(
 					"group flex items-center gap-3 p-4 rounded-xl",

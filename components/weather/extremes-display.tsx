@@ -63,7 +63,7 @@ function ExtremeValueCard({
   return (
     <article
       className={cn(
-        "flex flex-col gap-3 rounded-xl p-2.5 sm:p-4",
+        "flex min-w-0 w-full flex-col gap-3 rounded-xl p-2.5 sm:p-4",
         "glass-card border transition-all duration-300 hover:shadow-lg",
         style.border,
         style.glow,
@@ -112,7 +112,7 @@ function MetricGroup({
   return (
     <section
       className={cn(
-        "rounded-2xl border p-4 sm:p-5",
+        "w-full min-w-0 rounded-2xl border p-4 sm:p-5",
         "bg-background/25 backdrop-blur-sm",
         accentBorder,
       )}
@@ -121,7 +121,9 @@ function MetricGroup({
         {icon}
         <h3 className="text-sm font-semibold tracking-wide text-foreground">{title}</h3>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{children}</div>
+      <div className="grid w-full grid-cols-2 gap-3 sm:gap-4">
+        {children}
+      </div>
     </section>
   )
 }
@@ -158,7 +160,6 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
               <ThermometerSun className="h-4 w-4 text-orange-500" aria-hidden="true" />
             }
           >
-           <div className="grid grid-cols-2 gap-2 lg:gap-4">
             <ExtremeValueCard
               label="Mínima"
               value={extremes?.temp_min ?? null}
@@ -175,7 +176,6 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
               variant="max"
               index={1}
             />
-            </div> 
           </MetricGroup>
 
           <MetricGroup
@@ -183,24 +183,22 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
             accentBorder="border-sky-400/20"
             icon={<Droplets className="h-4 w-4 text-sky-500" aria-hidden="true" />}
           >
-            <div className="grid grid-cols-2 gap-2 lg:gap-4">
-              <ExtremeValueCard
-                label="Mínima"
-                value={extremes?.humidity_min ?? null}
-                unit="%"
-                time={extremes?.humidity_min_time ?? null}
-                variant="min"
-                index={2}
-              />
-              <ExtremeValueCard
-                label="Máxima"
-                value={extremes?.humidity_max ?? null}
-                unit="%"
-                time={extremes?.humidity_max_time ?? null}
-                variant="max"
-                index={3}
-              />
-            </div>
+            <ExtremeValueCard
+              label="Mínima"
+              value={extremes?.humidity_min ?? null}
+              unit="%"
+              time={extremes?.humidity_min_time ?? null}
+              variant="min"
+              index={2}
+            />
+            <ExtremeValueCard
+              label="Máxima"
+              value={extremes?.humidity_max ?? null}
+              unit="%"
+              time={extremes?.humidity_max_time ?? null}
+              variant="max"
+              index={3}
+            />
           </MetricGroup>
         </div>
       </div>

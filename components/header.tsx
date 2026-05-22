@@ -9,9 +9,7 @@ export default function Header() {
       "w-full bg-background/85 backdrop-blur-xl p-3 shadow-lg border-b border-border/50 sticky top-0 z-50",
       "transition-all duration-300"
     )}>
-      {/* Gradient effect */}
-      <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-orange-500/5 pointer-events-none" />
-      
+
       <div className="container flex justify-between items-center mx-auto relative z-10">
         <div className="flex flex-col items-center justify-center">
           <Link href="/" className="group">

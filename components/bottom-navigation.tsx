@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
   },
   {
     href: "/station-status",
-    label: "Estado",
+    label: "Reporte",
     border: "border-gray-800/50 dark:border-gray-400/50",
 		color: "text-gray-800 dark:text-gray-300",
 		glow: "shadow-gray-500/20",
