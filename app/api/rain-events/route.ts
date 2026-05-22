@@ -3,6 +3,16 @@ import { RainRepository } from "@/lib/db/rain-repository"
 import { WeatherRepository } from "@/lib/db/weather-repository"
 import { WeatherValidator } from "@/lib/utils/weather-validator"
 import { RainValidator } from "@/lib/utils/rain-validator"
+import { todayARLocalDate } from "@/lib/utils/timezone"
+
+function formatEvent(event: { id: string; recorded_at: string; created_at: string; is_offline: boolean }) {
+  return {
+    id: event.id,
+    recorded_at: event.recorded_at,
+    created_at: event.created_at,
+    is_offline: event.is_offline,
+  }
+}
 
 /**
  * POST /api/rain-events
@@ -91,5 +101,29 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(`[rain][req:${requestId}] Unhandled error:`, error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+/**
+ * GET /api/rain-events
+ * Devuelve los eventos de lluvia del día local actual.
+ */
+export async function GET() {
+  try {
+    const events = await RainRepository.getTodayEvents()
+
+    if (events === null) {
+      return NextResponse.json({ error: "Failed to fetch rain events" }, { status: 500 })
+    }
+
+    return NextResponse.json({
+      date: todayARLocalDate(),
+      count: events.length,
+      events: events.map(formatEvent),
+      timestamp: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error("[rain] Error fetching today events:", error)
+    return NextResponse.json({ error: "Failed to fetch rain events" }, { status: 500 })
   }
 }
