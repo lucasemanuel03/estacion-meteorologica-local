@@ -25,6 +25,10 @@ export interface DailyExtremes {
   humidity_min: number | null
   humidity_max_time: string | null
   humidity_min_time: string | null
+  // Lluvia acumulada para el día (mm)
+  precip_total?: number | null
+  // Último valor de lluvia observado (mm) para consulta rápida
+  last_value?: number | null
   updated_at: string
 }
 
