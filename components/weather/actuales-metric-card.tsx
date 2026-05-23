@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowDown, CloudRainWind, Mountain } from "lucide-react"
+import { ArrowDown, CloudRainWind, Mountain, CloudRain } from "lucide-react"
 import HeatIndexCard from "./heat-index-card"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
 import { WeatherCard } from "./weather-card"
@@ -16,6 +16,7 @@ interface ActualesMetricCardProps {
   humidity: number | null
   pressure: number | null
   altitude: number | null
+  precipitation: number | null
   heatIndex: HeatIndex | null
   prediction?: WeatherPrediction | null
 }
@@ -27,6 +28,7 @@ export function ActualesMetricCard({
   humidity,
   pressure,
   altitude,
+  precipitation,
   heatIndex,
   prediction,
 }: ActualesMetricCardProps) {
@@ -37,11 +39,19 @@ export function ActualesMetricCard({
   }
 
   const metrics = {
+    precipitation: {
+      title: "Lluvia",
+      value: precipitation?.toFixed(1) ?? null,
+      unit: "mm",
+      icon: <CloudRain className="h-full w-full text-primary" />,
+      diferencial: undefined,
+      subtitle: "ACUMULADO DURANTE EL DÍA",
+    },
     pressure: {
       title: "Presión Atmosférica",
       value: pressure?.toFixed(1) ?? null,
       unit: "hPa",
-      icon: <ArrowDown className="h-full w-full text-sky-700" />,
+      icon: <ArrowDown className="h-full w-full text-primary" />,
       diferencial: prediction?.deltaPressure,
       subtitle: prediction?.trendPressure.toUpperCase(),
     },
@@ -49,7 +59,7 @@ export function ActualesMetricCard({
       title: "Punto de Rocío",
       value: dewPoint?.toFixed(1) ?? null,
       unit: "°C",
-      icon: <CloudRainWind className="h-full w-full text-sky-500" />,
+      icon: <CloudRainWind className="h-full w-full text-primary" />,
       diferencial: undefined,
       subtitle: undefined,
     },
@@ -57,7 +67,7 @@ export function ActualesMetricCard({
       title: "Altura sobre el nivel del mar",
       value: altitude?.toFixed(1) ?? null,
       unit: "m.s.n.m.",
-      icon: <Mountain className="h-full w-full text-amber-700" />,
+      icon: <Mountain className="h-full w-full text-primary" />,
       diferencial: undefined,
       subtitle: undefined,
     },

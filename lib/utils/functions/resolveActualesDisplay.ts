@@ -3,7 +3,7 @@
  * Las reglas se evalúan en orden; gana la primera que cumpla su condición.
  */
 
-export type ActualesMetric = "heat-index" | "pressure" | "dew-point" | "altitude"
+export type ActualesMetric = "heat-index" | "pressure" | "dew-point" | "altitude" | "precipitation"
 
 export interface ActualesDisplayContext {
   now?: Date
@@ -11,6 +11,7 @@ export interface ActualesDisplayContext {
   humidity: number | null
   pressure: number | null
   altitude: number | null
+  precipitation: number | null
 }
 
 export interface ActualesDisplayConfig {
@@ -82,6 +83,15 @@ export const displayPredicates = {
  * (mayor prioridad) o antes del fallback `day-warm`.
  */
 export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
+  {
+    id: "rain",
+    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 0,
+    layout: {
+      tertiaryCard: "precipitation",
+      secondaryCard: "pressure",
+      showDewPointCard: true,
+    },
+  },
   {
     id: "night",
     when: displayPredicates.isNighttime,

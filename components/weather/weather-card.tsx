@@ -18,7 +18,7 @@ interface WeatherCardProps {
 
 export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: WeatherCardProps) {
   const getTrendState = (value?: number, thresholdValue = 0.2) => {
-    if (value === undefined || Number.isNaN(value)) return "stable"
+    if (value === undefined || Number.isNaN(value)) return "default"
     if (value > thresholdValue) return "up"
     if (value < -thresholdValue) return "down"
     return "stable"
@@ -26,10 +26,10 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
 
   const variants = {
     default: {
-      gradient: "from-slate-600/10 to-slate-500/20",
+      gradient: "from-gray-600/10 to-slate-500/20",
       border: "hover:border-slate-400/30",
-      iconBg: "bg-slate-500/10",
-      iconColor: "text-slate-600",
+      iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/20",
+      iconColor: "text-primary",
       glow: "hover:shadow-slate-500/20",
     },
     temperature: {
@@ -55,6 +55,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
     up: "animate-ascenso",
     down: "animate-descenso",
     stable: "animate-estable",
+    default: "",
   }[trendState]
 
   return (
@@ -71,7 +72,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
     >
       
       <CardHeader className="flex flex-row items-center justify-between relative z-10">
-        <CardTitle className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
+        <CardTitle className="text-base sm:text-lg font-semibold tracking-wide text-foreground/90">
           {title}
         </CardTitle>
         <div className={cn(

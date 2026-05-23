@@ -16,6 +16,7 @@ interface ActualesDisplayProps {
   humidity: number | null
   pressure: number | null
   altitude: number | null
+  precipitation?: number | null
   prediction?: WeatherPrediction | null
   heatIndex: HeatIndex | null
   tempTrend?: { differential: number; message: string }
@@ -27,6 +28,7 @@ export default function ActualesDisplay({
   humidity,
   pressure,
   altitude,
+  precipitation,
   prediction,
   tempTrend,
   humTrend,
@@ -40,8 +42,9 @@ export default function ActualesDisplay({
         humidity,
         pressure,
         altitude,
+        precipitation: precipitation ?? null,
       }),
-    [temperature, humidity, pressure, altitude],
+    [temperature, humidity, pressure, altitude, precipitation],
   )
 
   const dewPoint = calcularPuntoRocio(temperature, humidity)
@@ -82,6 +85,7 @@ export default function ActualesDisplay({
             humidity={humidity}
             pressure={pressure}
             altitude={altitude}
+            precipitation={precipitation ?? null}
             heatIndex={heatIndex}
             prediction={prediction}
           />
@@ -95,6 +99,7 @@ export default function ActualesDisplay({
             humidity={humidity}
             pressure={pressure}
             altitude={altitude}
+            precipitation={precipitation ?? null}
             heatIndex={heatIndex}
             prediction={prediction}
           />
