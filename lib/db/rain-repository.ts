@@ -21,7 +21,7 @@ export class RainRepository {
 
     try {
       // Obtener factor de conversión (mm por evento)
-      const factor = await ConversionRepository.getFactor("rain_event_test")
+      const factor = await ConversionRepository.getFactor("rain_event_v1")
 
       // Agrupar fechas locales afectadas por los eventos insertados
       const affectedDates = new Set<string>()
@@ -48,7 +48,9 @@ export class RainRepository {
         }
 
         const totalEvents = (count ?? 0) as number
-        const totalMm = Math.round((totalEvents * factor) * 100) / 100 // 2 decimales
+        const totalMm = Math.round(totalEvents * factor * 100) / 100
+        console.log(`[rain] Factor de conversión: ${factor} mm por evento`)
+        console.log(`[rain] Processed date ${date}: ${totalEvents} events, ${totalMm} mm`)
 
         // Upsert en daily_extremes para mantener precip_total
         const { error: upsertError } = await supabase.from("daily_extremes").upsert(

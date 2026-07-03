@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 
 export class ConversionRepository {
   /**
@@ -7,7 +7,7 @@ export class ConversionRepository {
    */
   static async getFactor(eventName: string): Promise<number> {
     try {
-      const supabase = await createClient()
+      const supabase = createAdminClient()
       const { data, error } = await supabase
         .from("conversion_factors")
         .select("factor")
