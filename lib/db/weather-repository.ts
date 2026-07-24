@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import type { WeatherReading, DailyExtremes, ESP32Payload } from "@/lib/types/weather"
-import { toARLocalDateString, todayARLocalDate } from "@/lib/utils/timezone"
+import { toARLocalDateString, todayARLocalDate, getUtcRangeForLocalDate } from "@/lib/utils/timezone"
+import { ConversionRepository } from "@/lib/db/conversion-repository"
 import { hashApiKey } from "@/lib/security/api-key"
 
 /**
@@ -45,7 +46,54 @@ export class WeatherRepository {
       return null
     }
 
-    return data && data.length > 0 ? data[0] : null
+    const record = data && data.length > 0 ? (data[0] as DailyExtremes) : null
+
+    // Si no hay valor de precip_total (o es nulo/undefined/0), calcularlo a partir
+    // de los eventos en `rain_events` como fallback para evitar inconsistencias.
+    try {
+      const needsFallback = !record || record.precip_total === null || record.precip_total === undefined || record.precip_total === 0
+      if (needsFallback) {
+        const { start, end } = getUtcRangeForLocalDate(today)
+
+        const { count, error: countError } = await supabase
+          .from("rain_events")
+          .select("id", { count: "exact", head: true })
+          .gte("recorded_at", start)
+          .lt("recorded_at", end)
+
+        if (!countError) {
+          const factor = await ConversionRepository.getFactor("rain_event_v1")
+          const totalMm = Math.round((Number(count ?? 0) * factor) * 100) / 100
+
+          if (record) {
+            // Anexo el valor calculado sin modificar la BD aquí
+            record.precip_total = totalMm
+            return record
+          }
+
+          // Si no existe registro de extremos, devolver un objeto mínimo con precip_total
+          return {
+            id: "",
+            date: today,
+            temp_max: null,
+            temp_min: null,
+            temp_max_time: null,
+            temp_min_time: null,
+            humidity_max: null,
+            humidity_min: null,
+            humidity_max_time: null,
+            humidity_min_time: null,
+            precip_total: totalMm,
+            last_value: null,
+            updated_at: new Date().toISOString(),
+          }
+        }
+      }
+    } catch (err) {
+      console.error("[v0] Error computing fallback precip_total:", err)
+    }
+
+    return record
   }
 
   /**

@@ -16,6 +16,9 @@ function formatEvent(event: { id: string; recorded_at: string; created_at: strin
 
 /**
  * POST /api/rain-events
+ * 
+ * :: HACER EL POST DESDE LOCALHOST:300 YA QUE LA MAIN DEL PROYECTO NO ESTÁ ACTUALIZADA ::
+ * 
  * Registra uno o varios eventos de lluvia desde la NodeMCU.
  *
  * Headers requeridos:
