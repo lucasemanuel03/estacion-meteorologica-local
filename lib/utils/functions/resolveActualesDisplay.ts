@@ -85,10 +85,19 @@ export const displayPredicates = {
 export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
   {
     id: "rain",
-    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 0,
+    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 5,
     layout: {
       tertiaryCard: "precipitation",
       secondaryCard: "pressure",
+      showDewPointCard: true,
+    },
+  },
+    {
+    id: "rain_low",
+    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 0 && ctx.precipitation <= 5,
+    layout: {
+      tertiaryCard: "pressure",
+      secondaryCard: "precipitation",
       showDewPointCard: true,
     },
   },
@@ -97,7 +106,7 @@ export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
     when: displayPredicates.isNighttime,
     layout: {
       tertiaryCard: "pressure",
-      secondaryCard: "altitude",
+      secondaryCard: "precipitation",
       showDewPointCard: true,
     },
   },
@@ -110,7 +119,7 @@ export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
       )(ctx, config),
     layout: {
       tertiaryCard: "pressure",
-      secondaryCard: "altitude",
+      secondaryCard: "precipitation",
       showDewPointCard: true,
     },
   },
