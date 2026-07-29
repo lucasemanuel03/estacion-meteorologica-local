@@ -5,6 +5,36 @@ import { getUtcRangeForLocalDate, toARLocalDateString } from "@/lib/utils/timezo
 import { ConversionRepository } from "@/lib/db/conversion-repository"
 
 export class RainRepository {
+  static async deleteTodayEvents(): Promise<{ deletedCount: number; date: string } | null> {
+    const supabase = createAdminClient()
+    const { start, end, localDate } = getUtcRangeForLocalDate()
+
+    const { error, count } = await supabase
+      .from("rain_events")
+      .delete({ count: "exact" })
+      .gte("recorded_at", start)
+      .lt("recorded_at", end)
+
+    if (error) {
+      console.error("[rain] Error deleting today events:", error)
+      return null
+    }
+
+    const deletedCount = count ?? 0
+
+    const { error: upsertError } = await supabase.from("daily_extremes").upsert(
+      { date: localDate, precip_total: 0, updated_at: new Date().toISOString() },
+      { onConflict: "date" },
+    )
+
+    if (upsertError) {
+      console.error("[rain] Error resetting daily_extremes precip_total after delete:", upsertError)
+      return null
+    }
+
+    return { deletedCount, date: localDate }
+  }
+
   static async insertEvents(events: RainEventInsert[]): Promise<RainEvent[] | null> {
     if (events.length === 0) {
       return []

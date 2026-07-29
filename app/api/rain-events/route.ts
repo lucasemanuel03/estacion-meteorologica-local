@@ -14,6 +14,22 @@ function formatEvent(event: { id: string; recorded_at: string; created_at: strin
   }
 }
 
+async function authorizeRainWriteRequest(request: NextRequest) {
+  const authHeader = request.headers.get("authorization")
+  const apiKey = WeatherValidator.extractApiKey(authHeader)
+
+  if (!apiKey) {
+    return NextResponse.json({ error: "Missing API key. Use Authorization header." }, { status: 401 })
+  }
+
+  const isValidKey = await WeatherRepository.validateApiKey(apiKey)
+  if (!isValidKey) {
+    return NextResponse.json({ error: "Invalid or inactive API key" }, { status: 403 })
+  }
+
+  return null
+}
+
 /**
  * POST /api/rain-events
  * 
@@ -40,16 +56,9 @@ export async function POST(request: NextRequest) {
   console.log(`[rain][req:${requestId}] Received POST request to /api/rain-events`)
 
   try {
-    const authHeader = request.headers.get("authorization")
-    const apiKey = WeatherValidator.extractApiKey(authHeader)
-
-    if (!apiKey) {
-      return NextResponse.json({ error: "Missing API key. Use Authorization header." }, { status: 401 })
-    }
-
-    const isValidKey = await WeatherRepository.validateApiKey(apiKey)
-    if (!isValidKey) {
-      return NextResponse.json({ error: "Invalid or inactive API key" }, { status: 403 })
+    const authError = await authorizeRainWriteRequest(request)
+    if (authError) {
+      return authError
     }
 
     let body: unknown
@@ -100,6 +109,41 @@ export async function POST(request: NextRequest) {
         is_offline: e.is_offline,
       })),
       ...(rejected.length > 0 ? { rejected } : {}),
+    })
+  } catch (error) {
+    console.error(`[rain][req:${requestId}] Unhandled error:`, error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+/**
+ * DELETE /api/rain-events
+ * Elimina físicamente los eventos de lluvia del día local actual.
+ */
+export async function DELETE(request: NextRequest) {
+  const requestId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`
+  console.log(`[rain][req:${requestId}] Received DELETE request to /api/rain-events`)
+
+  try {
+    const authError = await authorizeRainWriteRequest(request)
+    if (authError) {
+      return authError
+    }
+
+    const deleted = await RainRepository.deleteTodayEvents()
+    if (deleted === null) {
+      return NextResponse.json({ error: "Failed to delete rain events" }, { status: 500 })
+    }
+
+    console.log(
+      `[rain][req:${requestId}] Deleted ${deleted.deletedCount} event(s) for ${deleted.date} and reset precip_total`,
+    )
+
+    return NextResponse.json({
+      success: true,
+      date: deleted.date,
+      deleted: deleted.deletedCount,
+      timestamp: new Date().toISOString(),
     })
   } catch (error) {
     console.error(`[rain][req:${requestId}] Unhandled error:`, error)

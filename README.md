@@ -303,6 +303,10 @@ El sistema está diseñado para funcionar de manera autónoma con actualización
 - Tolerancia de fallos del sensor con alertas
 - Recovery automático de fallos temporales
 
+### Endpoints de lluvia
+- `DELETE /api/rain-events`: elimina físicamente los registros de lluvia del día actual y deja `precip_total` en 0.
+- Requiere `Authorization: Bearer <api-key>` como las escrituras del sensor.
+
 ### Precisión
 - Datos meteorológicos con precisión ±0.5°C
 - Almacenamiento de datos con timestamp exacto
