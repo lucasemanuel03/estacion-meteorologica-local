@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import useSWR from "swr"
-import { Clock, Cpu, EyeOff, Gauge, History, Loader2, MonitorDot, Power, Wifi } from "lucide-react"
+import { Clock, CloudRain, Cpu, EyeOff, Gauge, History, Loader2, MonitorDot, Power, Wifi } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type {
   FormattedStationStatusReport,
@@ -229,11 +229,21 @@ export function StationStatusDashboard() {
       {report && <LatestStatusCards report={report} />}
 
       <Separator />
-
+        
       <div className="flex flex-col items-center gap-3">
+        <a href="/test" className="w-full max-w-xs">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full max-w-xs"
+          >
+            <CloudRain />
+            Ver eventos de lluvia
+          </Button>
+        </a>
         <Button
           type="button"
-          variant="dinamic"
+          variant="outline"
           className="w-full max-w-xs"
           disabled={isLoading || historyLoading}
           onClick={loadHistory}

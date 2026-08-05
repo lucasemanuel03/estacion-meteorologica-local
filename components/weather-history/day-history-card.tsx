@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Calendar, CalendarDays, Droplets, Eye, Thermometer } from "lucide-react"
+import { Calendar, Clock, Droplets, Thermometer } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { DailyExtremes } from "@/lib/types/weather"
 import { cn } from "@/lib/utils"
@@ -65,8 +65,8 @@ function StatItem({
 
   return (
     <div className={cn(
-      "flex items-center justify-between rounded-lg px-2 py-1",
-      "bg-linear-to-br backdrop-blur-sm transition-all duration-300",
+      "flex items-center justify-between rounded-lg px-2",
+      "transition-all duration-300",
     )}>
       <div className="flex flex-row gap-2 items-start">
         <span className={cn("text-base font-normal", style.iconColor)}>
@@ -123,18 +123,31 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
     )}>
 
-      <CardHeader className="relative z-10 flex flex-row items-center justify-between gap-4 pb-1">
+      <CardHeader className="relative z-10 flex flex-row items-center justify-between">
         <div className="flex-1">
-          <CardTitle className="text-xl font-semibold tracking-wide text-foreground capitalize">
+          <CardTitle className="text-xl font-bold tracking-wide text-foreground capitalize">
             <div className="flex items-center">
-              <Calendar className="inline-block h-4 w-4 mr-2 " />
+              <Calendar className="inline-block h-4 w-4 mr-1 " />
               {formatDate(day.date)}
             </div>
           </CardTitle>
         </div>
+        {/* Ver detalles button */}
+        <div className="flex justify-end">
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Clock/>
+              </Button>
+            </DialogTrigger>
+            <ModalDetails day={day.date} open={open} />
+          </Dialog>
+        </div>
       </CardHeader>
       
-      <CardContent className="relative z-10 space-y-5">
+      <Separator />
+
+      <CardContent className="relative z-10 space-y-3 pt-2">
         
         <div className="flex flex-row gap-4 justify-center">
           {/* Temperatura */}
@@ -143,7 +156,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
               <Thermometer className="h-4 w-4 text-foreground/70" />
               <h3 className="text-sm font-medium text-foreground/80">Temperatura</h3>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1">
               <StatItem
                 value={day.temp_max}
                 unit="°C"
@@ -165,7 +178,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
               <Droplets className="h-4 w-4 text-foreground/70" />
               <h3 className="text-sm font-medium text-foreground/80">Humedad</h3>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1">
               <StatItem
                 value={day.humidity_max}
                 unit="%"
@@ -181,36 +194,38 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
             </div>
           </div>
         </div>
+        <div className="flex flex-row gap-2 justify-center">
+          {/* Amplitud térmica */}
+          <div className={cn(
+            "relative w-full overflow-hidden rounded-lg border py-0.5 px-3",
+            "border-border"
+            )}>
 
-        {/* Amplitud térmica */}
-        <div className={cn(
-          "relative w-full overflow-hidden rounded-lg border backdrop-blur-sm bg-linear-to-br py-0.5 px-3",
-          "from-slate-500/10  to-slate-500/5",
-          "border-border"
-          )}>
-
-          <div className="relative z-10 flex items-center justify-between">
-            <p className="text-sm text-foreground font-normal"> Amplitud Térmica: </p>
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-lg font-bold">
-                {thermalAmplitude}
-              </span>
-              <span className="text-xs text-muted-foreground font-normal">°C</span>
+            <div className="relative z-10 flex items-center justify-between">
+              <p className="text-sm text-foreground font-normal"> Amplitud Térmica</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-bold">
+                  {thermalAmplitude}
+                </span>
+                <span className="text-xs text-muted-foreground font-normal">°C</span>
+              </div>
             </div>
           </div>
+          <div className={cn(
+            "relative w-full overflow-hidden rounded-lg border py-0.5 px-3",
+            "border-border"
+            )}>
+            {/* Acumulado de Lluvia */} 
+          <div className="relative z-10 flex items-center justify-between">
+              <p className="text-sm text-foreground font-normal">Lluvia</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg font-bold">
+                  {day.precip_total?.toFixed(1) ?? "0.0"}
+                </span>
+                <span className="text-xs text-muted-foreground font-normal">mm</span>
+              </div>
+            </div>
         </div>
-        <Separator />
-        {/* Ver detalles button */}
-        <div className="flex justify-end">
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button variant="dinamic">
-                <Eye className="h-5 w-5" />
-                Detalles
-              </Button>
-            </DialogTrigger>
-            <ModalDetails day={day.date} open={open} />
-          </Dialog>
         </div>
       </CardContent>
     </Card>

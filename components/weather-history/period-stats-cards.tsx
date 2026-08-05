@@ -35,10 +35,14 @@ const tones = {
 
 function MetricCard({ title, value, unit, tone, icon }: MetricCardProps) {
   return (
-    <Card className={`py-4 relative overflow-hidden border backdrop-blur-xl bg-linear-to-br ${tones["neutral"].card}`}>
-      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
-      <CardContent className="flex flex-col items-center gap-1 relative z-10">
-        <p className={cn("text-sm flex items-center gap-1", tones[tone].value)}>{icon} {title}</p>
+    <Card className="glass-card py-4 px-2">
+      <CardContent className="flex flex-col items-center gap-2 relative z-10">
+        <p 
+          className={cn("text-sm flex items-center gap-1 truncate",
+          tones[tone].value)}
+          title={title}>
+            {icon} {title}
+        </p>
         <div className="flex items-baseline gap-1">
           <span className={`text-2xl font-bold tracking-wide text-primary`}>
             {value !== null ? value.toFixed(1) : "--"}
@@ -72,10 +76,18 @@ export function PeriodStatsCards({ history, days }: PeriodStatsCardsProps) {
       .filter((day) => day.temp_max !== null && day.temp_min !== null)
       .map((day) => (day.temp_max as number) - (day.temp_min as number))
 
+    const precipitation = history
+      .map((day) => day.precip_total)
+      .filter((value): value is number => value !== null)
+
     const mean = (values: number[]) => {
       if (values.length === 0) return null
       const total = values.reduce((acc, current) => acc + current, 0)
       return total / values.length
+    }
+    const sum = (values: number[]) => {
+      if (values.length === 0) return null
+      return values.reduce((acc, current) => acc + current, 0)
     }
 
     return {
@@ -84,6 +96,9 @@ export function PeriodStatsCards({ history, days }: PeriodStatsCardsProps) {
       minTemp: minTemps.length > 0 ? Math.min(...minTemps) : null,
       avgHumidity: mean(humidityMeans),
       avgAmplitude: mean(amplitudes),
+      maxAmplitude: amplitudes.length > 0 ? Math.max(...amplitudes) : null,
+      avgPrecipitation: sum(precipitation),
+      maxPrecipitation: precipitation.length > 0 ? Math.max(...precipitation) : null,
     }
   }, [history])
 
@@ -95,13 +110,16 @@ export function PeriodStatsCards({ history, days }: PeriodStatsCardsProps) {
         <div className="p-2 rounded-xl bg-emerald-500/10">
           <Activity className="h-4 w-4 text-emerald-500" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Resumen de {days} días</h2>
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Últimos {days} días</h2>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
         <MetricCard 
           icon={<Thermometer className="h-4 w-4" />}
           title="Temperatura promedio" value={stats.avgTemp} unit="°C" tone="neutral" />
+        <MetricCard 
+          icon={<Droplets className="h-4 w-4" />}
+          title="Humedad promedio" value={stats.avgHumidity} unit="%" tone="neutral" />
         <MetricCard 
           icon={<Activity className="h-4 w-4" />}
           title="Temperatura máxima" value={stats.maxTemp} unit="°C" tone="warm" />
@@ -109,23 +127,19 @@ export function PeriodStatsCards({ history, days }: PeriodStatsCardsProps) {
           icon={<Snowflake className="h-4 w-4" />}
           title="Temperatura mínima" value={stats.minTemp} unit="°C" tone="cold" />
         <MetricCard 
-          icon={<Droplets className="h-4 w-4" />}
-          title="Humedad promedio" value={stats.avgHumidity} unit="%" tone="neutral" />
+          icon={<TrendingUp className="h-4 w-4" />}
+          title="Amplitud Máxima" value={stats.maxAmplitude} unit="°C" tone="warm" />
         <MetricCard 
           icon={<TrendingUp className="h-4 w-4" />}
-          title="Amplitud térmica prom." value={stats.avgAmplitude} unit="°C" tone="warm" />
+          title="Amplitud Promedio" value={stats.avgAmplitude} unit="°C" tone="neutral" />
+        <MetricCard 
+          icon={<Droplets className="h-4 w-4" />}
+          title="Acumulado de Lluvia" value={stats.avgPrecipitation} unit="mm" tone="neutral" />
+        <MetricCard 
+          icon={<Droplets className="h-4 w-4" />}
+          title="Máxima Lluvia" value={stats.maxPrecipitation} unit="mm" tone="neutral" />
       </div>
 
-      <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1.5">
-          <Thermometer className="h-3.5 w-3.5" />
-          Basado en extremos diarios
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Droplets className="h-3.5 w-3.5" />
-          Valores promedio del período seleccionado
-        </span>
-      </div>
     </section>
   )
 }
