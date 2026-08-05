@@ -48,7 +48,7 @@
 }
 
 :root {
-  --background: oklch(99.029% 0.00532 198.238);
+  --background: oklch(89.762% 0.01293 197.363);
   --foreground: oklch(0.145 0 0);
   --ambient-bg: oklch(97.8% 0.01 204);
   --ambient-1: oklch(88% 0.052 205 / 0.55);
@@ -90,7 +90,7 @@
 }
 
 .dark {
-  --background: oklch(23.039% 0.01947 225.82);
+  --background: oklch(18.514% 0.01458 230.203);
   --foreground: oklch(0.985 0 0);
   --ambient-bg: oklch(17.6% 0.016 233);
   --ambient-1: oklch(52% 0.105 240 / 0.2);
@@ -184,9 +184,9 @@
     overflow-x: clip;
     background-color: var(--ambient-bg);
     background-image:
-      radial-gradient(circle at 12% 14%, var(--ambient-1), transparent 48%),
-      radial-gradient(circle at 84% 22%, var(--ambient-2), transparent 45%),
-      radial-gradient(circle at 50% 86%, var(--ambient-3), transparent 50%),
+      radial-gradient(circle at 12% 14%, var(--ambient-1), transparent 30%),
+      radial-gradient(circle at 84% 22%, var(--ambient-2), transparent 20%),
+      radial-gradient(circle at 50% 86%, var(--ambient-3), transparent 40%),
       linear-gradient(to bottom, color-mix(in oklch, var(--background) 92%, transparent), var(--background));
     background-attachment: fixed;
   }
@@ -202,11 +202,11 @@
   }
 
   body::before {
-    opacity: 0.55;
+    opacity: 0.5;
     background:
-      radial-gradient(circle at 18% 22%, var(--ambient-1), transparent 55%),
-      radial-gradient(circle at 78% 32%, var(--ambient-2), transparent 52%),
-      radial-gradient(circle at 52% 82%, var(--ambient-3), transparent 58%);
+      radial-gradient(circle at 18% 22%, var(--ambient-1), transparent 50%),
+      radial-gradient(circle at 78% 32%, var(--ambient-2), transparent 50%),
+      radial-gradient(circle at 52% 82%, var(--ambient-3), transparent 10%);
     filter: blur(38px);
     animation: ambient-drift 18s ease-in-out infinite;
   }
