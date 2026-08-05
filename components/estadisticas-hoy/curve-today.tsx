@@ -75,14 +75,11 @@ export default function CurveToday() {
           <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
             Evolución del día
           </h2>
-          <CardDescription className="text-sm sm:text-base">
-            Curvas por hora de temperatura y humedad
-          </CardDescription>
         </div>
       </div>
 
       <div>
-        <div className="relative z-10 flex w-full flex-col gap-5 p-5 sm:p-6 md:flex-row md:gap-6">
+        <div className="relative z-10 flex w-full flex-col gap-5 p-2 md:flex-row md:gap-6">
           <ChartPanel title="Temperatura" accent="temperature">
             <CurvaTempHum
               data={data}

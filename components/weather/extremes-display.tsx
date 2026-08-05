@@ -45,16 +45,16 @@ function ExtremeValueCard({
     min: {
       border: "border-sky-400/25",
       iconBg: "bg-sky-500/15",
-      icon: <ArrowDown className="h-4 w-4 text-sky-600 dark:text-sky-400" />,
-      valueColor: "text-sky-600 dark:text-sky-400",
+      icon: <ArrowDown className="text-sky-600 dark:text-sky-400" />,
+      valueColor: "text-sky-600 dark:text-sky-300",
       glow: "hover:shadow-sky-500/15",
     },
     max: {
-      border: "border-orange-400/25",
-      iconBg: "bg-orange-500/15",
-      icon: <ArrowUp className="h-4 w-4 text-orange-600 dark:text-orange-400" />,
-      valueColor: "text-orange-600 dark:text-orange-400",
-      glow: "hover:shadow-orange-500/15",
+      border: "border-red-400/25",
+      iconBg: "bg-red-500/15",
+      icon: <ArrowUp className=" text-red-700 dark:text-red-400" />,
+      valueColor: "text-red-700 dark:text-red-400",
+      glow: "hover:shadow-red-500/15",
     },
   }
 
@@ -63,8 +63,8 @@ function ExtremeValueCard({
   return (
     <article
       className={cn(
-        "flex min-w-0 w-full flex-col gap-3 rounded-xl p-2.5 sm:p-4",
-        "glass-card border transition-all duration-300 hover:shadow-lg",
+        "flex min-w-0 w-full flex-col  rounded-xl p-3 ",
+        "glass-card border transition-all duration-300",
         style.border,
         style.glow,
         "animate-in fade-in-50 slide-in-from-bottom-6 duration-700",
@@ -75,7 +75,11 @@ function ExtremeValueCard({
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {label}
         </span>
-        <div className={cn("rounded-lg p-2", style.iconBg)}>{style.icon}</div>
+        <div className={cn("rounded-lg p-1.5 w-8 h-8", style.iconBg)}>
+          <span className="flex items-center justify-center w-full h-full">
+            {style.icon}
+          </span>
+        </div>
       </div>
 
       <div className="flex items-baseline gap-1.5">
@@ -112,12 +116,12 @@ function MetricGroup({
   return (
     <section
       className={cn(
-        "w-full min-w-0 rounded-2xl border p-4 sm:p-5",
-        "bg-background/25 backdrop-blur-sm",
+        "w-full ",
+        "backdrop-blur-sm",
         accentBorder,
       )}
     >
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-2 flex items-center gap-2">
         {icon}
         <h3 className="text-sm font-semibold tracking-wide text-foreground">{title}</h3>
       </div>
@@ -143,16 +147,13 @@ export function ExtremesDisplay({ extremes }: ExtremesDisplayProps) {
         </div>
         <div>
           <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
-            Valores históricos del día
+            Valores Extremos
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Mínimos y máximos registrados hoy
-          </p>
         </div>
       </div>
 
       <div>
-        <div className="relative z-10 grid grid-cols-1 gap-4 sm:p-6 lg:grid-cols-2 lg:gap-6">
+        <div className="relative z-10 grid grid-cols-1 gap-6 p-2 lg:grid-cols-2 lg:gap-6">
           <MetricGroup
             title="Temperatura"
             accentBorder="border-orange-400/20"

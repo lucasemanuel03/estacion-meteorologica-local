@@ -1,10 +1,11 @@
 "use client"
 
-import CurveToday from "@/components/todays-stats/curve-today"
-import EstadisticasHoy from "@/components/todays-stats/estadisticas-hoy"
+import CurveToday from "@/components/estadisticas-hoy/curve-today"
+import EstadisticasHoy from "@/components/estadisticas-hoy/estadisticas-hoy"
 import { ExtremesDisplay } from "@/components/weather/extremes-display"
 import { useWeatherData } from "../../hooks/use-weather-data"
 import { useTrends } from "../../hooks/use-trends"
+import Title from "@/components/estadisticas-hoy/title"
 
 export default function EstadisticasHoyPage() {
   const { data, error } = useWeatherData()
@@ -12,12 +13,13 @@ export default function EstadisticasHoyPage() {
 
   return (
     <main className="app-stage min-h-screen relative overflow-hidden">
-      <div className="container flex flex-col gap-6 mx-auto py-8 px-4 relative z-10">
+      <div className="container flex flex-col mx-auto py-8 px-4 relative z-10">
 
         {error && (
           <p className="text-center text-destructive">No se pudieron cargar las estadísticas actuales.</p>
         )}
-
+        <Title />
+        <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
         <EstadisticasHoy
           temp_max={data?.todayExtremes?.temp_max ?? null}
           temp_min={data?.todayExtremes?.temp_min ?? null}
@@ -25,9 +27,6 @@ export default function EstadisticasHoyPage() {
           humDiferencial={humTrend?.differential}
           deltaPressure={data?.predictions?.now?.deltaPressure ?? null}
         />
-
-        <ExtremesDisplay extremes={data?.todayExtremes ?? null} />
-
         <CurveToday />
       </div>
     </main>
