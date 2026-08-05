@@ -124,7 +124,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
     )}>
 
       <CardHeader className="relative z-10 flex flex-row items-center justify-between">
-        <div className="flex-1">
+        <div className="flex-1 justify-center items-center">
           <CardTitle className="text-xl font-bold tracking-wide text-foreground capitalize">
             <div className="flex items-center">
               <Calendar className="inline-block h-4 w-4 mr-1 " />
@@ -133,10 +133,10 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
           </CardTitle>
         </div>
         {/* Ver detalles button */}
-        <div className="flex justify-end">
+        <div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="dinamic">
                 <Clock/>
               </Button>
             </DialogTrigger>
@@ -147,7 +147,7 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
       
       <Separator />
 
-      <CardContent className="relative z-10 space-y-3 pt-2">
+      <CardContent className="relative z-10 space-y-3 pt-2 px-4">
         
         <div className="flex flex-row gap-4 justify-center">
           {/* Temperatura */}
@@ -197,35 +197,34 @@ export function DayHistoryCard({ day }: DayHistoryCardProps) {
         <div className="flex flex-row gap-2 justify-center">
           {/* Amplitud térmica */}
           <div className={cn(
-            "relative w-full overflow-hidden rounded-lg border py-0.5 px-3",
-            "border-border"
+            "relative w-full overflow-hidden rounded-lg border py-2 px-3",
+            "border-border",
+            "flex items-center justify-between gap-2"
             )}>
-
-            <div className="relative z-10 flex items-center justify-between">
-              <p className="text-sm text-foreground font-normal"> Amplitud Térmica</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-lg font-bold">
-                  {thermalAmplitude}
-                </span>
-                <span className="text-xs text-muted-foreground font-normal">°C</span>
-              </div>
-            </div>
+             
+                <p className="text-sm text-foreground font-normal truncate" title="Amplitud Térmica">Amplitud Térmica</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-lg font-bold">
+                    {thermalAmplitude}
+                  </span>
+                  <span className="text-xs text-muted-foreground font-normal">°C</span>
+                </div>
           </div>
+          {/* Acumulado de Lluvia */} 
           <div className={cn(
-            "relative w-full overflow-hidden rounded-lg border py-0.5 px-3",
-            "border-border"
+            "relative w-full overflow-hidden rounded-lg border py-2 px-3",
+            "border-border",
+            "flex items-center justify-between"
             )}>
-            {/* Acumulado de Lluvia */} 
-          <div className="relative z-10 flex items-center justify-between">
-              <p className="text-sm text-foreground font-normal">Lluvia</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-lg font-bold">
-                  {day.precip_total?.toFixed(1) ?? "0.0"}
-                </span>
-                <span className="text-xs text-muted-foreground font-normal">mm</span>
-              </div>
-            </div>
-        </div>
+             
+                <p className="text-sm text-foreground font-normal ">Lluvia</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-lg font-bold">
+                    {day.precip_total?.toFixed(1) ?? "0.0"}
+                  </span>
+                  <span className="text-xs text-muted-foreground font-normal">mm</span>
+                </div>
+          </div>
         </div>
       </CardContent>
     </Card>

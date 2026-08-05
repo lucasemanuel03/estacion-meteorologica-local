@@ -231,7 +231,7 @@ export function StationStatusDashboard() {
       <Separator />
         
       <div className="flex flex-col items-center gap-3">
-        <a href="/test" className="w-full max-w-xs">
+        <a href="/test" className="w-full">
           <Button
             type="button"
             variant="outline"
