@@ -32,15 +32,20 @@ async function authorizeRainWriteRequest(request: NextRequest) {
 
 /**
  * POST /api/rain-events
- * 
- * :: HACER EL POST DESDE LOCALHOST:300 YA QUE LA MAIN DEL PROYECTO NO ESTÁ ACTUALIZADA ::
- * 
- * Registra uno o varios eventos de lluvia desde la NodeMCU.
+ *
+ * Registra eventos de lluvia desde la NodeMCU/ESP8266.
  *
  * Headers requeridos:
  * - Authorization: Bearer <api-key>
  *
- * Body:
+ * Body (formato agregado por ventana):
+ * {
+ *   "offline_data": true,
+ *   "count": 42,
+ *   "timestamp": 1690550000
+ * }
+ *
+ * Body (formato legacy, un timestamp por impulso):
  * {
  *   "offline_data": true,
  *   "events": [
@@ -49,7 +54,8 @@ async function authorizeRainWriteRequest(request: NextRequest) {
  *   ]
  * }
  *
- * timestamp: Unix epoch en segundos (UTC). Eventos sin timestamp válido se descartan.
+ * timestamp / window_end: Unix epoch en segundos (UTC), cierre de la ventana.
+ * count: impulsos detectados en la ventana (se expanden a N filas en rain_events).
  */
 export async function POST(request: NextRequest) {
   const requestId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`
@@ -71,14 +77,17 @@ export async function POST(request: NextRequest) {
     if (!RainValidator.validatePayload(body)) {
       return NextResponse.json(
         {
-          error: "Invalid payload format. Required: { offline_data?: boolean, events: [{ timestamp: number }, ...] }",
+          error:
+            "Invalid payload format. Required: { offline_data?: boolean, count: number, timestamp: number } or { offline_data?: boolean, events: [{ timestamp: number }, ...] }",
         },
         { status: 400 },
       )
     }
 
     const isOffline = body.offline_data === true
-    const { toInsert, rejected } = RainValidator.parseEvents(body.events, isOffline)
+    const { toInsert, rejected } = RainValidator.isLegacyPayload(body)
+      ? RainValidator.parseEvents(body.events, isOffline)
+      : RainValidator.parseWindow(body.count, body.window_end ?? body.timestamp, isOffline)
 
     if (toInsert.length === 0) {
       return NextResponse.json(
