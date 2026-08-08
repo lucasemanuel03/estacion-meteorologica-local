@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/clean-station-status",
       "schedule": "15 3 * * *"
+    },
+    {
+      "path": "/api/cron/clean-rain-events",
+      "schedule": "30 3 * * *"
     }
   ]
 }
