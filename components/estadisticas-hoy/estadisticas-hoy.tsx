@@ -1,5 +1,5 @@
 import type React from "react"
-import { Activity, ChevronsLeftRightEllipsis, Droplets, Gauge, Thermometer } from "lucide-react"
+import { Activity, ArrowUp, ChevronsLeftRightEllipsis, Droplets, Gauge, Thermometer } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -48,7 +48,9 @@ function StatCard({
             valueClassName,
           )}
         >
-          {value}
+          <div className="flex items-center gap-1">
+            {(parseFloat(value) >= 0)? "+" : ""} {value}
+          </div>
         </span>
         <span className="text-sm font-medium text-muted-foreground">{unit}</span>
       </div>
@@ -107,7 +109,8 @@ export default function EstadisticasHoy({
           value={presion}
           unit="hPa"
           icon={<Gauge />}
-          subtitle="En las últimas 3 horas"
+          subtitle= {parseFloat(presion) > 0 ? "Aumentó en los últimos 30' " : parseFloat(presion) < 0 ? "Disminuyó en los últimos 30' " : "Se mantuvo estable en los últimos 30' "
+            }
           accentClassName="border-blue-400/20 hover:border-blue-400/35 shadow-blue-500/10 bg-blue-500/5"
           valueClassName="from-sky-200 to-sky-50"
         />

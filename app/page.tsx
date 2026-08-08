@@ -1,3 +1,4 @@
+import IrAEstadisticasCard from "@/components/cards/ir-estadisticas"
 import IrAlHistorialCard from "@/components/cards/ir-historial-card"
 import { WeatherDashboard } from "@/components/weather/weather-dashboard"
 
@@ -8,7 +9,8 @@ export default function Home() {
         <WeatherDashboard 
           ubicacion="Las Margaritas, Córdoba"
         />
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col w-full sm:flex-row gap-4 sm:gap-6">
+          <IrAEstadisticasCard />
           <IrAlHistorialCard />
         </div>
       </div>
