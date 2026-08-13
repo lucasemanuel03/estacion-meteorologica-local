@@ -1,27 +1,27 @@
 # Especificación del Sistema: Local Weather Station
 
 ## 1. Nombre del Sistema
-**Local Weather Station** - Sistema de Monitoreo Meteorológico Doméstico en Tiempo Real
+**Estación Meteorológica Local** - Sistema de Monitoreo Meteorológico Doméstico en Tiempo Real
 
 ---
 
 ## 2. Objetivo del Sistema
 
-Proporcionar una solución integral de monitoreo meteorológico local que permita a los usuarios capturar, almacenar y visualizar datos de temperatura y humedad en tiempo real desde un dispositivo ESP01, con capacidad de análisis histórico, detección de tendencias y alertas automáticas de desconexión.
+Proporcionar una solución integral de monitoreo meteorológico local que permita a los usuarios capturar, almacenar y visualizar datos de temperatura y humedad en tiempo real desde un dispositivo con el módulo Esp8266, con capacidad de análisis histórico, detección de tendencias y alertas automáticas de desconexión.
 
 ---
 
 ## 3. Descripción General
 
-**Local Weather Station** es una aplicación web fullstack que integra un microcontrolador ESP01 como sensor remoto para recopilar datos meteorológicos (temperatura y humedad) en tiempo real. El sistema procesa estos datos, los almacena en una base de datos, y presenta un dashboard interactivo que muestra:
+**Estación Meteorológica Local** es una aplicación web fullstack que integra un microcontrolador ESP8266 con sensores de temperatura, humedad, presión atmosférica y pluviometro digital remoto para recopilar datos meteorológicos en tiempo real. El sistema procesa estos datos, los almacena en una base de datos, y presenta un dashboard interactivo que muestra:
 
-- Valores actuales de temperatura y humedad
+- Valores actuales
 - Extremos diarios (máximas y mínimas)
 - Tendencias de cambio en las últimas horas
 - Estadísticas diarias detalladas
 - Alertas automáticas cuando el sensor pierde conexión
 
-El sistema está diseñado para funcionar de manera autónoma con actualización de datos cada 15 minutos desde el sensor, con un mecanismo robusto de detección de fallos y notificación al usuario.
+El sistema está diseñado para funcionar de manera autónoma con actualización de datos cada 10 minutos desde la placa, con un mecanismo robusto de detección de fallos.
 
 ---
 
