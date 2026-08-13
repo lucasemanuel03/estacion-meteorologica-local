@@ -1,4 +1,4 @@
-# Especificación del Sistema: Local Weather Station
+# Especificación del Sistema
 
 ## 1. Nombre del Sistema
 **Estación Meteorológica Local** - Sistema de Monitoreo Meteorológico Doméstico en Tiempo Real
