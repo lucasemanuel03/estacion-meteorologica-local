@@ -1,4 +1,4 @@
-# 🌡️ Estación Meteorológica Local
+# Estación Meteorológica Local
 
 **Sistema de Monitoreo Meteorológico Doméstico en Tiempo Real**
 
@@ -8,7 +8,7 @@
 
 ## 📌 Descripción General
 
-**Estación Meteorológica Local** es una solución completa de monitoreo ambiental que integra hardware IoT con una aplicación web moderna. El sistema recopila automáticamente datos de sensores físicos, los procesa en un backend robusto y los presenta en un dashboard intuitivo y responsivo.
+**Estación Meteorológica Local** es un proyecto personal de monitoreo ambiental que integra hardware IoT con una aplicación web moderna. El sistema recopila automáticamente datos de sensores físicos, los procesa en un backend robusto y los presenta en un dashboard intuitivo y responsivo.
 
 ### ✨ Características Principales
 
@@ -361,13 +361,6 @@ ERROR (> 30 min)
 - [ ] Sistema de autenticación
 - [ ] Base de datos distribuida para redundancia
 
----
-
-## 📧 Contacto y Soporte
-
-Para reportar problemas, sugerencias o contribuciones, por favor abre un issue o un pull request en el repositorio.
-
----
 
 **Última actualización:** 13 de agosto de 2026  
 **Versión:** 2.0  
