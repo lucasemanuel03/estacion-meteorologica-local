@@ -56,8 +56,9 @@ function ChartPanel({
   )
 }
 
-export default function CurveToday({ date }: { date?: string }) {
+export default function CurveToday({ date, showAllHours }: { date?: string; showAllHours?: boolean }) {
   const { data, loading, error } = useHourlyAverages(date)
+  const isAllHours = showAllHours ?? Boolean(date)
 
   return (
     <section
@@ -86,7 +87,7 @@ export default function CurveToday({ date }: { date?: string }) {
               metric="temperature"
               loading={loading}
               error={error}
-              showAllHours={false}
+              showAllHours={isAllHours}
             />
           </ChartPanel>
 
@@ -96,7 +97,7 @@ export default function CurveToday({ date }: { date?: string }) {
               metric="humidity"
               loading={loading}
               error={error}
-              showAllHours={false}
+              showAllHours={isAllHours}
             />
           </ChartPanel>
         </div>

@@ -1,5 +1,5 @@
 import type React from "react"
-import { Activity, ArrowUp, ChevronsLeftRightEllipsis, Droplets, Gauge, Thermometer } from "lucide-react"
+import { Activity, ArrowUp, ChevronsLeftRightEllipsis, Droplet, Droplets, Gauge, Thermometer } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -31,7 +31,7 @@ function StatCard({
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground truncate">
           {title}
         </span>
         <div className={cn("rounded-lg w-8 h-8 p-1.5", accentClassName)}>
@@ -49,7 +49,7 @@ function StatCard({
           )}
         >
           <div className="flex items-center gap-1">
-            {(parseFloat(value) >= 0)? "+" : ""} {value}
+            {value}
           </div>
         </span>
         <span className="text-sm font-medium text-muted-foreground">{unit}</span>
@@ -65,6 +65,7 @@ function StatCard({
 export default function EstadisticasHoy({
   temp_max,
   temp_min,
+  precip,
   tempDiferencial = -999,
   humDiferencial = -999,
   deltaPressure,
@@ -72,6 +73,7 @@ export default function EstadisticasHoy({
 }: {
   temp_max: number | null
   temp_min: number | null
+  precip: number | null
   tempDiferencial?: number
   humDiferencial?: number
   deltaPressure: number | null
@@ -92,7 +94,7 @@ export default function EstadisticasHoy({
         <div className="p-2 rounded-xl bg-emerald-950/20">
           <Activity className="h-4 w-4 text-emerald-500" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Variación de los parámetros</h2>
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Más Parámetros</h2>
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -107,26 +109,37 @@ export default function EstadisticasHoy({
         />
 
         <StatCard
-          title="Presión Atmosférica"
-          value={presion}
-          unit="hPa"
-          icon={<Gauge />}
-          subtitle={
-            presion === "--"
-              ? "No disponible"
-              : parseFloat(presion) > 0
-              ? "Aumentó en los últimos 30' "
-              : parseFloat(presion) < 0
-              ? "Disminuyó en los últimos 30' "
-              : "Se mantuvo estable en los últimos 30' "
-          }
+          title="Precipitación"
+          value={precip?.toFixed(1).toString() || "0.0"}
+          unit="mm"
+          icon={<Droplet />}
+          subtitle={isHistorical ? "En el día seleccionado" : "Hasta el momento"}
           accentClassName="border-blue-400/20 hover:border-blue-400/35 shadow-blue-500/10 bg-blue-500/5"
           valueClassName="from-sky-200 to-sky-50"
         />
+        {isHistorical ? null : (
+          <StatCard
+            title="Variación de Presión"
+            value={presion}
+            unit="hPa"
+            icon={<Gauge />}
+            subtitle={
+              presion === "--"
+                ? "No disponible"
+                : parseFloat(presion) > 0
+                  ? "Aumentó en los últimos 30' "
+                  : parseFloat(presion) < 0
+                    ? "Disminuyó en los últimos 30' "
+                    : "Se mantuvo estable en los últimos 30' "
+            }
+            accentClassName="border-blue-400/20 hover:border-blue-400/35 shadow-blue-500/10 bg-blue-500/5"
+            valueClassName="from-sky-200 to-sky-50"
+          />
+        )}
 
         {tempDiferencial !== -999 && (
           <StatCard
-            title="Temperatura"
+            title="Variación de Temperatura"
             value={Math.abs(tempDiferencial).toFixed(1)}
             unit="°C"
             icon={<Thermometer />}
@@ -143,7 +156,7 @@ export default function EstadisticasHoy({
 
         {humDiferencial !== -999 && (
           <StatCard
-            title="Humedad"
+            title="Variación de Humedad"
             value={Math.abs(humDiferencial).toFixed(1)}
             unit="%"
             icon={<Droplets />}

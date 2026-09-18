@@ -7,7 +7,6 @@ import ActualesDisplay from "./actuales-display"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
 import { MapPin } from "lucide-react"
-import ProximasHorasDisplay from "./proximas-horas-display"
 import { Separator } from "../ui/separator"
 
 type TrendResponse = {
@@ -25,7 +24,7 @@ type EstadoConexion = "normal" | "warning" | "error"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubicacion?: string}) {
+export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { ubicacion?: string }) {
   const [lastUpdate, setLastUpdate] = useState<string>("")
   const [tempTrend, setTempTrend] = useState<TrendParametro | null>(null)
   const [humTrend, setHumTrend] = useState<TrendParametro | null>(null)
@@ -66,7 +65,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
 
     const verificarConexion = () => {
       if (!data?.latestReading?.recorded_at) return
-      
+
       const ahora = new Date()
       const ultimaMedicion = new Date(data.latestReading.recorded_at)
       const diferenciaMinutos = (ahora.getTime() - ultimaMedicion.getTime()) / (1000 * 60)
@@ -140,7 +139,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
         <div className="flex items-center justify-center pb-4">
 
-          {isLoading? (
+          {isLoading ? (
             <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
               <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
               <span className="text-sm font-medium text-primary">Actualizando...</span>
@@ -148,7 +147,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
           ) : (
             <div className="space-y-1 flex flex-col justify-center items-center">
               <div className="flex items-baseline gap-1 ">
-                <MapPin className="h-6 w-6"/>
+                <MapPin className="h-6 w-6" />
                 <h2 className="text-lg sm:text-xl font-extrabold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
                   {ubicacion}
                 </h2>
@@ -189,7 +188,7 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
           humidity={data?.latestReading?.humidity ?? null}
           pressure={data?.latestReading?.pressure ?? null}
           precipitation={data?.todayExtremes?.precip_total ?? null}
-          altitude={data?.latestReading?.altitude ?? null} 
+          altitude={data?.latestReading?.altitude ?? null}
           heatIndex={data?.heatIndex ?? null}
           prediction={data?.predictions?.now ?? null}
           tempTrend={tempTrend ?? undefined}
@@ -197,13 +196,13 @@ export function WeatherDashboard({ubicacion = "Las Margaritas, Córdoba"}: {ubic
         />
 
         <Separator />
-
+        {/* [ TO DO ] : Arreglar las estimaciones para las próximas horas
         <ProximasHorasDisplay 
           pressure={data?.latestReading?.pressure ?? null}
           prediction={data?.predictions?.now ?? null}
         />
+        */}
       </section>
-
 
       {/* Modal de error crítico */}
       <ModalError

@@ -33,7 +33,7 @@ export function ActualesMetricCard({
   prediction,
 }: ActualesMetricCardProps) {
   const dewPoint = calcularPuntoRocio(temperature, humidity)
-  const rainIcon = (precipitation !== null && precipitation > 0) ? 
+  const rainIcon = (precipitation !== null && precipitation > 0) ?
     <CloudRain className="h-full w-full text-blue-500" /> :
     <CloudRain className="h-full w-full text-primary" />
   if (metric === "heat-index") {
@@ -43,7 +43,7 @@ export function ActualesMetricCard({
 
   const metrics = {
     precipitation: {
-      title: "Acumulado de lluvia",
+      title: "Lluvia",
       value: precipitation?.toFixed(1) ?? null,
       unit: "mm",
       icon: rainIcon,
@@ -67,7 +67,7 @@ export function ActualesMetricCard({
       subtitle: undefined,
     },
     altitude: {
-      title: "Altura sobre el nivel del mar",
+      title: "Altitud",
       value: altitude?.toFixed(1) ?? null,
       unit: "m.s.n.m.",
       icon: <Mountain className="h-full w-full text-primary" />,

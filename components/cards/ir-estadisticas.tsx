@@ -13,9 +13,9 @@ export default function IrAEstadisticasCard() {
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
       "group  transition-all w-full"
     )}
-    style={{ animationDelay: "600ms" }}
+      style={{ animationDelay: "600ms" }}
     >
-      
+
       <CardHeader className="relative z-10">
         <div className="flex items-start gap-4 group-hover:scale-101 transition-transform duration-300">
           <div className="p-3 rounded-2xl bg-linear-to-br from-blue-500/20 to-indigo-500/20 backdrop-blur-sm ">
@@ -31,11 +31,11 @@ export default function IrAEstadisticasCard() {
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="relative z-10">
         <Link href="/day-stats">
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="outline"
             size="lg"
             className={cn(
               "w-full sm:w-auto group/btn",

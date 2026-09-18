@@ -69,6 +69,7 @@ function DayStatsContent() {
           <EstadisticasHoy
             temp_max={data?.todayExtremes?.temp_max ?? null}
             temp_min={data?.todayExtremes?.temp_min ?? null}
+            precip={data?.todayExtremes?.precip_total ?? null}
             tempDiferencial={isHistorical ? undefined : tempTrend?.differential}
             humDiferencial={isHistorical ? undefined : humTrend?.differential}
             deltaPressure={isHistorical ? null : (data?.predictions?.now?.deltaPressure ?? null)}

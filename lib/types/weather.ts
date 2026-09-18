@@ -90,10 +90,14 @@ export interface MonthlyWeatherSummary {
   month: number // 1..12
   temp_max: number | null
   temp_max_date: string | null
+  temp_max_time: string | null
   temp_min: number | null
   temp_min_date: string | null
+  temp_min_time: string | null
   humidity_avg: number | null
   precip_total: number | null
+  max_daily_precip?: number | null
+  max_daily_precip_date?: string | null
   days_with_data: number
 }
 

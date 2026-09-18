@@ -386,8 +386,12 @@ export class WeatherRepository {
 
     let monthTempMax: number | null = null
     let monthTempMaxDate: string | null = null
+    let monthTempMaxTime: string | null = null
     let monthTempMin: number | null = null
     let monthTempMinDate: string | null = null
+    let monthTempMinTime: string | null = null
+    let monthMaxDailyPrecip: number | null = null
+    let monthMaxDailyPrecipDate: string | null = null
     let totalPrecip = 0
     let totalHumSum = 0
     let totalHumCount = 0
@@ -429,16 +433,22 @@ export class WeatherRepository {
         if (monthTempMax === null || tMax > monthTempMax) {
           monthTempMax = tMax
           monthTempMaxDate = date
+          monthTempMaxTime = record.temp_max_time ?? null
         }
       }
       if (tMin !== null) {
         if (monthTempMin === null || tMin < monthTempMin) {
           monthTempMin = tMin
           monthTempMinDate = date
+          monthTempMinTime = record.temp_min_time ?? null
         }
       }
       if (precip > 0) {
         totalPrecip += precip
+        if (monthMaxDailyPrecip === null || precip > monthMaxDailyPrecip) {
+          monthMaxDailyPrecip = precip
+          monthMaxDailyPrecipDate = date
+        }
       }
       if (humAvg !== null) {
         totalHumSum += humAvg
@@ -456,10 +466,14 @@ export class WeatherRepository {
         month,
         temp_max: monthTempMax,
         temp_max_date: monthTempMaxDate,
+        temp_max_time: monthTempMaxTime,
         temp_min: monthTempMin,
         temp_min_date: monthTempMinDate,
+        temp_min_time: monthTempMinTime,
         humidity_avg: monthHumidityAvg,
         precip_total: Math.round(totalPrecip * 100) / 100,
+        max_daily_precip: monthMaxDailyPrecip,
+        max_daily_precip_date: monthMaxDailyPrecipDate,
         days_with_data: daysWithDataCount,
       },
       days: daysMap,

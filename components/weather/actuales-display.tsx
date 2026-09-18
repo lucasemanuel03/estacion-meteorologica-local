@@ -58,7 +58,7 @@ export default function ActualesDisplay({
         <h2 className="text-xl md:text-2xl font-semibold tracking-tight">Valores actuales</h2>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col ">
         <div className="grid gap-4 md:grid-cols-2 ">
           <TemperatureWeatherCard
             title="Temperatura"
@@ -67,7 +67,7 @@ export default function ActualesDisplay({
             subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}
             diferencial={tempTrend ? tempTrend.differential : undefined}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <WeatherCard
               title="Humedad"
               value={humidity}
@@ -92,7 +92,7 @@ export default function ActualesDisplay({
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 mt-4">
           <ActualesMetricCard
             metric={layout.secondaryCard}
             variant="secondary"

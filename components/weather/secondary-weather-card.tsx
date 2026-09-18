@@ -16,7 +16,7 @@ interface SecondaryWeatherCardProps {
   treshold?: number
 }
 
-export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: SecondaryWeatherCardProps) {
+export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor = "text-primary", diferencial, treshold = 0.2 }: SecondaryWeatherCardProps) {
   const variants = {
     default: {
       gradient: "from-slate-500/10 to-slate-600/10",
@@ -44,25 +44,25 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
   const style = variants[variant]
 
   return (
-    <Card 
+    <Card
       className={cn(
         "glass-card",
         "hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
-        "p-1 h-full",
+        "p-1 ",
         style.gradient,
         style.border,
         style.glow
       )}
     >
 
-      <div className="flex items-center justify-between px-4 py-2 relative z-10">
+      <div className="flex items-center justify-between px-2 sm:px-4 py-2 relative z-10">
         {/* Left side: Title, Value, Subtitle */}
         <div className="flex-1 min-w-0 mr-6">
-          <CardTitle className="text-xs sm:text-sm font-semibold tracking-wide text-foreground/80 mb-1">
+          <CardTitle className="text-xs sm:text-sm font-semibold tracking-wide text-foreground/80 truncate">
             {title}
           </CardTitle>
-          
+
           {value && (
             <div className="flex items-baseline gap-1">
 
@@ -82,7 +82,7 @@ export function SecondaryWeatherCard({ title, value, unit, subtitle, icon, varia
               )}
             </div>
           )}
-          
+
           {subtitle && (
             <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-background/50 backdrop-blur-sm">
               <p className="text-sm sm:text-base font-medium text-foreground/90 ">
