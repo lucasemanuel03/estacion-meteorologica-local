@@ -126,7 +126,7 @@ export function DayDetailModal({ dateStr, stats, isOpen, onClose }: DayDetailMod
                   <span>Amplitud Térmica</span>
                 </div>
                 <span className="text-xl font-bold text-principal">
-                  Δ {stats.temp_max && stats.temp_min ? `${stats.temp_max - stats.temp_min}°C` : "N/A"}
+                  Δ {stats.temp_max && stats.temp_min ? `${(stats.temp_max - stats.temp_min).toFixed(1)}°C` : "N/A"}
                 </span>
               </div>
 
