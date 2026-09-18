@@ -66,39 +66,11 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
 
       {/* Lista de indicadores */}
       <div className="flex flex-col divide-y divide-border/50 text-sm">
-        {/* 1. ITH */}
-        {ith && (
-          <div className="py-3 first:pt-0 last:pb-0 flex flex-col gap-1">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-1.5 font-medium text-foreground">
-                <Thermometer className="h-4 w-4 text-amber-500 shrink-0" />
-                <span>ITH (Estrés Ganadero):</span>
-                <span className="font-semibold ml-2">{ith.value}</span>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal("ith")}
-                  className="inline-flex items-center justify-center text-muted-foreground hover:text-primary transition-colors p-0.5 rounded-full focus:outline-hidden"
-                  title="Ver información detallada del ITH"
-                  aria-label="Ver detalles de ITH"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </div>
-              <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${getBadgeStyle(
-                  ith.category
-                )}`}
-              >
-                {ith.category}
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* 2. ET0 */}
         {et0 && (
           <div className="py-3 first:pt-0 last:pb-0 flex flex-col gap-1">
-            <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center justify-between flex-col sm:flex-wrap gap-2">
               <div className="flex items-center gap-1.5 font-medium text-foreground">
                 <Sun className="h-4 w-4 text-orange-500 shrink-0" />
                 <span>Evapotranspiración (ET0):</span>
@@ -123,7 +95,7 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
         {/* 3. Delta T */}
         {deltaT && (
           <div className="py-3 first:pt-0 last:pb-0 flex flex-col gap-1">
-            <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center justify-between flex-col sm:flex-wrap gap-2">
               <div className="flex items-center gap-1.5 font-medium text-foreground">
                 <Droplet className="h-4 w-4 text-sky-500 shrink-0" />
                 <span>Delta T (Pulverización):</span>
@@ -141,7 +113,7 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
                 </button>
               </div>
               <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${getBadgeStyle(
+                className={`text-xs px-2.5 py-0.5 rounded-full font-medium w-40 truncate text-center border ${getBadgeStyle(
                   deltaT.category
                 )}`}
               >
@@ -151,13 +123,42 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
           </div>
         )}
 
+        {/* 1. ITH */}
+        {ith && (
+          <div className="py-3 first:pt-0 last:pb-0 flex flex-col gap-1">
+            <div className="flex items-center justify-between flex-col sm:flex-wrap gap-2">
+              <div className="flex items-center gap-1.5 font-medium text-foreground">
+                <Thermometer className="h-4 w-4 text-amber-500 shrink-0" />
+                <span>ITH (Estrés Ganadero):</span>
+                <span className="font-semibold ml-2">{ith.value}</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal("ith")}
+                  className="inline-flex items-center justify-center text-muted-foreground hover:text-primary transition-colors p-0.5 rounded-full focus:outline-hidden"
+                  title="Ver información detallada del ITH"
+                  aria-label="Ver detalles de ITH"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </button>
+              </div>
+              <span
+                className={`text-xs px-2.5 py-0.5 rounded-full font-medium w-40 truncate text-center border ${getBadgeStyle(
+                  ith.category
+                )}`}
+              >
+                {ith.category}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* 4. Riesgo de Helada */}
         {frostRisk && (
           <div className="py-3 first:pt-0 last:pb-0 flex flex-col gap-1">
-            <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center justify-between flex-col sm:flex-wrap gap-2">
               <div className="flex items-center gap-1.5 font-medium text-foreground">
                 <Snowflake className="h-4 w-4 text-cyan-500 shrink-0" />
-                <span>Riesgo de Helada:</span>
+                <span>Riesgo de Helada</span>
                 <button
                   type="button"
                   onClick={() => setActiveModal("frostRisk")}
@@ -169,7 +170,7 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
                 </button>
               </div>
               <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${getBadgeStyle(
+                className={`text-xs px-2.5 py-0.5 rounded-full font-medium w-40 truncate text-center border ${getBadgeStyle(
                   frostRisk.category
                 )}`}
               >
