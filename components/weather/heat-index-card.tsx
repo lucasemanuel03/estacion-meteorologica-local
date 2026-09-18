@@ -33,97 +33,97 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         "glass-card",
         "transition-all duration-300 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
-        "py-4",
+        "py-3",
         style.gradient,
         style.border,
         style.glow
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
-        <CardTitle 
-            className="text-lg sm:text-xl font-semibold tracking-wide text-foreground/90">
-                <p className="flex gap-2 items-center">
-                    Índice de Calor
-                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                      <DialogTrigger asChild>
-                        <HelpCircle className="text-primary/50 cursor-pointer hover:text-primary transition-colors w-5 h-5" />
-                      </DialogTrigger>
-                      <DialogContent className="max-w-md md:max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle className="text-xl flex items-center gap-2">
-                            <Flame className="w-6 h-6 text-orange-500" />
-                            ¿Qué es el Índice de Calor?
-                          </DialogTitle>
-                          <DialogDescription className="text-sm text-muted-foreground pt-4">
-                            {leyendas.heatIndexLeyenda}
-                          </DialogDescription>
-                        </DialogHeader>
-                        
-                        <div className="space-y-3 pt-4">
-                          <h3 className="font-semibold text-base">Categorías de Advertencia</h3>
-                          
-                          <div className="space-y-2">
-                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border-green-500/20">
-                              <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-green-700 dark:text-green-400">SEGURO (&lt; 26°C)</p>
-                                <p className="text-sm text-muted-foreground">No se esperan efectos adversos debidos al calor.</p>
-                              </div>
-                            </div>
+        <CardTitle
+          className="text-sm sm:text-base font-medium tracking-wide text-foreground/90 truncate">
+          <p className="flex gap-2 items-center">
+            Índice de Calor
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <HelpCircle className="text-primary/50 cursor-pointer hover:text-primary transition-colors w-5 h-5" />
+              </DialogTrigger>
+              <DialogContent className="max-w-md md:max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-xl flex items-center gap-2">
+                    <Flame className="w-6 h-6 text-orange-500" />
+                    ¿Qué es el Índice de Calor?
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-muted-foreground pt-4">
+                    {leyendas.heatIndexLeyenda}
+                  </DialogDescription>
+                </DialogHeader>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-yellow-500/20">
-                              <div className="w-3 h-3 rounded-full bg-yellow-500 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-yellow-700 dark:text-yellow-400">PRECAUCIÓN (27-32°C)</p>
-                                <p className="text-sm text-muted-foreground">Fatiga posible con exposición prolongada y/o actividad física.</p>
-                              </div>
-                            </div>
+                <div className="space-y-3 pt-4">
+                  <h3 className="font-semibold text-base">Categorías de Advertencia</h3>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-orange-500/20">
-                              <div className="w-3 h-3 rounded-full bg-orange-500 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-orange-700 dark:text-orange-400">PRECAUCIÓN EXTREMA (33-40°C)</p>
-                                <p className="text-sm text-muted-foreground">Posible golpe de calor, calambres o agotamiento con exposición prolongada.</p>
-                              </div>
-                            </div>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-3 p-3 rounded-lg glass-card border-green-500/20">
+                      <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-green-700 dark:text-green-400">SEGURO (&lt; 26°C)</p>
+                        <p className="text-sm text-muted-foreground">No se esperan efectos adversos debidos al calor.</p>
+                      </div>
+                    </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-red-500/20">
-                              <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-red-700 dark:text-red-400">PELIGRO (41-51°C)</p>
-                                <p className="text-sm text-muted-foreground">Calambres o agotamiento probables y golpe de calor posible.</p>
-                              </div>
-                            </div>
+                    <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-yellow-500/20">
+                      <div className="w-3 h-3 rounded-full bg-yellow-500 mt-1 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-yellow-700 dark:text-yellow-400">PRECAUCIÓN (27-32°C)</p>
+                        <p className="text-sm text-muted-foreground">Fatiga posible con exposición prolongada y/o actividad física.</p>
+                      </div>
+                    </div>
 
-                            <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-purple-500/20">
-                              <div className="w-3 h-3 rounded-full bg-purple-500 mt-1 shrink-0" />
-                              <div>
-                                <p className="font-semibold text-purple-700 dark:text-purple-400">PELIGRO EXTREMO (≥ 52°C)</p>
-                                <p className="text-sm text-muted-foreground">Golpe de calor altamente probable.</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      <DialogFooter>
-                        <p className="font-extralight text-primary/70">Fuente: <a href="https://www.weather.gov/ama/heatindex" target="_blank">National Weather Service (USA)</a></p>
-                      </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                </p>
+                    <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-orange-500/20">
+                      <div className="w-3 h-3 rounded-full bg-orange-500 mt-1 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-orange-700 dark:text-orange-400">PRECAUCIÓN EXTREMA (33-40°C)</p>
+                        <p className="text-sm text-muted-foreground">Posible golpe de calor, calambres o agotamiento con exposición prolongada.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-red-500/20">
+                      <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-red-700 dark:text-red-400">PELIGRO (41-51°C)</p>
+                        <p className="text-sm text-muted-foreground">Calambres o agotamiento probables y golpe de calor posible.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 rounded-lg glass-card border border-purple-500/20">
+                      <div className="w-3 h-3 rounded-full bg-purple-500 mt-1 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-purple-700 dark:text-purple-400">PELIGRO EXTREMO (≥ 52°C)</p>
+                        <p className="text-sm text-muted-foreground">Golpe de calor altamente probable.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <p className="font-extralight text-primary/70">Fuente: <a href="https://www.weather.gov/ama/heatindex" target="_blank">National Weather Service (USA)</a></p>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </p>
         </CardTitle>
         <div
           className={cn(
-            "p-2 rounded-2xl",
+            "p-1.5 rounded-lg sm:rounded-xl",
             style.iconBg
           )}
         >
-          <Flame className={"w-6 h-6"} />
+          <Flame className={"w-4 h-4 sm:w-5 sm:h-5"} />
         </div>
       </CardHeader>
 
-      <CardContent className="relative z-10 pb-6">
+      <CardContent className="relative z-10 sm:p-2">
         {heatIndex ? (
-          <>
+          <div className="space-y-2">
 
             {/* Badge de categoría */}
             <div className="flex justify-center">
@@ -141,12 +141,12 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
             </div>
 
             {/* Descripción compacta */}
-            <div className="mt-4 px-3 py-2 rounded-lg bg-background/60 ">
+            <div className="bg-background/60 ">
               <p className="text-xs sm:text-sm text-center font-medium text-muted-foreground leading-relaxed">
                 {heatIndex.description}
               </p>
             </div>
-          </>
+          </div>
         ) : (
           <div className="py-4 text-center">
             <p className="text-sm text-muted-foreground/70">
@@ -158,4 +158,3 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
     </Card>
   )
 }
- 

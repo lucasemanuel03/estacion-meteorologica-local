@@ -164,8 +164,8 @@ export function DayDetailModal({ dateStr, stats, isOpen, onClose }: DayDetailMod
             {/* Acciones */}
             <div className="flex justify-end pt-2 border-t border-border/40">
               <Link href={`/day-stats?fecha=${dateStr}`} passHref>
-                <Button size="sm" variant="default" className="gap-1.5">
-                  <span>Ver estadísticas del día</span>
+                <Button size="sm" variant="dinamic" className="gap-1.5">
+                  <span>Más Datos del día</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Button>
               </Link>
@@ -173,13 +173,7 @@ export function DayDetailModal({ dateStr, stats, isOpen, onClose }: DayDetailMod
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4 py-6 text-center text-sm text-muted-foreground">
-            <p>No hay registros de mediciones guardadas para este día en la base de datos.</p>
-            <Link href={`/day-stats?fecha=${dateStr}`} passHref>
-              <Button size="sm" variant="outline" className="gap-1.5">
-                <span>Ver página del día</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
+            <p>No hay registros de mediciones guardadas para este día.</p>
           </div>
         )}
       </DialogContent>

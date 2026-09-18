@@ -57,11 +57,13 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
     return (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="border-border/60 bg-card/60 backdrop-blur-md">
-            <CardContent className="p-4 flex flex-col gap-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-8 w-16" />
-              <Skeleton className="h-3 w-20" />
+          <Card key={i} className="border-border/60 bg-card/80 backdrop-blur-md shadow-xs">
+            <CardContent className="flex items-center gap-3 p-3.5">
+              <Skeleton className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl shrink-0" />
+              <div className="flex flex-col gap-1.5 w-full min-w-0">
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-6 sm:h-7 w-20" />
+              </div>
             </CardContent>
           </Card>
         ))}

@@ -59,9 +59,21 @@ export function CalendarGrid({
 
       {/* Grid del Mes */}
       {isLoading ? (
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5">
+        <div className="grid grid-cols-7 gap-0.5 sm:gap-2.5">
           {[...Array(35)].map((_, i) => (
-            <Skeleton key={i} className="h-20 sm:h-28 rounded-xl" />
+            <div
+              key={i}
+              className="flex flex-col justify-between p-1 sm:p-2.5 rounded-md border border-border/40 bg-card/30 min-h-25 md:min-h-30 select-none"
+            >
+              <div className="flex items-center justify-between w-full">
+                <Skeleton className="h-4 w-4 rounded-md" />
+              </div>
+              <div className="flex flex-col gap-1 my-1 w-full overflow-hidden">
+                <Skeleton className="h-3 sm:h-4 w-full rounded-xs" />
+                <Skeleton className="h-3 sm:h-4 w-4/5 rounded-xs" />
+                <Skeleton className="h-3 sm:h-4 w-2/3 rounded-xs" />
+              </div>
+            </div>
           ))}
         </div>
       ) : (

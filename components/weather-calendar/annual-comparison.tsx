@@ -74,10 +74,29 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
 
       {/* Contenido Principal */}
       {isLoading ? (
-        <div className="rounded-2xl border border-border/60 p-4 space-y-3">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full rounded-xl" />
-          ))}
+        <div className="flex flex-col gap-3">
+          {/* Skeleton Móvil */}
+          <div className="flex flex-col gap-2 sm:hidden">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="p-3 rounded-xl border border-border/40 bg-card/40 flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-12 rounded-full" />
+                </div>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <Skeleton className="h-10 rounded-lg" />
+                  <Skeleton className="h-10 rounded-lg" />
+                  <Skeleton className="h-10 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton Escritorio */}
+          <div className="hidden sm:block rounded-2xl border border-border/60 bg-card/40 p-4 space-y-3">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-10 w-full rounded-lg" />
+            ))}
+          </div>
         </div>
       ) : error || !data?.has_data ? (
         /* Estado Sin Registros para el año */
