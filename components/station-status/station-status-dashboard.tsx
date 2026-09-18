@@ -17,6 +17,7 @@ import {
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { MiniStat, ReportTypeBadge, SensorRow } from "./status-detail-parts"
 import { RecentStatusList } from "./recent-status-list"
@@ -73,7 +74,7 @@ function LatestStatusCards({ report }: { report: FormattedStationStatusReport })
             <MiniStat
               icon={Cpu}
               label="Memoria libre"
-              value={`${report.board.free_heap_bytes / 1024} KB`}
+              value={`${(report.board.free_heap_bytes / (1024 * 1024)).toFixed(2)} MB`}
             />
             <MiniStat icon={Power} label="Uptime" value={formatUptime(report.uptime_sec)} />
             <MiniStat
@@ -108,6 +109,7 @@ export function StationStatusDashboard() {
   const [lastUpdateLabel, setLastUpdateLabel] = useState("")
   const [connectionState, setConnectionState] = useState<ConnectionState>("normal")
   const [showHistory, setShowHistory] = useState(false)
+  const [limit, setLimit] = useState(10)
   const [recentReports, setRecentReports] = useState<FormattedStationStatusReport[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState<string | null>(null)
@@ -140,17 +142,13 @@ export function StationStatusDashboard() {
     return () => clearInterval(interval)
   }, [report?.recorded_at])
 
-  const loadHistory = useCallback(async () => {
-    if (showHistory) {
-      setShowHistory(false)
-      return
-    }
-
+  const fetchHistory = useCallback(async (targetLimit: number) => {
+    const cleanLimit = Math.min(Math.max(targetLimit, 1), 30)
     setHistoryLoading(true)
     setHistoryError(null)
 
     try {
-      const res = await fetch("/api/station-status?limit=10")
+      const res = await fetch(`/api/station-status?limit=${cleanLimit}`)
       const json: StationStatusRecentResponse & { error?: string } = await res.json()
 
       if (!res.ok) {
@@ -165,7 +163,15 @@ export function StationStatusDashboard() {
     } finally {
       setHistoryLoading(false)
     }
-  }, [showHistory])
+  }, [])
+
+  const toggleHistory = useCallback(() => {
+    if (showHistory) {
+      setShowHistory(false)
+    } else {
+      fetchHistory(limit)
+    }
+  }, [showHistory, limit, fetchHistory])
 
   if (error) {
     return (
@@ -176,7 +182,7 @@ export function StationStatusDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6">
       <div className="relative">
         <div className="absolute inset-0 -z-10 bg-linear-to-r from-sky-500/10 via-violet-500/10 to-emerald-500/10 blur-3xl" />
         <div className="flex flex-col items-center justify-center pb-2">
@@ -229,13 +235,13 @@ export function StationStatusDashboard() {
       {report && <LatestStatusCards report={report} />}
 
       <Separator />
-        
+
       <div className="flex flex-col items-center gap-3">
-        <a href="/test" className="w-full">
+        <a href="/test" className="w-full max-w-xs">
           <Button
             type="button"
             variant="outline"
-            className="w-full max-w-xs"
+            className="w-full"
           >
             <CloudRain />
             Ver eventos de lluvia
@@ -246,7 +252,7 @@ export function StationStatusDashboard() {
           variant="outline"
           className="w-full max-w-xs"
           disabled={isLoading || historyLoading}
-          onClick={loadHistory}
+          onClick={toggleHistory}
         >
           {historyLoading ? (
             <>
@@ -256,12 +262,12 @@ export function StationStatusDashboard() {
           ) : showHistory ? (
             <>
               <EyeOff className="mr-2 h-4 w-4" />
-              Ocultar últimos registros
-              </>
+              Ocultar registros
+            </>
           ) : (
             <>
               <History className="mr-2 h-4 w-4" />
-              Ver últimos registros
+              Ver registros anteriores
             </>
           )}
         </Button>
@@ -269,10 +275,54 @@ export function StationStatusDashboard() {
         {historyError && <p className="text-sm text-destructive">{historyError}</p>}
       </div>
 
-      {showHistory && recentReports.length > 0 && <RecentStatusList reports={recentReports} />}
+      {showHistory && (
+        <div className="space-y-4 animate-in fade-in-50 slide-in-from-bottom-6 duration-500">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/40 bg-card/40 p-3.5 backdrop-blur-xs">
+            <h3 className="text-base font-semibold tracking-tight">
+              Últimos {recentReports.length} registros
+            </h3>
+            <div className="flex items-center gap-2">
+              <label htmlFor="limit-input" className="text-xs font-medium text-muted-foreground">
+                Cantidad a consultar (máx. 30):
+              </label>
+              <Input
+                id="limit-input"
+                type="number"
+                min={1}
+                max={30}
+                value={limit}
+                onChange={(e) => {
+                  const val = Number.parseInt(e.target.value, 10)
+                  if (!Number.isNaN(val)) {
+                    setLimit(Math.min(Math.max(val, 1), 30))
+                  } else {
+                    setLimit(1)
+                  }
+                }}
+                className="h-8 w-20 text-center text-xs"
+              />
+              <Button
+                size="sm"
+                variant="secondary"
+                className="h-8 text-xs"
+                disabled={historyLoading}
+                onClick={() => fetchHistory(limit)}
+              >
+                {historyLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Actualizar"}
+              </Button>
+            </div>
+          </div>
 
-      {showHistory && recentReports.length === 0 && !historyLoading && (
-        <p className="text-center text-sm text-muted-foreground">No hay registros para mostrar.</p>
+          {recentReports.length > 0 ? (
+            <RecentStatusList reports={recentReports} />
+          ) : (
+            !historyLoading && (
+              <p className="py-4 text-center text-sm text-muted-foreground">
+                No hay registros para mostrar.
+              </p>
+            )
+          )}
+        </div>
       )}
     </div>
   )

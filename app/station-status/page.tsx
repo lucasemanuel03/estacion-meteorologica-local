@@ -3,7 +3,7 @@ import { StationStatusDashboard } from "@/components/station-status/station-stat
 export default function StationStatusPage() {
   return (
     <main className="app-stage relative min-h-screen overflow-hidden">
-      <div className="container relative z-10 mx-auto px-4 py-8">
+      <div className="container relative z-10 mx-auto max-w-6xl px-4 py-8">
         <StationStatusDashboard />
       </div>
     </main>
