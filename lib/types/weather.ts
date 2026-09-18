@@ -56,12 +56,18 @@ export interface WeatherPredictions {
   now: WeatherPrediction
 }
 
+// Interfaces para métricas derivadas agropecuarias
+export type { ITHResult } from "../utils/functions/ith"
+export type { ET0Result } from "../utils/functions/et0-hargreaves"
+export type { DeltaTResult, FrostRiskResult, DewPointResult, DerivedMetrics } from "../utils/functions/derived-metrics"
+
 // Tipo para la respuesta del dashboard
 export interface WeatherDashboardData {
   latestReading: WeatherReading | null
   todayExtremes: DailyExtremes | null
   heatIndex: HeatIndex | null
   predictions: WeatherPredictions | null
+  derivedMetrics?: import("../utils/functions/derived-metrics").DerivedMetrics | null
 }
 
 // Tipo para los promedios horarios

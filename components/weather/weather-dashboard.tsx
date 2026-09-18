@@ -193,6 +193,8 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
           prediction={data?.predictions?.now ?? null}
           tempTrend={tempTrend ?? undefined}
           humTrend={humTrend ?? undefined}
+          thermalAmplitud={(data?.todayExtremes?.temp_max ?? 0) - (data?.todayExtremes?.temp_min ?? 0)}
+          derivedMetrics={data?.derivedMetrics ?? null}
         />
 
         <Separator />

@@ -3,13 +3,13 @@
 import { useMemo } from "react"
 import { WeatherCard } from "./weather-card"
 import { TemperatureWeatherCard } from "./temperature-weather-card"
-import { Droplets, CloudRainWind, ThermometerSun, Radio } from "lucide-react"
-import { HeatIndex } from "@/lib/types/weather"
+import { Droplets, CloudRainWind, ThermometerSun, Radio, ArrowDown, ArrowUpDown } from "lucide-react"
+import type { DerivedMetrics, HeatIndex } from "@/lib/types/weather"
 import { SecondaryWeatherCard } from "./secondary-weather-card"
-import { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
-import calcularPuntoRocio from "@/lib/utils/functions/calcularPuntoRocio"
+import type { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
 import { resolveActualesDisplay } from "@/lib/utils/functions/resolveActualesDisplay"
 import { ActualesMetricCard } from "./actuales-metric-card"
+import { AgroMetricsList } from "./agro-metrics-list"
 
 interface ActualesDisplayProps {
   temperature: number | null
@@ -21,6 +21,8 @@ interface ActualesDisplayProps {
   heatIndex: HeatIndex | null
   tempTrend?: { differential: number; message: string }
   humTrend?: { differential: number; message: string }
+  thermalAmplitud: number | null
+  derivedMetrics?: DerivedMetrics | null
 }
 
 export default function ActualesDisplay({
@@ -33,6 +35,8 @@ export default function ActualesDisplay({
   tempTrend,
   humTrend,
   heatIndex,
+  thermalAmplitud,
+  derivedMetrics,
 }: ActualesDisplayProps) {
   const layout = useMemo(
     () =>
@@ -47,7 +51,7 @@ export default function ActualesDisplay({
     [temperature, humidity, pressure, altitude, precipitation],
   )
 
-  const dewPoint = calcularPuntoRocio(temperature, humidity)
+  const dewPoint = derivedMetrics?.dewPoint
 
   return (
     <section className="mb-4 animate-in fade-in-50 slide-in-from-bottom-8 duration-700">
@@ -108,13 +112,30 @@ export default function ActualesDisplay({
           {layout.showDewPointCard && (
             <SecondaryWeatherCard
               title="Punto de Rocío"
-              value={dewPoint?.toFixed(1) ?? "---"}
-              unit="°C"
+              value={dewPoint?.value !== undefined ? dewPoint.value.toFixed(1) : "---"}
+              unit={dewPoint?.unit}
               icon={<CloudRainWind className="h-full w-full text-sky-500" />}
               variant="default"
             />
           )}
+          <SecondaryWeatherCard
+            title="Variación Pr. Atm (3h)"
+            value={prediction?.deltaPressure?.toFixed(1) ?? "---"}
+            unit="hPa"
+            icon={<ArrowDown className="h-full w-full text-primary" />}
+            variant="default"
+          />
+          <SecondaryWeatherCard
+            title="Amplitud Térmica"
+            value={`Δ ${thermalAmplitud?.toFixed(1) ?? "---"}`}
+            unit="°C"
+            icon={<ArrowUpDown className="h-full w-full text-primary" />}
+            variant="default"
+          />
         </div>
+
+        {/* Lista de Indicadores Agropecuarios Derivados */}
+        <AgroMetricsList derivedMetrics={derivedMetrics} />
       </div>
     </section>
   )
