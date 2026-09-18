@@ -33,7 +33,7 @@ export default function IrAEstadisticasCard() {
       </CardHeader>
       
       <CardContent className="relative z-10">
-        <Link href="/estadisticas-hoy">
+        <Link href="/day-stats">
           <Button 
             variant="secondary" 
             size="lg"

@@ -71,3 +71,59 @@ export interface HourlyAverages{
   avgTemperature: number
   avgHumidity: number
 }
+
+// Tipos para la vista de Calendario Climático Mensual
+export interface DailyWeatherStats {
+  date: string // YYYY-MM-DD
+  temp_max: number | null
+  temp_min: number | null
+  temp_avg: number | null
+  humidity_max: number | null
+  humidity_min: number | null
+  humidity_avg: number | null
+  precip_total: number | null
+  has_data: boolean
+}
+
+export interface MonthlyWeatherSummary {
+  year: number
+  month: number // 1..12
+  temp_max: number | null
+  temp_max_date: string | null
+  temp_min: number | null
+  temp_min_date: string | null
+  humidity_avg: number | null
+  precip_total: number | null
+  days_with_data: number
+}
+
+export interface MonthlyWeatherResponse {
+  summary: MonthlyWeatherSummary
+  days: Record<string, DailyWeatherStats>
+}
+
+// Tipos para la Comparativa Anual de Meses
+export interface MonthComparisonStats {
+  month: number // 1..12
+  monthName: string // "Enero", "Febrero", etc.
+  temp_avg: number | null
+  temp_max: number | null
+  temp_max_date: string | null
+  temp_min: number | null
+  temp_min_date: string | null
+  humidity_avg: number | null
+  precip_total: number | null
+  max_daily_precip: number | null
+  max_daily_precip_date: string | null
+  rainy_days_count: number
+  days_with_data: number
+  has_data: boolean
+}
+
+export interface AnnualComparisonResponse {
+  year: number
+  months: MonthComparisonStats[]
+  has_data: boolean
+}
+
+

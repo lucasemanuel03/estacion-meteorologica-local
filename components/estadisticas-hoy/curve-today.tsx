@@ -56,8 +56,8 @@ function ChartPanel({
   )
 }
 
-export default function CurveToday() {
-  const { data, loading, error } = useHourlyAverages()
+export default function CurveToday({ date }: { date?: string }) {
+  const { data, loading, error } = useHourlyAverages(date)
 
   return (
     <section

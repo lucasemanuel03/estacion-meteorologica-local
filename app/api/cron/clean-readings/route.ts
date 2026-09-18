@@ -293,7 +293,7 @@ export async function GET() {
 
       console.log(`${prefix} Stage 3 complete: deferred weather_readings deleted`, {
         deleteDate,
-        deletedCount: deletedCount ?? deletedRows?.length ?? 0,
+        deletedCount: deletedCount ?? 0,
       })
 
       processedDates.push(date)

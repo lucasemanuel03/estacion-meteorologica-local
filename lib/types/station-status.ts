@@ -72,7 +72,7 @@ export interface FormattedStationStatusReport {
 }
 
 export interface StationStatusLatestResponse {
-  report: FormattedStationStatusReport
+  report: FormattedStationStatusReport | null
   timestamp: string
 }
 

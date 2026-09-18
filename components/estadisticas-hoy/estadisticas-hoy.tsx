@@ -68,12 +68,14 @@ export default function EstadisticasHoy({
   tempDiferencial = -999,
   humDiferencial = -999,
   deltaPressure,
+  isHistorical = false,
 }: {
   temp_max: number | null
   temp_min: number | null
   tempDiferencial?: number
   humDiferencial?: number
   deltaPressure: number | null
+  isHistorical?: boolean
 }) {
   const amplitudTermica = temp_max !== null && temp_min !== null ? (temp_max - temp_min).toFixed(1) : "--"
   const presion = deltaPressure !== null ? deltaPressure.toFixed(1) : "--"
@@ -99,7 +101,7 @@ export default function EstadisticasHoy({
           value={amplitudTermica}
           unit="°C"
           icon={<ChevronsLeftRightEllipsis />}
-          subtitle="Hasta el momento"
+          subtitle={isHistorical ? "En el día seleccionado" : "Hasta el momento"}
           accentClassName="border-orange-400/20 hover:border-orange-400/35 shadow-orange-500/10 bg-orange-500/5"
           valueClassName="from-orange-200 to-orange-50"
         />
@@ -109,8 +111,15 @@ export default function EstadisticasHoy({
           value={presion}
           unit="hPa"
           icon={<Gauge />}
-          subtitle= {parseFloat(presion) > 0 ? "Aumentó en los últimos 30' " : parseFloat(presion) < 0 ? "Disminuyó en los últimos 30' " : "Se mantuvo estable en los últimos 30' "
-            }
+          subtitle={
+            presion === "--"
+              ? "No disponible"
+              : parseFloat(presion) > 0
+              ? "Aumentó en los últimos 30' "
+              : parseFloat(presion) < 0
+              ? "Disminuyó en los últimos 30' "
+              : "Se mantuvo estable en los últimos 30' "
+          }
           accentClassName="border-blue-400/20 hover:border-blue-400/35 shadow-blue-500/10 bg-blue-500/5"
           valueClassName="from-sky-200 to-sky-50"
         />

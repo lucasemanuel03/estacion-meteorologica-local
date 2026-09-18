@@ -42,12 +42,12 @@ export function TemperatureWeatherCard({
 
   return (
     <Card
-    glowColor={style.iconColor} 
+      glowColor={style.iconColor}
       className={cn(
         "glass-card",
         "transition-all duration-500 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-500",
-        "py-4",
+        "py-3",
         style.border,
         style.glow
 
@@ -63,7 +63,7 @@ export function TemperatureWeatherCard({
       </CardHeader>
 
       <CardContent className="relative z-10">
-        
+
         <div className="flex gap-2 items-baseline justify-center">
           <span className={cn("text-5xl sm:text-6xl font-bold tracking-wide drop-shadow-sm", style.textColor)}>
             {temperature ?? "--"}

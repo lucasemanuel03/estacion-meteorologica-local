@@ -2,15 +2,15 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, Check, CheckCircle, CloudSun, History, MonitorDot } from "lucide-react"
+import { BarChart3, Calendar, Check, CheckCircle, CloudSun, History, MonitorDot } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type NavItem = {
   href: string
   label: string
   border: string
-	color: string
-	glow: string
+  color: string
+  glow: string
   icon: React.ComponentType<{ className?: string }>
   isActive: (pathname: string) => boolean
 }
@@ -20,35 +20,35 @@ const navItems: NavItem[] = [
     href: "/",
     label: "Actual",
     border: "border-emerald-800/50 dark:border-emerald-400/50",
-		color: "text-emerald-800 dark:text-emerald-300",
-		glow: "shadow-emerald-500/20",
+    color: "text-emerald-800 dark:text-emerald-300",
+    glow: "shadow-emerald-500/20",
     icon: CloudSun,
     isActive: (pathname) => pathname === "/inicio" || pathname === "/",
   },
   {
-    href: "/estadisticas-hoy",
+    href: "/day-stats",
     label: "Estadísticas",
     border: "border-sky-700/50 dark:border-sky-400/50",
-		color: "text-sky-700 dark:text-sky-300",
-		glow: "shadow-sky-500/20",
+    color: "text-sky-700 dark:text-sky-300",
+    glow: "shadow-sky-500/20",
     icon: BarChart3,
-    isActive: (pathname) => pathname.startsWith("/estadisticas-hoy"),
+    isActive: (pathname) => pathname.startsWith("/day-stats"),
   },
   {
-    href: "/weather-history",
-    label: "Últimos Días",
-    border: "border-sky-800/50 dark:border-sky-400/50",
-		color: "text-sky-800 dark:text-sky-300",
-		glow: "shadow-sky-500/20",
-    icon: History,
-    isActive: (pathname) => pathname.startsWith("/historial") || pathname.startsWith("/weather-history"),
+    href: "/weather-calendar",
+    label: "Calendario",
+    border: "border-indigo-800/50 dark:border-indigo-400/50",
+    color: "text-indigo-800 dark:text-indigo-300",
+    glow: "shadow-indigo-500/20",
+    icon: Calendar,
+    isActive: (pathname) => pathname.startsWith("/weather-calendar"),
   },
   {
     href: "/station-status",
     label: "Reporte",
     border: "border-gray-800/50 dark:border-gray-400/50",
-		color: "text-gray-800 dark:text-gray-300",
-		glow: "shadow-gray-500/20",
+    color: "text-gray-800 dark:text-gray-300",
+    glow: "shadow-gray-500/20",
     icon: MonitorDot,
     isActive: (pathname) => pathname.startsWith("/station-status"),
   },
@@ -76,8 +76,8 @@ export default function BottomNavigation() {
                       : "border-transparent text-muted-foreground hover:border-border hover:bg-background/50 hover:text-foreground hover:shadow-2xl " + item.glow,
                   )}
                 >
-                  <Icon/>
-                  <span>{item.label}</span>
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="truncate">{item.label}</span>
                 </Link>
               </li>
             )
@@ -87,3 +87,4 @@ export default function BottomNavigation() {
     </nav>
   )
 }
+

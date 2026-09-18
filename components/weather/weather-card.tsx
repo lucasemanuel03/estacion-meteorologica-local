@@ -16,7 +16,7 @@ interface WeatherCardProps {
   treshold?: number
 }
 
-export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor="text-primary", diferencial, treshold=0.2 }: WeatherCardProps) {
+export function WeatherCard({ title, value, unit, subtitle, icon, variant = "default", tempColor = "text-primary", diferencial, treshold = 0.2 }: WeatherCardProps) {
   const getTrendState = (value?: number, thresholdValue = 0.2) => {
     if (value === undefined || Number.isNaN(value)) return "default"
     if (value > thresholdValue) return "up"
@@ -59,55 +59,55 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
   }[trendState]
 
   return (
-    <Card 
+    <Card
       className={cn(
         "glass-card",
         "transition-all duration-500 hover:shadow-2xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-500",
-        "py-4",
+        "py-3 ",
         style.gradient,
         style.border,
         style.glow
       )}
     >
-      
+
       <CardHeader className="flex flex-row items-center justify-between relative z-10">
-        <CardTitle className="text-base sm:text-lg font-semibold tracking-wide text-foreground/90">
+        <CardTitle className="text-sm sm:text-base font-medium tracking-wide text-foreground/90 truncate">
           {title}
         </CardTitle>
         <div className={cn(
-          "p-2 rounded-2xl backdrop-blur-sm",
+          "p-1.5 rounded-lg sm:rounded-xl backdrop-blur-sm",
           style.iconBg
         )}>
-          <div className="w-6 h-6">
+          <div className="w-4 h-4 sm:w-5 sm:h-5 ">
             {icon}
           </div>
         </div>
       </CardHeader>
-      
-      <CardContent className="relative z-10 ">
+
+      <CardContent className="relative z-10 p-2 sm:p-3">
         <div className="flex gap-2 items-baseline justify-center">
           <span className={cn(
-            "text-5xl sm:text-6xl font-bold tracking-wide ",
+            "text-3xl sm:text-6xl font-bold tracking-wide ",
             "bg-linear-to-br from-foreground to-foreground/80 bg-clip-text text-transparent",
             "drop-shadow-sm"
           )}>
             {value ?? "--"}
           </span>
           {unit && (
-            <span className="text-2xl sm:text-3xl font-medium text-muted-foreground">
+            <span className="text-base sm:text-3xl font-medium text-muted-foreground">
               {unit}
             </span>
           )}
         </div>
         {subtitle && (
-          
+
           <div className="flex  items-center justify-center gap-2 mt-4 px-3 py-1 rounded-xl bg-background/40 backdrop-blur-sm">
             {/* Capa de animación de fondo */}
             <div className={cn("absolute inset-0 pointer-events-none inset-shadow-sm inset-shadow-background blur-xs", trendAnimationClass, tempColor)} />
-            
-            {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold}/>}
-            <p className="text-sm font-medium text-foreground/80">
+
+            {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold} />}
+            <p className="text-xs sm:text-sm font-medium text-foreground/80">
               {subtitle}
             </p>
           </div>

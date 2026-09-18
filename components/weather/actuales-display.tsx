@@ -59,7 +59,7 @@ export default function ActualesDisplay({
       </div>
 
       <div className="flex flex-col">
-        <div className="grid gap-4 md:grid-cols-3 ">
+        <div className="grid gap-4 md:grid-cols-2 ">
           <TemperatureWeatherCard
             title="Temperatura"
             temperature={temperature}
@@ -67,28 +67,29 @@ export default function ActualesDisplay({
             subtitle={tempTrend ? tempTrend.message.toUpperCase() : undefined}
             diferencial={tempTrend ? tempTrend.differential : undefined}
           />
+          <div className="grid grid-cols-2 gap-4">
+            <WeatherCard
+              title="Humedad"
+              value={humidity}
+              unit="%"
+              icon={<Droplets className="h-full w-full" />}
+              variant="humidity"
+              subtitle={humTrend ? humTrend.message.toUpperCase() : undefined}
+              diferencial={humTrend ? humTrend.differential : undefined}
+            />
 
-          <WeatherCard
-            title="Humedad"
-            value={humidity}
-            unit="%"
-            icon={<Droplets className="h-full w-full" />}
-            variant="humidity"
-            subtitle={humTrend ? humTrend.message.toUpperCase() : undefined}
-            diferencial={humTrend ? humTrend.differential : undefined}
-          />
-
-          <ActualesMetricCard
-            metric={layout.tertiaryCard}
-            variant="main"
-            temperature={temperature}
-            humidity={humidity}
-            pressure={pressure}
-            altitude={altitude}
-            precipitation={precipitation ?? null}
-            heatIndex={heatIndex}
-            prediction={prediction}
-          />
+            <ActualesMetricCard
+              metric={layout.tertiaryCard}
+              variant="main"
+              temperature={temperature}
+              humidity={humidity}
+              pressure={pressure}
+              altitude={altitude}
+              precipitation={precipitation ?? null}
+              heatIndex={heatIndex}
+              prediction={prediction}
+            />
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 mt-4">

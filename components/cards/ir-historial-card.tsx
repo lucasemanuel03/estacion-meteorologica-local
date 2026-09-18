@@ -33,7 +33,7 @@ export default function IrAlHistorialCard() {
       </CardHeader>
       
       <CardContent className="relative z-10">
-        <Link href="/weather-history">
+        <Link href="/weather-calendar">
           <Button 
             variant="secondary" 
             size="lg"
@@ -42,7 +42,7 @@ export default function IrAlHistorialCard() {
             )}
           >
             <HistoryIcon className="mr-2" />
-            Ver Historial del Clima
+            Ver Calendario Climático
             <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
           </Button>
         </Link>
