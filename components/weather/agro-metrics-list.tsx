@@ -11,6 +11,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
+import { Card } from "../ui/card"
 
 interface AgroMetricsListProps {
   derivedMetrics?: DerivedMetrics | null
@@ -53,7 +54,7 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
   }
 
   return (
-    <div className="mt-6 rounded-2xl border bg-card/60 p-4 sm:p-5 backdrop-blur-xs shadow-xs animate-in fade-in duration-500">
+    <Card className="mt-6 p-4 sm:p-5">
       {/* Título de la sección */}
       <div className="flex items-center gap-2 mb-4 pb-3 border-b">
         <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
@@ -377,6 +378,6 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </Card>
   )
 }

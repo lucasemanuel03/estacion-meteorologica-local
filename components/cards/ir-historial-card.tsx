@@ -8,7 +8,7 @@ export default function IrAlHistorialCard() {
   return (
     <Card className={cn(
       "relative overflow-hidden backdrop-blur-xl",
-      "bg-linear-to-br from-indigo-400/20 to-violet-600/10",
+      "bg-linear-to-br from-indigo-500/20 to-indigo-500/10",
       "border-border/50 shadow-2xl shadow-border/50",
       "animate-in fade-in-50 slide-in-from-bottom-10 duration-700",
       "group  transition-all w-full"
@@ -22,8 +22,8 @@ export default function IrAlHistorialCard() {
             <HistoryIcon className="w-6 h-6 text-indigo-600 dark:text-violet-400" />
           </div>
           <div>
-            <CardTitle className="text-xl sm:text-2xl font-black tracking-tight ">
-              Historial Climático
+            <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight ">
+              Ver Historial Climático
             </CardTitle>
             <CardDescription className="text-sm">
               Consulta el clima por meses y años
@@ -32,21 +32,6 @@ export default function IrAlHistorialCard() {
         </div>
       </CardHeader>
 
-      <CardContent className="relative z-10">
-        <Link href="/weather-calendar">
-          <Button
-            variant="outline"
-            size="lg"
-            className={cn(
-              "w-full sm:w-auto group/btn",
-            )}
-          >
-            <HistoryIcon className="mr-2" />
-            Ver Calendario Climático
-            <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-          </Button>
-        </Link>
-      </CardContent>
     </Card>
   )
 }

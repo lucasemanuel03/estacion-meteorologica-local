@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Thermometer, ThermometerSnowflake, Droplets, CloudRain, Sparkles, Check, Layout, LayoutDashboard, Cog } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Card } from "../ui/card"
 
 export type WeatherParameter = "temp_max" | "temp_min" | "temp_avg" | "humidity_avg" | "precip_total"
 
@@ -108,7 +109,7 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
   }
 
   return (
-    <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-xl border border-border/60 bg-card/40 backdrop-blur-md">
+    <Card className="flex flex-col p-3 sm:p-4 ">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Cog className="w-4 h-4 text-primary" />
@@ -185,6 +186,6 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
           )
         })}
       </div>
-    </div>
+    </Card>
   )
 }

@@ -52,9 +52,9 @@
   --background: oklch(93.551% 0.00646 197.955);
   --foreground: oklch(0.145 0 0);
   --ambient-bg: oklch(97.8% 0.01 204);
-  --ambient-1: oklch(88% 0.052 205 / 0.55);
+  --ambient-1: oklch(81.878% 0.04163 36.893 / 0.55);
   --ambient-2: oklch(90% 0.05 120 / 0.42);
-  --ambient-3: oklch(93% 0.038 28 / 0.3);
+  --ambient-3: oklch(96.966% 0.04299 169.128 / 0.3);
   --ambient-grid: oklch(55% 0.02 230 / 0.09);
   --card: oklch(92.797% 0.00011 271.152 / 0.849);
   --card-foreground: oklch(0.145 0 0);
@@ -94,9 +94,9 @@
   --background: oklch(18.514% 0.01458 230.203);
   --foreground: oklch(0.985 0 0);
   --ambient-bg: oklch(17.6% 0.016 233);
-  --ambient-1: oklch(52% 0.105 240 / 0.2);
+  --ambient-1: oklch(56.388% 0.10953 68.574 / 0.2);
   --ambient-2: oklch(61% 0.09 175 / 0.15);
-  --ambient-3: oklch(66% 0.11 35 / 0.12);
+  --ambient-3: oklch(75.862% 0.17375 143.649 / 0.12);
   --ambient-grid: oklch(90% 0.02 250 / 0.06);
   --card: oklch(20.019% 0.00002 271.152);
   --card-foreground: oklch(0.985 0 0);
@@ -112,7 +112,7 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(32.109% 0.00004 271.152);
+  --border: oklch(29.313% 0.00003 271.152);
   --input: oklch(19.125% 0.00002 271.152 / 0.904);
   --ring: oklch(0.439 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -186,8 +186,8 @@
     overflow-x: clip;
     background-color: var(--ambient-bg);
     background-image:
-      radial-gradient(circle at 12% 14%, var(--ambient-1), transparent 30%),
-      radial-gradient(circle at 84% 22%, var(--ambient-2), transparent 20%),
+      radial-gradient(circle at 12% 14%, var(--ambient-1), transparent 50%),
+      radial-gradient(circle at 84% 22%, var(--ambient-2), transparent 30%),
       radial-gradient(circle at 50% 86%, var(--ambient-3), transparent 40%),
       linear-gradient(to bottom, color-mix(in oklch, var(--background) 92%, transparent), var(--background));
     background-attachment: fixed;
@@ -226,21 +226,17 @@
 
 @layer components {
   .glass-card {
-    @apply relative overflow-hidden rounded-3xl border transition-all duration-500;
-    --glow-color: color-mix(in oklch, var(--primary) 65%, white);
+    @apply relative overflow-hidden rounded-2xl transition-all duration-500;
     /* Modo Claro por defecto */
-    background: rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
+    border-width: 0px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.151);
   }
 
   .dark .glass-card {
     /* Ajustes para Modo Oscuro */
-    --glow-color: color-mix(in oklch, var(--primary) 75%, black);
-    background: rgba(15, 15, 15, 0.3);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgb(15, 18, 20);
+    border-width: 0px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   }
 
@@ -251,7 +247,7 @@
     inset-inline: 0;
     top: 0;
     height: 1px;
-    opacity: 0.6;
+    opacity: 0.5;
     background: linear-gradient(to right,
         transparent,
         var(--glow-color),

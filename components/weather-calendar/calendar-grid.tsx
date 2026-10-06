@@ -41,7 +41,7 @@ export function CalendarGrid({
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd })
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-card/50 backdrop-blur-xl p-1.5 sm:p-5 shadow-lg">
+    <div className="flex flex-col gap-2 glass-card p-1.5 sm:p-5">
       {/* Cabecera Días de la Semana */}
       <div className="grid grid-cols-7 gap-0.5 sm:gap-2 mb-1 text-center">
         {WEEKDAYS.map((weekday, idx) => (

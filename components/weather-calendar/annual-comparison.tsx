@@ -36,7 +36,7 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
   }, [currentYear])
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-4xl mx-auto pt-6 border-t border-border/60">
+    <Card className="flex flex-col p-3 sm:p-4 w-full max-w-4xl mx-auto pt-6">
       {/* Cabecera y Selector de Año */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -47,9 +47,6 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Comparativa de Meses de {selectedYear}
           </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Valores consolidados de temperaturas, humedad y precipitaciones. Toca un mes para ver el detalle completo.
-          </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
@@ -198,7 +195,7 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
         isOpen={!!selectedMonthData}
         onClose={() => setSelectedMonthData(null)}
       />
-    </div>
+    </Card>
   )
 }
 

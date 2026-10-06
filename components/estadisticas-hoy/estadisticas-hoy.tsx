@@ -26,7 +26,7 @@ function StatCard({
     <article
       className={cn(
         "flex min-w-0 w-full flex-col  rounded-xl p-3 ",
-        "glass-card border transition-all duration-300 hover:shadow-lg",
+        "glass-card transition-all duration-300 hover:shadow-lg",
         "animate-in fade-in-50 slide-in-from-bottom-6 duration-700",
       )}
     >

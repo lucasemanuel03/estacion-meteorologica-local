@@ -57,7 +57,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
     return (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="border-border/60 bg-card/80 backdrop-blur-md shadow-xs">
+          <Card key={i} className="glass-card">
             <CardContent className="flex items-center gap-3 p-3.5">
               <Skeleton className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl shrink-0" />
               <div className="flex flex-col gap-1.5 w-full min-w-0">
@@ -82,7 +82,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
         {/* Temp Máxima */}
         <Card
           onClick={() => setSelectedMetric("temp_max")}
-          className="border-red-500/20 bg-card/80 backdrop-blur-md shadow-xs transition-all hover:border-red-500/50 hover:shadow-md cursor-pointer group select-none"
+          className="glass-card cursor-pointer group select-none"
         >
           <CardContent className="flex items-center gap-3 p-3.5">
             <div className="rounded-xl bg-red-500/10 text-red-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
@@ -100,7 +100,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
         {/* Temp Mínima */}
         <Card
           onClick={() => setSelectedMetric("temp_min")}
-          className="border-blue-500/20 bg-card/80 backdrop-blur-md shadow-xs transition-all hover:border-blue-500/50 hover:shadow-md cursor-pointer group select-none"
+          className="glass-card cursor-pointer group select-none"
         >
           <CardContent className="flex items-center gap-3 p-3.5">
             <div className="rounded-xl bg-blue-500/10 text-blue-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
@@ -118,7 +118,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
         {/* Humedad Promedio */}
         <Card
           onClick={() => setSelectedMetric("humidity_avg")}
-          className="border-emerald-500/20 bg-card/80 backdrop-blur-md shadow-xs transition-all hover:border-emerald-500/50 hover:shadow-md cursor-pointer group select-none"
+          className="glass-card cursor-pointer group select-none"
         >
           <CardContent className="flex items-center gap-3 p-3.5">
             <div className="rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
@@ -136,7 +136,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
         {/* Lluvia Acumulada */}
         <Card
           onClick={() => setSelectedMetric("precip_total")}
-          className="border-sky-500/20 bg-card/80 backdrop-blur-md shadow-xs transition-all hover:border-sky-500/50 hover:shadow-md cursor-pointer group select-none"
+          className="glass-card cursor-pointer group select-none"
         >
           <CardContent className="flex items-center gap-3 p-3.5">
             <div className="rounded-xl bg-sky-500/10 text-sky-500 shrink-0 p-2 group-hover:scale-105 transition-transform">

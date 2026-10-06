@@ -9,23 +9,23 @@ type CardProps = React.ComponentProps<'div'> & {
 function Card({ className, style, glowColor, ...props }: CardProps) {
   const mergedStyle = glowColor
     ? ({
-        ...(style ?? {}),
-        ['--glow-color' as string]: glowColor,
-      } as React.CSSProperties)
+      ...(style ?? {}),
+      ['--glow-color' as string]: glowColor,
+    } as React.CSSProperties)
     : style
 
   return (
     <div
       data-slot="card"
       className={cn(
-        'glass-card border-2 text-card-foreground flex flex-col gap-2  py-5 shadow-sm',
+        'glass-card border text-card-foreground flex flex-col gap-2  py-5',
         className,
       )}
       style={mergedStyle}
       {...props}
-      
+
     />
-    
+
   )
 }
 
