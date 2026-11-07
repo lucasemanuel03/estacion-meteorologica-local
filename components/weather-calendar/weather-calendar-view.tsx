@@ -21,6 +21,8 @@ import { ParameterSelector, WeatherParameter } from "./parameter-selector"
 import { CalendarGrid } from "./calendar-grid"
 import { DayDetailModal } from "./day-detail-modal"
 import { AnnualComparison } from "./annual-comparison"
+import { MonthEvolutionChart } from "./month-evolution-chart"
+
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -193,8 +195,16 @@ export function WeatherCalendarView() {
         />
       </div>
 
+      {/* Gráfico de evolución mensual */}
+      <MonthEvolutionChart
+        days={data?.days ?? {}}
+        currentMonth={currentMonth}
+        isLoading={isLoading}
+      />
+
       {/* Nueva Sección: Comparativa Anual de Meses */}
       <AnnualComparison initialYear={year} />
+
 
       {/* Modal interactivo al hacer clic en un día */}
       <DayDetailModal
