@@ -27,10 +27,17 @@ export default function Header({
   const showTemp = (!isHome || isScrolled) && currentTemp !== undefined && currentTemp !== null;
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      // Si el scroll supera 10px, consideramos que ya no está arriba del todo
-      const scrolled = window.scrollY > 10;
-      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 10;
+          setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     handleScroll();
@@ -41,7 +48,7 @@ export default function Header({
   return (
     <header
       className={cn(
-        "w-full bg-background/85 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50",
+        "w-full bg-background/90 backdrop-blur-md sm:backdrop-blur-xl border-b border-border/50 sticky top-0 z-50",
         "h-16 sm:h-[68px] transition-shadow duration-300",
         isScrolled ? "shadow-md" : "shadow-lg"
       )}
@@ -50,7 +57,7 @@ export default function Header({
         <Link href="/" className="group flex items-center gap-2.5 sm:gap-3 min-w-0">
           {/* Logo con tamaño constante para evitar saltos */}
           <div className="relative shrink-0">
-            <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
+            <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-md sm:blur-xl transition-all transform-gpu" />
             <div
               className="h-10 w-10 sm:h-11 sm:w-11 text-foreground relative z-10 drop-shadow-lg"
               style={{
@@ -61,15 +68,15 @@ export default function Header({
             />
           </div>
 
-          {/* Textos: Título, Ubicación y Temperatura */}
-          <div className="flex flex-col justify-center min-w-0 transition-all duration-300">
+          {/* Textos: Título, Ubicación y Temperatura con animación GPU pura sin reflows */}
+          <div className="relative flex flex-col justify-center min-w-0 h-10 sm:h-11">
             {/* Título: Solo visible si el scroll se encuentra arriba del todo */}
             <div
               className={cn(
-                "overflow-hidden transition-all duration-300 ease-in-out",
+                "transition-all duration-300 ease-out transform-gpu will-change-[transform,opacity]",
                 isScrolled
-                  ? "max-h-0 opacity-0 -translate-y-1 pointer-events-none"
-                  : "max-h-8 opacity-100 translate-y-0"
+                  ? "opacity-0 -translate-y-2 pointer-events-none scale-95"
+                  : "opacity-100 translate-y-0 scale-100"
               )}
             >
               <h1
@@ -86,10 +93,11 @@ export default function Header({
             {/* Fila de Ubicación y Temperatura */}
             <div
               className={cn(
-                "flex items-center gap-2 font-normal text-muted-foreground transition-all duration-300 flex-wrap",
+                "flex items-center gap-2 font-normal text-muted-foreground flex-wrap",
+                "transition-all duration-300 ease-out transform-gpu will-change-[transform,color]",
                 isScrolled
-                  ? "text-sm sm:text-base text-foreground/90"
-                  : "text-xs sm:text-sm"
+                  ? "-translate-y-2.5 sm:-translate-y-3 text-sm sm:text-base text-foreground/90"
+                  : "translate-y-0 text-xs sm:text-sm"
               )}
             >
               <div className="flex items-center gap-1.5 min-w-0">
