@@ -6,7 +6,7 @@ import { Thermometer, ThermometerSnowflake, Droplets, CloudRain, Sparkles, Check
 import { cn } from "@/lib/utils"
 import { Card } from "../ui/card"
 
-export type WeatherParameter = "temp_max" | "temp_min" | "temp_avg" | "humidity_avg" | "precip_total"
+export type WeatherParameter = "temperature" | "precip_total" | "temp_avg" | "humidity_avg"
 
 export interface ParameterConfig {
   id: WeatherParameter
@@ -22,26 +22,26 @@ export interface ParameterConfig {
 
 export const PARAMETER_CONFIGS: ParameterConfig[] = [
   {
-    id: "temp_max",
-    label: "Máxima",
-    shortLabel: "Max",
+    id: "temperature",
+    label: "Temperaturas",
+    shortLabel: "Máx/Mín",
     unit: "°C",
     icon: Thermometer,
-    activeClass: "bg-red-500/15 border-red-500/50 text-red-700 dark:text-red-300",
-    borderClass: "border-red-500/30",
-    badgeBg: "bg-red-500/10 dark:bg-red-500/20",
-    badgeText: "text-red-700 dark:text-red-300 border-red-500/30",
+    activeClass: "bg-orange-500/15 border-orange-500/50 text-orange-700 dark:text-orange-300",
+    borderClass: "border-orange-500/30",
+    badgeBg: "bg-orange-500/10 dark:bg-orange-500/20",
+    badgeText: "text-orange-700 dark:text-orange-300 border-orange-500/30",
   },
   {
-    id: "temp_min",
-    label: "Mínima",
-    shortLabel: "Mín",
-    unit: "°C",
-    icon: ThermometerSnowflake,
-    activeClass: "bg-blue-500/15 border-blue-500/50 text-blue-700 dark:text-blue-300",
-    borderClass: "border-blue-500/30",
-    badgeBg: "bg-blue-500/10 dark:bg-blue-500/20",
-    badgeText: "text-blue-700 dark:text-blue-300 border-blue-500/30",
+    id: "precip_total",
+    label: "Lluvia Acumulada",
+    shortLabel: "Lluvia",
+    unit: "mm",
+    icon: CloudRain,
+    activeClass: "bg-sky-500/15 border-sky-500/50 text-sky-700 dark:text-sky-300",
+    borderClass: "border-sky-500/30",
+    badgeBg: "bg-sky-500/10 dark:bg-sky-500/20",
+    badgeText: "text-sky-700 dark:text-sky-300 border-sky-500/30",
   },
   {
     id: "temp_avg",
@@ -65,17 +65,6 @@ export const PARAMETER_CONFIGS: ParameterConfig[] = [
     badgeBg: "bg-emerald-500/10 dark:bg-emerald-500/20",
     badgeText: "text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
   },
-  {
-    id: "precip_total",
-    label: "Lluvia Acumulada",
-    shortLabel: "Lluvia",
-    unit: "mm",
-    icon: CloudRain,
-    activeClass: "bg-sky-500/15 border-sky-500/50 text-sky-700 dark:text-sky-300",
-    borderClass: "border-sky-500/30",
-    badgeBg: "bg-sky-500/10 dark:bg-sky-500/20",
-    badgeText: "text-sky-700 dark:text-sky-300 border-sky-500/30",
-  },
 ]
 
 interface ParameterSelectorProps {
@@ -86,7 +75,6 @@ interface ParameterSelectorProps {
 export function ParameterSelector({ selectedParameters, onChange }: ParameterSelectorProps) {
   const toggleParameter = (id: WeatherParameter) => {
     if (selectedParameters.includes(id)) {
-      // Si solo queda uno seleccionado, no permitir dejarlo totalmente vacío (o permitir si el usuario quiere)
       if (selectedParameters.length === 1) {
         return // Mantener al menos un parámetro seleccionado
       }
@@ -100,8 +88,12 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
     onChange(PARAMETER_CONFIGS.map((p) => p.id))
   }
 
+  const selectDefault = () => {
+    onChange(["temperature", "precip_total"])
+  }
+
   const selectTemperatures = () => {
-    onChange(["temp_max", "temp_min"])
+    onChange(["temperature"])
   }
 
   const selectRainAndHumidity = () => {
@@ -109,7 +101,7 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
   }
 
   return (
-    <Card className="flex flex-col p-3 sm:p-4 ">
+    <Card className="flex flex-col p-3 sm:p-4 gap-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Cog className="w-4 h-4 text-primary" />
@@ -119,7 +111,16 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
         </div>
 
         {/* Accesos rápidos */}
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className="flex items-center gap-1.5 text-xs flex-wrap">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={selectDefault}
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+          >
+            Por defecto
+          </Button>
           <Button
             type="button"
             variant="ghost"
@@ -151,7 +152,7 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
       </div>
 
       {/* Botones de Parámetros */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {PARAMETER_CONFIGS.map((param) => {
           const Icon = param.icon
           const isSelected = selectedParameters.includes(param.id)

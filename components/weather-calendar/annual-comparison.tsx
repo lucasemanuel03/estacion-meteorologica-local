@@ -36,7 +36,7 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
   }, [currentYear])
 
   return (
-    <Card className="flex flex-col p-3 sm:p-4 w-full max-w-4xl mx-auto pt-6">
+    <Card className="flex flex-col p-3 sm:p-5 w-full pt-6">
       {/* Cabecera y Selector de Año */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -129,13 +129,13 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
               <table className="w-full text-xs text-left">
                 <thead className="bg-muted/60 border-b border-border/60 text-muted-foreground font-semibold">
                   <tr>
-                    <th className="py-3.5 px-4 w-32">Mes</th>
-                    <th className="py-3.5 px-3 text-center w-24">Temp. Prom.</th>
-                    <th className="py-3.5 px-3 text-center w-24 text-red-600 dark:text-red-400">Temp. Máx.</th>
-                    <th className="py-3.5 px-3 text-center w-24 text-blue-600 dark:text-blue-400">Temp. Mín.</th>
-                    <th className="py-3.5 px-3 text-center w-28 text-emerald-600 dark:text-emerald-400">Humedad Prom.</th>
-                    <th className="py-3.5 px-3 text-center w-28 text-sky-600 dark:text-sky-400">Lluvia Total</th>
-                    <th className="py-3.5 px-3 text-center w-28">Lluvia Máx. Día</th>
+                    <th className="py-3.5 px-4">Mes</th>
+                    <th className="py-3.5 px-3 text-center">Temp. Prom.</th>
+                    <th className="py-3.5 px-3 text-center text-red-600 dark:text-red-400">Temp. Máx.</th>
+                    <th className="py-3.5 px-3 text-center text-blue-600 dark:text-blue-400">Temp. Mín.</th>
+                    <th className="py-3.5 px-3 text-center text-emerald-600 dark:text-emerald-400">Humedad Prom.</th>
+                    <th className="py-3.5 px-3 text-center text-sky-600 dark:text-sky-400">Lluvia Total</th>
+                    <th className="py-3.5 px-3 text-center">Lluvia Máx. Día</th>
                     <th className="py-3.5 px-3 text-center w-10"></th>
                   </tr>
                 </thead>

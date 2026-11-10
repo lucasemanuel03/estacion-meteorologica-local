@@ -243,7 +243,7 @@ export function MonthEvolutionChart({
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
+      <div className="w-full flex flex-col gap-6">
         {[0, 1].map((i) => (
           <div key={i} className="glass-card rounded-2xl p-5 flex flex-col gap-4">
             <Skeleton className="h-5 w-40" />
@@ -259,7 +259,7 @@ export function MonthEvolutionChart({
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6">
 
       {/* ── Temperatura ─────────────────────────────────────── */}
       <section className="glass-card rounded-2xl p-5 flex flex-col gap-4 animate-in fade-in-50 slide-in-from-bottom-4 duration-500">
@@ -274,7 +274,7 @@ export function MonthEvolutionChart({
         {/* Stat chips */}
         <div className="flex flex-wrap gap-2">
           <StatChip
-            label="Máxima del mes"
+            label="Máxima"
             value={tempMaxVal !== null ? `${tempMaxVal}` : "—"}
             unit="°C"
             icon={Thermometer}
@@ -282,7 +282,7 @@ export function MonthEvolutionChart({
             iconBgClass="bg-red-500/10"
           />
           <StatChip
-            label="Mínima del mes"
+            label="Mínima"
             value={tempMinVal !== null ? `${tempMinVal}` : "—"}
             unit="°C"
             icon={ThermometerSnowflake}
@@ -290,7 +290,7 @@ export function MonthEvolutionChart({
             iconBgClass="bg-blue-500/10"
           />
           <StatChip
-            label="Promedio del mes"
+            label="Promedio"
             value={tempAvgVal !== null ? `${tempAvgVal}` : "—"}
             unit="°C"
             icon={Thermometer}
@@ -379,7 +379,7 @@ export function MonthEvolutionChart({
         {/* Stat chips */}
         <div className="flex flex-wrap gap-2">
           <StatChip
-            label="Total del mes"
+            label="Total"
             value={rainTotalVal !== null ? `${rainTotalVal}` : "0"}
             unit="mm"
             icon={CloudRain}
@@ -387,7 +387,7 @@ export function MonthEvolutionChart({
             iconBgClass="bg-sky-500/10"
           />
           <StatChip
-            label="Máximo en un día"
+            label="Máximo de un día"
             value={rainMaxVal !== null ? `${rainMaxVal}` : "0"}
             unit="mm"
             icon={Droplets}
