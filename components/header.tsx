@@ -41,20 +41,18 @@ export default function Header({
   return (
     <header
       className={cn(
-        "w-full bg-background/85 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50 transition-all duration-300",
-        isScrolled ? "py-2 shadow-md" : "py-3 shadow-lg"
+        "w-full bg-background/85 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50",
+        "h-16 sm:h-[68px] transition-shadow duration-300",
+        isScrolled ? "shadow-md" : "shadow-lg"
       )}
     >
-      <div className="container flex justify-between items-center mx-auto px-4 relative z-10">
+      <div className="container h-full flex justify-between items-center mx-auto px-4 relative z-10">
         <Link href="/" className="group flex items-center gap-2.5 sm:gap-3 min-w-0">
-          {/* Logo con efecto sutil */}
+          {/* Logo con tamaño constante para evitar saltos */}
           <div className="relative shrink-0">
             <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-orange-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
             <div
-              className={cn(
-                "text-foreground relative z-10 drop-shadow-lg transition-all duration-300",
-                isScrolled ? "h-8 w-8 sm:h-9 sm:w-9" : "h-10 w-10 sm:h-11 sm:w-11"
-              )}
+              className="h-10 w-10 sm:h-11 sm:w-11 text-foreground relative z-10 drop-shadow-lg"
               style={{
                 backgroundColor: "currentColor",
                 WebkitMask: "url('/EML-isotipo.svg') center / contain no-repeat",
@@ -71,12 +69,12 @@ export default function Header({
                 "overflow-hidden transition-all duration-300 ease-in-out",
                 isScrolled
                   ? "max-h-0 opacity-0 -translate-y-1 pointer-events-none"
-                  : "max-h-12 opacity-100 translate-y-0"
+                  : "max-h-8 opacity-100 translate-y-0"
               )}
             >
               <h1
                 className={cn(
-                  "text-base sm:text-xl font-black tracking-tight",
+                  "text-base sm:text-xl font-black tracking-tight leading-tight",
                   "bg-linear-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent",
                   "drop-shadow-sm truncate"
                 )}
