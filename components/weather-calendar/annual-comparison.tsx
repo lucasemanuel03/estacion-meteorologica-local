@@ -97,7 +97,7 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
         </div>
       ) : error || !data?.has_data ? (
         /* Estado Sin Registros para el año */
-        <Card className="border-border/60 bg-card/40 backdrop-blur-md py-10 px-4 text-center">
+        <Card className="border-border/60 bg-card py-10 px-4 text-center">
           <CardContent className="flex flex-col items-center justify-center gap-3">
             <div className="p-3 rounded-2xl bg-muted text-muted-foreground">
               <CalendarX className="w-8 h-8" />
@@ -124,7 +124,7 @@ export function AnnualComparison({ initialYear }: AnnualComparisonProps) {
           </div>
 
           {/* Vista Escritorio (pantallas >= sm): Tabla elegante acotada */}
-          <div className="hidden sm:block rounded-2xl border border-border/60 bg-card/50 backdrop-blur-xl overflow-hidden shadow-lg">
+          <div className="hidden sm:block rounded-2xl border border-border/60 bg-card overflow-hidden shadow-lg">
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
                 <thead className="bg-muted/60 border-b border-border/60 text-muted-foreground font-semibold">
@@ -212,7 +212,7 @@ function MobileMonthCard({
     <div
       onClick={() => has_data && onSelect()}
       className={cn(
-        "flex flex-col gap-2 p-3 rounded-xl border bg-card/60 backdrop-blur-md transition-all select-none w-full overflow-hidden",
+        "flex flex-col gap-2 p-3 rounded-xl border bg-card transition-colors duration-150 select-none w-full overflow-hidden",
         has_data
           ? "border-border/60 hover:border-primary/40 active:bg-accent/40 cursor-pointer shadow-2xs"
           : "border-border/30 opacity-40 cursor-not-allowed bg-muted/10"

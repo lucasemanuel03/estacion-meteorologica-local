@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import useSWR from "swr"
 import {
   format,
@@ -31,17 +31,48 @@ export function WeatherCalendarView() {
   const today = useMemo(() => new Date(), [])
   const [currentMonth, setCurrentMonth] = useState<Date>(() => startOfMonth(today))
   const [isSelectorVisible, setIsSelectorVisible] = useState(true)
+  const userActionTimeRef = useRef<number>(0)
+  const userActionScrollRef = useRef<number>(0)
 
-  // Ocultar selector automáticamente al hacer scroll hacia abajo
+  // Alternar visibilidad manualmente protegida contra rebote de scroll
+  const handleToggleSelector = () => {
+    setIsSelectorVisible((prev) => {
+      const next = !prev
+      if (next) {
+        // Marcamos el momento y posición exacta donde el usuario lo abrió
+        userActionTimeRef.current = Date.now()
+        userActionScrollRef.current = window.scrollY
+      }
+      return next
+    })
+  }
+
+  // Ocultar selector automáticamente al hacer scroll hacia abajo intencional
   useEffect(() => {
     let lastScrollY = window.scrollY
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-      // Si nos desplazamos hacia abajo más de 15px y pasamos el umbral inicial
-      if (currentScrollY > lastScrollY + 15 && currentScrollY > 50) {
-        setIsSelectorVisible(false)
+
+      // Si el usuario acaba de abrirlo manualmente (hace menos de 800ms), ignorar micro-scrolls
+      if (Date.now() - userActionTimeRef.current < 800) {
+        lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY
+        return
       }
+
+      // Si se abrió manualmente a mitad de pantalla, exigir que el usuario scrollee hacia abajo
+      // al menos 50px de distancia real antes de ocultarlo nuevamente
+      if (userActionScrollRef.current > 0 && currentScrollY < userActionScrollRef.current + 50) {
+        lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY
+        return
+      }
+
+      // Si nos desplazamos hacia abajo más de 25px de forma intencional y pasamos el umbral inicial
+      if (currentScrollY > lastScrollY + 25 && currentScrollY > 80) {
+        setIsSelectorVisible(false)
+        userActionScrollRef.current = 0
+      }
+
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY
     }
 
@@ -122,7 +153,7 @@ export function WeatherCalendarView() {
   return (
     <div className="flex flex-col w-full pb-12">
       {/* Barra Sticky Superior: Título dinámico "Clima de [Mes]" + Selector de Mes/Año */}
-      <div className="sticky top-16 sm:top-[68px] z-30 w-full bg-background/85 dark:bg-background/90 backdrop-blur-xl border-b border-border/50 py-2.5 sm:py-3 px-3 sm:px-6 shadow-xs mb-6 transition-all duration-200">
+      <div className="sticky top-16 sm:top-[68px] z-30 w-full bg-background/90 dark:bg-background/90 backdrop-blur-md sm:backdrop-blur-xl border-b border-border/50 py-2.5 sm:py-3 px-3 sm:px-6 shadow-xs mb-6 transition-all duration-200">
         <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-4">
           <div className="flex items-center justify-between w-full md:w-auto gap-3">
             <WeatherCalendarTitle currentMonth={currentMonth} />
@@ -132,7 +163,7 @@ export function WeatherCalendarView() {
               type="button"
               variant="ghost"
               size="icon"
-              onClick={() => setIsSelectorVisible((prev) => !prev)}
+              onClick={handleToggleSelector}
               title={isSelectorVisible ? "Ocultar selector de mes y año" : "Mostrar selector de mes y año"}
               aria-label={isSelectorVisible ? "Ocultar selector de mes y año" : "Mostrar selector de mes y año"}
               className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/60 border border-transparent hover:border-border/40 transition-all duration-200 shrink-0"
@@ -155,7 +186,7 @@ export function WeatherCalendarView() {
             )}
           >
             <div className="overflow-hidden">
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-xl bg-card border border-border/80 shadow-xs backdrop-blur-md">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-xl bg-card border border-border/80 shadow-xs">
                 <Button
                   variant="outline"
                   size="icon"

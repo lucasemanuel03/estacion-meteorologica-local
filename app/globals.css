@@ -193,28 +193,18 @@
     background-attachment: fixed;
   }
 
-  body::before,
+  @media (max-width: 768px) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
   body::after {
     content: "";
     position: fixed;
     inset: -20vh -14vw;
-    z-index: -2;
-    pointer-events: none;
-    will-change: transform;
-  }
-
-  body::before {
-    opacity: 0.5;
-    background:
-      radial-gradient(circle at 18% 22%, var(--ambient-1), transparent 50%),
-      radial-gradient(circle at 78% 32%, var(--ambient-2), transparent 50%),
-      radial-gradient(circle at 52% 82%, var(--ambient-3), transparent 10%);
-    filter: blur(38px);
-    animation: ambient-drift 18s ease-in-out infinite;
-  }
-
-  body::after {
     z-index: -1;
+    pointer-events: none;
     opacity: 0.22;
     background-image:
       linear-gradient(to right, var(--ambient-grid) 1px, transparent 1px),
