@@ -45,20 +45,19 @@ export function TemperatureWeatherCard({
       glowColor={style.iconColor}
       className={cn(
         "glass-card",
-        "transition-all duration-500 hover:shadow-2xl",
+        "transition-all duration-500 shadow-2xl hover:shadow-xl",
         "animate-in fade-in-50 slide-in-from-bottom-10 duration-500",
-        "py-3",
         style.border,
         style.glow
 
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between relative z-10">
-        <CardTitle className="text-base sm:text-lg font-semibold tracking-wide text-foreground/90">
+        <CardTitle className="text-sm sm:text-base font-semibold tracking-wide text-foreground/90">
           {title}
         </CardTitle>
-        <div className={cn("p-2 rounded-2xl backdrop-blur-sm", style.iconBg)}>
-          <div className={cn("w-6 h-6", style.iconColor)}>{icon}</div>
+        <div className={cn("p-2 rounded-xl backdrop-blur-sm", style.iconBg)}>
+          <div className={cn("w-4 h-4", style.iconColor)}>{icon}</div>
         </div>
       </CardHeader>
 
@@ -72,7 +71,7 @@ export function TemperatureWeatherCard({
         </div>
 
         {subtitle && (
-          <div className="flex items-center justify-center gap-2 mt-4 px-3 py-1 rounded-xl bg-background/40 backdrop-blur-sm">
+          <div className="flex items-center justify-center gap-2 mt-2 py-1 rounded-xl bg-background/40 backdrop-blur-sm">
             <div className={cn("absolute inset-0 pointer-events-none inset-shadow-sm inset-shadow-background blur-xs", trendAnimationClass, style.textColor)} />
 
             {diferencial !== undefined && <TrendIcon diferencial={diferencial} threshold={treshold} />}

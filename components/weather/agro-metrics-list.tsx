@@ -22,7 +22,13 @@ type ModalType = "ith" | "et0" | "deltaT" | "frostRisk" | null
 export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
   const [activeModal, setActiveModal] = useState<ModalType>(null)
 
-  if (!derivedMetrics) return null
+  if (!derivedMetrics) return (
+    <Card className="p-4 sm:p-5">
+      <p className="text-sm text-muted-foreground">
+        No hay datos disponibles para los indicadores agropecuarios.
+      </p>
+    </Card>
+  )
 
   const { ith, et0, dewPoint, deltaT, frostRisk } = derivedMetrics
 
@@ -54,9 +60,9 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
   }
 
   return (
-    <Card className="mt-6 p-4 sm:p-5">
+    <Card className="p-4 sm:p-5">
       {/* Título de la sección */}
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b">
+      <div className="flex items-center gap-2 pb-3 border-b">
         <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
           <Sprout className="h-5 w-5" />
         </div>
@@ -66,7 +72,7 @@ export function AgroMetricsList({ derivedMetrics }: AgroMetricsListProps) {
       </div>
 
       {/* Lista de indicadores */}
-      <div className="flex flex-col divide-y divide-border/50 text-sm">
+      <div className="flex flex-col items-center justify-center divide-y divide-border/50 text-sm">
 
         {/* 2. ET0 */}
         {et0 && (

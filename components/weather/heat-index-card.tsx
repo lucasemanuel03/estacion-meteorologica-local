@@ -42,7 +42,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
       <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
         <CardTitle
           className="text-sm sm:text-base font-medium tracking-wide text-foreground/90 truncate">
-          <p className="flex gap-2 items-center">
+          <p className="flex gap-1 items-center">
             Índice de Calor
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
@@ -121,7 +121,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="relative z-10 sm:p-2">
+      <CardContent className="relative z-10">
         {heatIndex ? (
           <div className="space-y-2">
 
@@ -142,7 +142,7 @@ export default function HeatIndexCard({ heatIndex }: HeatIndexCardProps) {
 
             {/* Descripción compacta */}
             <div className="bg-background/60 ">
-              <p className="text-xs sm:text-sm text-center font-medium text-muted-foreground leading-relaxed">
+              <p className="text-xs sm:text-sm py-1 text-center font-medium text-muted-foreground truncate">
                 {heatIndex.description}
               </p>
             </div>

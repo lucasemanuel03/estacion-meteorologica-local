@@ -85,7 +85,7 @@ export function WeatherCard({ title, value, unit, subtitle, icon, variant = "def
         </div>
       </CardHeader>
 
-      <CardContent className="relative z-10 p-2 sm:p-3">
+      <CardContent className="relative z-10">
         <div className="flex gap-2 items-baseline justify-center">
           <span className={cn(
             "text-3xl sm:text-6xl font-bold tracking-wide ",

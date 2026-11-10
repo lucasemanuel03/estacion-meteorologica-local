@@ -4,9 +4,11 @@ import { useEffect, useState } from "react"
 import useSWR from "swr"
 import type { WeatherDashboardData } from "@/lib/types/weather"
 import ActualesDisplay from "./actuales-display"
+import HourlyEvolutionChart from "@/components/hourly-evolution-chart"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
 import { Separator } from "../ui/separator"
+import { AgroMetricsList } from "./agro-metrics-list"
 
 type TrendResponse = {
   success: boolean
@@ -184,6 +186,11 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
           thermalAmplitud={(data?.todayExtremes?.temp_max ?? 0) - (data?.todayExtremes?.temp_min ?? 0)}
           derivedMetrics={data?.derivedMetrics ?? null}
         />
+        <div className="grid gap-6 md:grid-cols-2">
+          <AgroMetricsList derivedMetrics={data?.derivedMetrics ?? null} />
+
+          <HourlyEvolutionChart />
+        </div>
 
         <Separator />
         {/* [ TO DO ] : Arreglar las estimaciones para las próximas horas

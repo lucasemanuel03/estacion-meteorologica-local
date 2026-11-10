@@ -9,7 +9,6 @@ import { SecondaryWeatherCard } from "./secondary-weather-card"
 import type { WeatherPrediction } from "@/lib/utils/functions/predictWeather"
 import { resolveActualesDisplay } from "@/lib/utils/functions/resolveActualesDisplay"
 import { ActualesMetricCard } from "./actuales-metric-card"
-import { AgroMetricsList } from "./agro-metrics-list"
 
 interface ActualesDisplayProps {
   temperature: number | null
@@ -63,7 +62,7 @@ export default function ActualesDisplay({
       </div>
 
       <div className="flex flex-col ">
-        <div className="grid gap-4 md:grid-cols-2 ">
+        <div className="grid gap-6 md:grid-cols-2 ">
           <TemperatureWeatherCard
             title="Temperatura"
             temperature={temperature}
@@ -133,9 +132,6 @@ export default function ActualesDisplay({
             variant="default"
           />
         </div>
-
-        {/* Lista de Indicadores Agropecuarios Derivados */}
-        <AgroMetricsList derivedMetrics={derivedMetrics} />
       </div>
     </section>
   )
