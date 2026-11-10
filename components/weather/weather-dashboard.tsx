@@ -134,10 +134,9 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       {/* Header con efecto de gradiente */}
       <div className="relative">
-        <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
         <div className="flex items-center justify-center pb-2">
           {isLoading ? (
             <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
@@ -159,15 +158,15 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
           <AdvertenciaCard
             nivel="warning"
             titulo="Valores desactualizados"
-            descripcion="No se ha recibido la última medición del sensor. Los valores mostrados pueden estar desactualizados."
+            descripcion="No se ha recibido la última medición de la estación. Los valores mostrados pueden estar desactualizados."
           />
         )}
 
         {estadoConexion === "error" && (
           <AdvertenciaCard
             nivel="error"
-            titulo="Conexión perdida con el sensor"
-            descripcion="Se perdió la conexión con el sensor ESP01. Los valores mostrados están desactualizados. Verifique la conexión del dispositivo."
+            titulo="Conexión perdida"
+            descripcion="Se perdió la conexión con la estación. Los valores mostrados están desactualizados."
           />
         )}
       </div>
