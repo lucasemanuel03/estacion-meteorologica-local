@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, Calendar, Check, CheckCircle, CloudSun, History, MonitorDot } from "lucide-react"
+import {  Calendar, CloudSun, History, MonitorDot } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type NavItem = {
@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
     icon: CloudSun,
     isActive: (pathname) => pathname === "/inicio" || pathname === "/",
   },
+  /*
   {
     href: "/day-stats",
     label: "Estadísticas",
@@ -34,9 +35,10 @@ const navItems: NavItem[] = [
     icon: BarChart3,
     isActive: (pathname) => pathname.startsWith("/day-stats"),
   },
+  */
   {
     href: "/weather-calendar",
-    label: "Calendario",
+    label: "Clima del mes",
     border: "border-indigo-800/50 dark:border-indigo-400/50",
     color: "text-indigo-800 dark:text-indigo-300",
     glow: "shadow-indigo-500/20",
@@ -60,7 +62,7 @@ export default function BottomNavigation() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/85 backdrop-blur-md sm:backdrop-blur-xl">
       <div className="container mx-auto px-2 py-2 flex items-center justify-center">
-        <ul className="grid grid-cols-4 gap-2 max-w-2xl w-full">
+        <ul className="grid grid-cols-3 gap-2 max-w-2xl w-full">
           {navItems.map((item) => {
             const Icon = item.icon
             const active = item.isActive(pathname)

@@ -10,7 +10,6 @@ export default function Home() {
           ubicacion="Las Margaritas, Córdoba"
         />
         <div className="mt-8 flex flex-col w-full sm:flex-row gap-4 sm:gap-6">
-          <IrAEstadisticasCard />
           <IrAlHistorialCard />
         </div>
       </div>

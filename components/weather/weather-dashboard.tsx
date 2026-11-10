@@ -185,11 +185,14 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
           humTrend={humTrend ?? undefined}
           thermalAmplitud={(data?.todayExtremes?.temp_max ?? 0) - (data?.todayExtremes?.temp_min ?? 0)}
           derivedMetrics={data?.derivedMetrics ?? null}
+          todayExtremes={data?.todayExtremes ?? null}
         />
-        <div className="grid gap-6 md:grid-cols-2">
-          <AgroMetricsList derivedMetrics={data?.derivedMetrics ?? null} />
 
+        <Separator />
+
+        <div className="grid gap-6 md:grid-cols-2">
           <HourlyEvolutionChart />
+          <AgroMetricsList derivedMetrics={data?.derivedMetrics ?? null} />
         </div>
 
         <Separator />

@@ -110,3 +110,24 @@ export function formatDateForTitle(dateStr?: string | null): string {
     })
     .toUpperCase()
 }
+
+/**
+ * Formatea un timestamp ISO en hora legible (p.ej. "14:30 hs").
+ */
+export function formatTimeString(isoStr?: string | null): string | null {
+  if (!isoStr) return null
+  try {
+    const d = new Date(isoStr)
+    if (isNaN(d.getTime())) return null
+    return (
+      d.toLocaleTimeString("es-AR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }) + " hs"
+    )
+  } catch {
+    return null
+  }
+}
+

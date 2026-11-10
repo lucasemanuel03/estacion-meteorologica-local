@@ -58,7 +58,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[...Array(4)].map((_, i) => (
           <Card key={i} className="glass-card">
-            <CardContent className="flex items-center gap-3 p-3.5">
+            <CardContent className="flex items-center">
               <Skeleton className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl shrink-0" />
               <div className="flex flex-col gap-1.5 w-full min-w-0">
                 <Skeleton className="h-3 w-16" />
@@ -78,18 +78,16 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         {/* Temp Máxima */}
         <Card
           onClick={() => setSelectedMetric("temp_max")}
           className="glass-card cursor-pointer group select-none"
         >
-          <CardContent className="flex items-center gap-3 p-3.5">
-            <div className="rounded-xl bg-red-500/10 text-red-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
-              <Thermometer className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
+          <CardContent className="flex items-center gap-2">
+
             <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground truncate">Máxima</p>
+              <p className="text-xs font-medium text-muted-foreground truncate">Temp. Máxima</p>
               <p className="text-base sm:text-2xl font-bold tracking-tight text-red-600 dark:text-red-400">
                 {tempMax}
               </p>
@@ -102,32 +100,11 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
           onClick={() => setSelectedMetric("temp_min")}
           className="glass-card cursor-pointer group select-none"
         >
-          <CardContent className="flex items-center gap-3 p-3.5">
-            <div className="rounded-xl bg-blue-500/10 text-blue-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
-              <ThermometerSnowflake className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
+          <CardContent className="flex items-center gap-2">
             <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground truncate">Mínima</p>
+              <p className="text-xs font-medium text-muted-foreground truncate">Temp. Mínima</p>
               <p className="text-base sm:text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400">
                 {tempMin}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Humedad Promedio */}
-        <Card
-          onClick={() => setSelectedMetric("humidity_avg")}
-          className="glass-card cursor-pointer group select-none"
-        >
-          <CardContent className="flex items-center gap-3 p-3.5">
-            <div className="rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
-              <Droplets className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground truncate">Humedad Prom.</p>
-              <p className="text-base sm:text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-                {humAvg}
               </p>
             </div>
           </CardContent>
@@ -138,10 +115,7 @@ export function MonthSummaryCards({ summary, isLoading }: MonthSummaryCardsProps
           onClick={() => setSelectedMetric("precip_total")}
           className="glass-card cursor-pointer group select-none"
         >
-          <CardContent className="flex items-center gap-3 p-3.5">
-            <div className="rounded-xl bg-sky-500/10 text-sky-500 shrink-0 p-2 group-hover:scale-105 transition-transform">
-              <CloudRain className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
+          <CardContent className="flex items-center gap-2">
             <div className="min-w-0">
               <p className="text-xs font-medium text-muted-foreground truncate">Total de Lluvias</p>
               <p className="text-base sm:text-2xl font-bold tracking-tight text-sky-600 dark:text-sky-400">
