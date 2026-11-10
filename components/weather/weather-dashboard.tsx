@@ -6,7 +6,6 @@ import type { WeatherDashboardData } from "@/lib/types/weather"
 import ActualesDisplay from "./actuales-display"
 import { AdvertenciaCard } from "@/components/ui/advertencia-card"
 import { ModalError } from "@/components/ui/modal-error"
-import { MapPin } from "lucide-react"
 import { Separator } from "../ui/separator"
 
 type TrendResponse = {
@@ -137,29 +136,18 @@ export function WeatherDashboard({ ubicacion = "Las Margaritas, Córdoba" }: { u
       {/* Header con efecto de gradiente */}
       <div className="relative">
         <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10 blur-3xl -z-10" />
-        <div className="flex items-center justify-center pb-4">
-
+        <div className="flex items-center justify-center pb-2">
           {isLoading ? (
             <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
               <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
               <span className="text-sm font-medium text-primary">Actualizando...</span>
             </div>
-          ) : (
-            <div className="space-y-1 flex flex-col justify-center items-center">
-              <div className="flex items-baseline gap-1 ">
-                <MapPin className="h-6 w-6" />
-                <h2 className="text-lg sm:text-xl font-extrabold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-                  {ubicacion}
-                </h2>
-              </div>
-              {lastUpdate && (
-                <p className="text-xs sm:text-sm text-muted-foreground font-medium flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  Última Medición: {lastUpdate}
-                </p>
-              )}
-            </div>
-          )}
+          ) : lastUpdate ? (
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Última Medición: {lastUpdate}
+            </p>
+          ) : null}
         </div>
       </div>
 
