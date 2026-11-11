@@ -114,12 +114,12 @@ function StatChip({
   iconBgClass: string
 }) {
   return (
-    <div className="glass-card rounded-xl px-4 py-3 flex items-center gap-3 min-w-[110px]">
+    <div className="glass-card p-3 flex items-center gap-3 min-w-27.5">
       <div className={cn("rounded-lg p-2 shrink-0", iconBgClass)}>
         <Icon className={cn("w-4 h-4", colorClass)} />
       </div>
       <div className="min-w-0">
-        <p className="text-[11px] font-medium text-muted-foreground leading-tight">{label}</p>
+        <p className="text-xs sm:text-sm font-medium text-muted-foreground leading-tight">{label}</p>
         <p className={cn("text-lg font-bold tracking-tight leading-tight", colorClass)}>
           {value}
           {unit && <span className="text-xs font-medium text-muted-foreground ml-0.5">{unit}</span>}
@@ -272,7 +272,7 @@ export function MonthEvolutionChart({
         </div>
 
         {/* Stat chips */}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <StatChip
             label="Máxima"
             value={tempMaxVal !== null ? `${tempMaxVal}` : "—"}
@@ -377,7 +377,7 @@ export function MonthEvolutionChart({
         </div>
 
         {/* Stat chips */}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <StatChip
             label="Total"
             value={rainTotalVal !== null ? `${rainTotalVal}` : "0"}

@@ -101,53 +101,13 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
   }
 
   return (
-    <Card className="flex flex-col p-3 sm:p-4 gap-3">
+    <div className="flex flex-col p-3 sm:p-4 gap-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Cog className="w-4 h-4 text-primary" />
           <span className="text-xs sm:text-sm font-semibold text-foreground">
-            Configurar qué ver por día:
+            Configurar filtros:
           </span>
-        </div>
-
-        {/* Accesos rápidos */}
-        <div className="flex items-center gap-1.5 text-xs flex-wrap">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={selectDefault}
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Por defecto
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={selectTemperatures}
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Solo Temperaturas
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={selectRainAndHumidity}
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Lluvia y Humedad
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={selectAll}
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Todos
-          </Button>
         </div>
       </div>
 
@@ -187,6 +147,6 @@ export function ParameterSelector({ selectedParameters, onChange }: ParameterSel
           )
         })}
       </div>
-    </Card>
+    </div>
   )
 }

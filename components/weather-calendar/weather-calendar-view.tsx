@@ -11,19 +11,19 @@ import {
   parseISO,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { CalendarIcon, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, RotateCcw, Calendar as CalendarHeaderIcon } from "lucide-react"
+import { CalendarIcon, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, RotateCcw, Calendar as CalendarHeaderIcon, CalendarDaysIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MonthlyWeatherResponse, DailyWeatherStats } from "@/lib/types/weather"
-import { MonthSummaryCards } from "./month-summary-cards"
 import { ParameterSelector, WeatherParameter } from "./parameter-selector"
 import { CalendarGrid } from "./calendar-grid"
 import { DayDetailModal } from "./day-detail-modal"
 import { AnnualComparison } from "./annual-comparison"
 import { MonthEvolutionChart } from "./month-evolution-chart"
 import { WeatherCalendarTitle, MONTH_NAMES } from "./weather-calendar-title"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -258,28 +258,10 @@ export function WeatherCalendarView() {
 
       {/* Contenedor Principal con ancho armónico */}
       <div className="max-w-[1600px] mx-auto w-full px-2 sm:px-6 flex flex-col items-center justify-center gap-6">
-        {/* Tarjetas de Valores Resumen del Mes (Temp Máx/Mín, Humidad Prom, Lluvia Total) */}
-        <div className="w-full">
-          <MonthSummaryCards summary={data?.summary} isLoading={isLoading} />
-        </div>
+
 
         {/* Grilla Principal (en pantallas grandes: 2fr Calendario a la izquierda, 1fr Temperatura y Lluvia mensual a la derecha) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full items-start">
-          {/* 2fr: Calendario y selector de parámetros */}
-          <div className="lg:col-span-2 flex flex-col gap-4 w-full">
-            <CalendarGrid
-              currentMonth={currentMonth}
-              daysData={data?.days || {}}
-              selectedParameters={selectedParameters}
-              onSelectDay={handleSelectDay}
-              isLoading={isLoading}
-            />
-            <ParameterSelector
-              selectedParameters={selectedParameters}
-              onChange={setSelectedParameters}
-            />
-          </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-start">
           {/* 1fr: Temperatura Mensual y Lluvia Mensual */}
           <div className="lg:col-span-1 w-full">
             <MonthEvolutionChart
@@ -288,6 +270,37 @@ export function WeatherCalendarView() {
               isLoading={isLoading}
             />
           </div>
+          {/* 2fr: Calendario y selector de parámetros */}
+          <div className=" glass-card flex flex-col gap-2 w-full">
+            <Card className=" glass-card flex flex-col gap-2 w-full">
+              <CardTitle className="flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 border-b border-border/80">
+
+                <div className="flex items-center gap-2">
+                  <div className="rounded-xl bg-orange-500/10 p-2">
+                    <CalendarDaysIcon className="h-4 w-4 text-primary" />
+                  </div>
+                  <h2 className="text-lg font-semibold tracking-tight">Clima por día</h2>
+                </div>
+              </CardTitle>
+              <CardContent className="p-1">
+                <div className="flex flex-col gap-2">
+                  <ParameterSelector
+                    selectedParameters={selectedParameters}
+                    onChange={setSelectedParameters}
+                  />
+                  <CalendarGrid
+                    currentMonth={currentMonth}
+                    daysData={data?.days || {}}
+                    selectedParameters={selectedParameters}
+                    onSelectDay={handleSelectDay}
+                    isLoading={isLoading}
+                  />
+                </div>
+              </CardContent>
+
+            </Card>
+          </div>
+
         </div>
 
         {/* Comparativa Anual de Meses (mismo ancho que la grilla superior) */}
