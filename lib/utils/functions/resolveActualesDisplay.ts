@@ -84,24 +84,17 @@ export const displayPredicates = {
  */
 export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
   {
+    // Lluvia significativa (>2mm): mostrar acumulado de lluvia en la card principal
     id: "rain",
-    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 5,
+    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 2,
     layout: {
       tertiaryCard: "precipitation",
       secondaryCard: "pressure",
       showDewPointCard: true,
     },
   },
-    {
-    id: "rain_low",
-    when: (ctx) => ctx.precipitation !== null && ctx.precipitation > 0 && ctx.precipitation <= 5,
-    layout: {
-      tertiaryCard: "pressure",
-      secondaryCard: "precipitation",
-      showDewPointCard: true,
-    },
-  },
   {
+    // Noche: mostrar presión por defecto
     id: "night",
     when: displayPredicates.isNighttime,
     layout: {
@@ -111,6 +104,7 @@ export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
     },
   },
   {
+    // Día fresco (temp < umbral): mostrar presión
     id: "cold",
     when: (ctx, config) =>
       displayPredicates.and(
@@ -124,6 +118,7 @@ export const DEFAULT_ACTUALES_DISPLAY_RULES: ActualesDisplayRule[] = [
     },
   },
   {
+    // Día cálido (temp >= umbral): mostrar índice de calor
     id: "day-warm",
     when: () => true,
     layout: {
