@@ -481,6 +481,69 @@ export class WeatherRepository {
   }
 
   /**
+   * Actualiza o inserta el campo precip_total en daily_extremes para una fecha específica.
+   *
+   * - Si ya existe un registro para `date`, actualiza únicamente precip_total y updated_at.
+   * - Si no existe ningún registro para `date`, inserta una fila nueva con date y precip_total
+   *   (el resto de los campos quedan en null hasta que lleguen lecturas del sensor).
+   *
+   * @param date        Fecha en formato YYYY-MM-DD (hora local AR)
+   * @param precipTotal Precipitación acumulada en mm (número >= 0)
+   * @returns Objeto con `success`, `action` ("updated" | "inserted") y `error` en caso de fallo
+   */
+  static async upsertPrecipTotal(
+    date: string,
+    precipTotal: number,
+  ): Promise<{ success: boolean; action?: "updated" | "inserted"; error?: unknown }> {
+    try {
+      const supabase = await createClient()
+      const now = new Date().toISOString()
+
+      // Verificar si ya existe un registro para la fecha
+      const { data: existing, error: fetchError } = await supabase
+        .from("daily_extremes")
+        .select("id")
+        .eq("date", date)
+        .maybeSingle()
+
+      if (fetchError) {
+        console.error("[weather-repo] Error checking existing daily_extremes:", fetchError)
+        return { success: false, error: fetchError }
+      }
+
+      if (existing) {
+        // El registro existe: solo actualizar precip_total
+        const { error: updateError } = await supabase
+          .from("daily_extremes")
+          .update({ precip_total: precipTotal, updated_at: now })
+          .eq("date", date)
+
+        if (updateError) {
+          console.error("[weather-repo] Error updating precip_total:", updateError)
+          return { success: false, error: updateError }
+        }
+
+        return { success: true, action: "updated" }
+      }
+
+      // El registro no existe: insertar fila mínima con solo date y precip_total
+      const { error: insertError } = await supabase
+        .from("daily_extremes")
+        .insert({ date, precip_total: precipTotal, updated_at: now })
+
+      if (insertError) {
+        console.error("[weather-repo] Error inserting precip_total:", insertError)
+        return { success: false, error: insertError }
+      }
+
+      return { success: true, action: "inserted" }
+    } catch (err) {
+      console.error("[weather-repo] Unexpected error in upsertPrecipTotal:", err)
+      return { success: false, error: err }
+    }
+  }
+
+  /**
    * Obtiene la comparativa de todos los meses de un año específico
    */
   static async getAnnualComparisonStats(
